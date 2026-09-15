@@ -1,0 +1,33 @@
+# 환경 변수 / 비밀키
+.env
+.env.*
+!.env.example
+
+# Python
+venv/
+.venv/
+es-vector-test/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Node / Next.js
+node_modules/
+.next/
+
+# Spring Boot
+target/
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# Elasticsearch local data
+data/
+logs/
+
+# HuggingFace 모델 캐시
+.cache/
