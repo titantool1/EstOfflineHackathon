@@ -31,3 +31,6 @@ logs/
 
 # HuggingFace 모델 캐시
 .cache/
+
+# Local QA/runtime files
+.local/

@@ -51,23 +51,24 @@ export default function KakaoMap({ places, selectedId, onSelect }: KakaoMapProps
   }, [key]);
 
   useEffect(() => {
-    if (!isReady || !mapRef.current) return;
+    const map = mapRef.current;
+    if (!isReady || !map) return;
     const maps = window.kakao?.maps;
     if (!maps) return;
     const markers = places.map((place) => {
-      const marker = new maps.Marker({ position: new maps.LatLng(place.latitude, place.longitude), map: mapRef.current, title: place.name });
+      const marker = new maps.Marker({ position: new maps.LatLng(place.latitude, place.longitude), map, title: place.name });
       maps.event.addListener(marker, "click", () => {
         onSelect(place.id);
         const content = `<div style="box-sizing:border-box;width:210px;padding:10px 12px;font-family:Arial,sans-serif;white-space:normal;overflow-wrap:anywhere;word-break:keep-all"><strong style="display:block;color:#276d34;font-size:14px;line-height:1.4">${place.name}</strong><span style="display:block;margin-top:4px;color:#617a60;font-size:12px;line-height:1.45">🌱 ${place.benefit ?? "친환경 실천 장소"}</span></div>`;
         infoWindowRef.current?.close();
         const infoWindow = new maps.InfoWindow({ content, removable: true });
-        infoWindow.open(mapRef.current!, marker);
+        infoWindow.open(map, marker);
         infoWindowRef.current = infoWindow;
       });
       return marker;
     });
     const selected = places.find((place) => place.id === selectedId);
-    if (selected) mapRef.current.panTo(new maps.LatLng(selected.latitude, selected.longitude));
+    if (selected) map.panTo(new maps.LatLng(selected.latitude, selected.longitude));
     return () => markers.forEach((marker) => marker.setMap(null));
   }, [isReady, places, selectedId, onSelect]);
 
