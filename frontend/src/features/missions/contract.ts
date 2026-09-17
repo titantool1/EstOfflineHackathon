@@ -1,4 +1,8 @@
-export type MissionRecommendationInput = { clientRequestId: string; limit?: number };
+export type MissionRecommendationInput = {
+  clientRequestId: string;
+  limit?: number;
+  mode?: "interests" | "general";
+};
 export type MissionRecommendationItem = {
   itemId: string;
   position: number;
@@ -42,9 +46,13 @@ const text = (value: unknown): value is string => typeof value === "string" && v
 const count = (value: unknown): value is number => Number.isSafeInteger(value) && Number(value) >= 0;
 
 export function isMissionRecommendationInput(value: unknown): value is MissionRecommendationInput {
-  return record(value) && (exact(value, ["clientRequestId"]) || exact(value, ["clientRequestId", "limit"]))
+  return record(value) && (exact(value, ["clientRequestId"])
+      || exact(value, ["clientRequestId", "limit"])
+      || exact(value, ["clientRequestId", "mode"])
+      || exact(value, ["clientRequestId", "limit", "mode"]))
     && isUuid(value.clientRequestId) && (value.limit === undefined
-      || (Number.isInteger(value.limit) && Number(value.limit) >= 1 && Number(value.limit) <= 20));
+      || (Number.isInteger(value.limit) && Number(value.limit) >= 1 && Number(value.limit) <= 20))
+    && (value.mode === undefined || value.mode === "interests" || value.mode === "general");
 }
 function isItem(value: unknown): value is MissionRecommendationItem {
   if (!record(value) || !exact(value, [

@@ -2,16 +2,20 @@
 
 import Link from "next/link";
 import { SourceLink } from "@/features/sources/SourceLink";
-import { displayValue, missionReturnHref } from "./detail-contract.ts";
+import { displayValue } from "./detail-contract.ts";
+import { missionRouteHref, safeMissionReturnHref } from "./return-context.ts";
 import { useMissionDetail } from "./use-mission-detail.ts";
 
 function programField(program: Record<string, unknown>, key: string) {
   return displayValue(program[key]);
 }
 
-export function MissionDetailScreen({ batchId, itemId }: { batchId: string; itemId: string }) {
+export function MissionDetailScreen({ batchId, itemId, returnTo }: {
+  batchId: string; itemId: string; returnTo?: string;
+}) {
   const state = useMissionDetail(batchId, itemId, "detail_view");
-  const returnHref = missionReturnHref(batchId, itemId);
+  const position = { batchId, itemId };
+  const returnHref = safeMissionReturnHref(returnTo, position);
 
   if (state.loading) return <Status title="미션 상세를 불러오는 중이에요" returnHref={returnHref} />;
   if (state.error || !state.detail) return <Status title={state.error ?? "상세 정보를 확인하지 못했어요."}
@@ -63,9 +67,10 @@ export function MissionDetailScreen({ batchId, itemId }: { batchId: string; item
     </section>
 
     <div className="mt-6 grid gap-3 sm:grid-cols-2">
-      <Link href={`/map/mission?${new URLSearchParams({ batchId, itemId })}`} aria-label="이 미션의 관련 장소 보기"
+      <Link href={missionRouteHref("/map/mission", position, returnHref)} aria-label="이 미션의 관련 장소 보기"
         className="rounded-2xl bg-[#2f843d] px-5 py-4 text-center font-bold text-white">관련 장소 {detail.places.length}건 보기</Link>
-      <Link href={returnHref} className="rounded-2xl bg-white px-5 py-4 text-center font-bold text-[#347b3d] ring-1 ring-[#cfe0c9]">카드로 돌아가기</Link>
+      <Link href={returnHref} aria-label="원래 미션 카드로 돌아가기"
+        className="rounded-2xl bg-white px-5 py-4 text-center font-bold text-[#347b3d] ring-1 ring-[#cfe0c9]">카드로 돌아가기</Link>
     </div>
     {state.eventError && <aside role="status" className="mt-5 rounded-2xl bg-[#fff4e5] p-4 text-sm text-[#7b5929]">
       상세 정보는 표시했지만 열람 기록을 저장하지 못했어요. <button type="button" onClick={state.retryEvent}
