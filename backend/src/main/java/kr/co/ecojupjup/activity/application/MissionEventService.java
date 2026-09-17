@@ -19,6 +19,12 @@ public class MissionEventService {
     public MissionEventService(MissionEventStore store,RecommendationService recommendations) { this(store,recommendations,Clock.systemUTC()); }
     MissionEventService(MissionEventStore store,RecommendationService recommendations,Clock clock) { this.store=store;this.recommendations=recommendations;this.clock=clock; }
 
+    @Transactional(readOnly=true) public Progress progress(UUID owner) {
+        if (owner==null) throw new MissionEventException(401,"AUTHENTICATION_REQUIRED");
+        return new Progress(store.completedMissionCount(owner));
+    }
+    public record Progress(long completedMissionCount) {}
+
     @Transactional public MissionEvent record(UUID owner,UUID clientEventId,UUID batchId,UUID itemId,String eventType,OffsetDateTime occurredAt) {
         if (owner==null || clientEventId==null || batchId==null || itemId==null || occurredAt==null
                 || eventType==null || !TYPES.contains(eventType))

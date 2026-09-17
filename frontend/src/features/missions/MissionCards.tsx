@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { MissionPhotoToggle } from "./photo/MissionPhotoToggle";
 import { SourceText } from "@/features/sources/SourceText";
 import { createMissionClient, MissionClientError } from "./client.ts";
 import type { MissionEventInput, MissionRecommendationItem } from "./contract.ts";
@@ -111,13 +112,14 @@ function MissionCard({ item, batchId, position, total, paneTitle, returnHref, st
       </button>
     </div>
     <p className="mt-3 text-xs text-[#71816f]">실천 기록은 본인의 자기보고이며 프로그램의 공식 완료·포인트 지급을 뜻하지 않아요.</p>
+    <MissionPhotoToggle actionId={item.actionId} />
     {impression?.kind === "failed" && <EventFailure label={eventLabel.impression} retry={() => record("impression")} />}
     {accepted?.kind === "failed" && <EventFailure label={eventLabel.accepted} retry={() => record("accepted")} />}
     {completed?.kind === "failed" && <EventFailure label={eventLabel.self_reported_completed} retry={() => record("self_reported_completed")} />}
   </article>;
 }
 
-export function MissionCards({ pane, mode, title, description, initialPosition, returnHref, onLocationChange }: {
+export function MissionCards({ pane, mode, title, description, initialPosition, returnHref, onLocationChange, onCompleted }: {
   pane: MissionPane;
   mode: "interests" | "general";
   title: string;
@@ -125,6 +127,7 @@ export function MissionCards({ pane, mode, title, description, initialPosition, 
   initialPosition?: MissionPosition;
   returnHref: string;
   onLocationChange: (position?: MissionPosition) => void;
+  onCompleted?: () => void;
 }) {
   const client = useMemo(() => createMissionClient(), []);
   const [source, setSource] = useState<Source>(() => initialPosition
@@ -181,6 +184,7 @@ export function MissionCards({ pane, mode, title, description, initialPosition, 
     client.recordEvent(input).then(() => {
       eventRecorded.current.add(key);
       setEventStatuses(current => ({ ...current, [key]: { kind: "recorded" } }));
+      if (type === "self_reported_completed") onCompleted?.();
     }).catch(error => {
       if (type === "impression" && error instanceof MissionClientError
           && error.status === 409 && error.code === "IMPRESSION_ALREADY_RECORDED") {
@@ -190,7 +194,7 @@ export function MissionCards({ pane, mode, title, description, initialPosition, 
       }
       setEventStatuses(current => ({ ...current, [key]: { kind: "failed", message: loadMessage(error) } }));
     }).finally(() => eventInFlight.current.delete(key));
-  }, [active, client, state]);
+  }, [active, client, onCompleted, state]);
 
   const status = useCallback((type: MissionEventInput["eventType"]) => {
     if (!active || state.kind !== "ready") return undefined;

@@ -1,8 +1,10 @@
 import "server-only";
+import { isMissionProgress, type MissionProgress } from "../../features/missions/progress.ts";
 import { isMissionEvent, isMissionRecommendationBatch, type MissionEvent, type MissionRecommendationBatch } from "../../features/missions/contract.ts";
 import { createSpringClient, type SpringResult } from "./spring-client.ts";
 
 export type MissionsSpring = {
+  getProgress(requestId: string | null, cookie: string | null): Promise<SpringResult<MissionProgress>>;
   createRecommendation(value: unknown, requestId: string | null, cookie: string | null,
     csrf: string | null): Promise<SpringResult<MissionRecommendationBatch>>;
   getRecommendation(batchId: string, requestId: string | null,
@@ -19,6 +21,9 @@ export function createMissionsSpring(config: { baseUrl: string; fetch?: typeof f
     return headers;
   };
   return {
+    getProgress: (requestId, cookie) => spring.request("/api/missions/events/progress", {
+      requestId, headers: selected(cookie), validate: isMissionProgress,
+    }),
     createRecommendation: (body, requestId, cookie, csrf) => spring.request("/api/missions/recommendations", {
       method: "POST", body, requestId, headers: selected(cookie, csrf), validate: isMissionRecommendationBatch,
     }),

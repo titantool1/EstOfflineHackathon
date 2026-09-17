@@ -55,6 +55,9 @@ export function createMissionHandlers(dependencies?: {
     }
   }
   return {
+    async getProgress(request: Request) {
+      return output(await spring.getProgress(id(request), request.headers.get("Cookie")));
+    },
     async createRecommendation(request: Request) {
       const parsed = await body(request, isMissionRecommendationInput);
       if ("response" in parsed) return parsed.response;

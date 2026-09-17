@@ -1,3 +1,4 @@
+import { isMissionProgress, type MissionProgress } from "./progress.ts";
 import {
   isMissionEvent,
   isMissionRecommendationBatch,
@@ -89,6 +90,9 @@ export function createMissionClient(fetcher: typeof fetch = fetch) {
   }
 
   return {
+    getProgress(signal?: AbortSignal): Promise<MissionProgress> {
+      return request("/api/missions/progress", isMissionProgress, {}, signal);
+    },
     recommend(input: MissionRecommendationInput, signal?: AbortSignal): Promise<MissionRecommendationBatch> {
       return mutate("/api/missions/recommendations", input, isMissionRecommendationBatch, signal);
     },
