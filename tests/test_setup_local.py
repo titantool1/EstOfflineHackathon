@@ -46,7 +46,7 @@ class LocalSetupTests(unittest.TestCase):
         root_config, frontend = self.configs()
         self.assertIn("OPENAI_API_KEY=test-only-openai", root_config)
         self.assertIn("OPENAI_API_KEY=test-only-openai", frontend)
-        self.assertNotIn("NEXT_PUBLIC_KAKAO_MAP_KEY", root_config)
+        self.assertIn("NEXT_PUBLIC_KAKAO_MAP_KEY=test-only-map", root_config)
         self.assertIn("NEXT_PUBLIC_KAKAO_MAP_KEY=test-only-map", frontend)
         self.assertNotIn("NEXT_PUBLIC_OPENAI", frontend)
         for value in ["test-only-openai", "test-only-rest", "test-only-map"]:

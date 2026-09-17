@@ -69,7 +69,7 @@ def main() -> int:
     try:
         keys = read_api_keys(args.api_keys) if args.api_keys else {}
         entries = [
-            (ROOT / ".env.example", ROOT / ".env", {k: v for k, v in keys.items() if not k.startswith("NEXT_PUBLIC_")}),
+            (ROOT / ".env.example", ROOT / ".env", keys),
             (ROOT / "frontend/.env.local.example", ROOT / "frontend/.env.local", keys),
         ]
         planned = []
@@ -85,7 +85,7 @@ def main() -> int:
         if keys:
             print("Imported key names: " + ", ".join(sorted(keys)))
         else:
-            print("API keys optional for this infrastructure step; existing values preserved.")
+            print("API keys optional for infrastructure and health checks; existing values preserved.")
         return 0
     except (OSError, UnicodeError, ValueError) as error:
         print(f"Setup failed: {type(error).__name__}; check the TXT format and local file access.")
