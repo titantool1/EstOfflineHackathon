@@ -1,3 +1,4 @@
+import { sessionFetch } from "../profile/session-fetch.ts";
 import { isUuid, type MissionEventInput } from "./contract.ts";
 import { isMissionItemDetail, type MissionItemDetail } from "./detail-contract.ts";
 
@@ -26,7 +27,7 @@ function invalidResponse() {
   return new MissionDetailClientError(503, "INVALID_RESPONSE", "상세 응답을 확인하지 못했어요.");
 }
 
-export function createMissionDetailClient(fetcher: typeof fetch = fetch) {
+export function createMissionDetailClient(fetcher: typeof fetch = sessionFetch) {
   return async (batchId: string, itemId: string, signal?: AbortSignal): Promise<MissionItemDetail> => {
     if (!isUuid(batchId) || !isUuid(itemId))
       throw new MissionDetailClientError(400, "INVALID_MISSION_REQUEST", "추천 묶음과 항목 번호를 확인해 주세요.");

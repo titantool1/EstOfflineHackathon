@@ -11,7 +11,7 @@ type LoadState =
   | { key: string; status: "ready"; detail: MissionItemDetail }
   | { key: string; status: "error"; message: string };
 
-export function useMissionDetail(batchId: string, itemId: string, eventType: ViewEventType) {
+export function useMissionDetail(batchId: string, itemId: string, eventType: ViewEventType, enabled = true) {
   const key = `${batchId}:${itemId}`;
   const detailClient = useMemo(() => createMissionDetailClient(), []);
   const missionClient = useMemo(() => createMissionClient(), []);
@@ -39,6 +39,7 @@ export function useMissionDetail(batchId: string, itemId: string, eventType: Vie
   }, [missionClient, viewEvent]);
 
   useEffect(() => {
+    if (!enabled) return;
     const controller = new AbortController();
     detailClient(batchId, itemId, controller.signal).then(result => {
       if (controller.signal.aborted) return;
@@ -48,7 +49,7 @@ export function useMissionDetail(batchId: string, itemId: string, eventType: Vie
       setLoad({ key, status: "error", message: detailErrorMessage(caught) });
     });
     return () => controller.abort();
-  }, [attempt, batchId, detailClient, itemId, key]);
+  }, [attempt, batchId, detailClient, enabled, itemId, key]);
 
   useEffect(() => {
     automaticEventId.current = null;

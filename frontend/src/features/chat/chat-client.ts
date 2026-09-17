@@ -1,8 +1,10 @@
-import type { ChatAnswer, ChatProgress, ChatTurnEvent } from "../../lib/chat-stream.ts";
+import { sessionFetch } from "../profile/session-fetch.ts";
+import type { ChatAnswer, ChatProgress, ChatSnapshot, ChatTurnEvent } from "../../lib/chat-stream.ts";
 export type { ChatAnswer } from "../../lib/chat-stream.ts";
 type Envelope<T> = { data: T | null; error: { code: string; message: string } | null; requestId: string };
-type SendOptions = { signal?: AbortSignal; onEvent?: (event: ChatTurnEvent) => void };
-export type ChatSaveStatus = "saved" | "no_changes" | "pending_resolution" | "rejected" | "outcome_unconfirmed";
+type SendOptions = { signal?: AbortSignal; onEvent?: (event: ChatTurnEvent) => void; clientSessionId?: string };
+export type { ChatSaveStatus } from "../../lib/chat-stream.ts";
+import type { ChatSaveStatus } from "../../lib/chat-stream.ts";
 const stages: ChatProgress[] = ["thinking", "searching", "reading", "checking_conditions", "updating_conditions", "answering"];
 export class ChatClientError extends Error {
   readonly status: number;
@@ -60,7 +62,7 @@ async function readAnswer(response: Response, options: SendOptions): Promise<Cha
     reader.releaseLock();
   }
 }
-export function createChatClient(fetcher: typeof fetch = fetch) {
+export function createChatClient(fetcher: typeof fetch = sessionFetch) {
   async function envelope<T>(response: Response): Promise<T> {
     const value = await response.json() as Envelope<T>;
     if (!response.ok || value.error || !value.data)
@@ -69,10 +71,23 @@ export function createChatClient(fetcher: typeof fetch = fetch) {
     return value.data;
   }
   return {
+    async restore(clientSessionId: string, signal?: AbortSignal): Promise<ChatSnapshot> {
+      const value = await envelope<ChatSnapshot>(await fetcher(`/api/chat?clientSessionId=${encodeURIComponent(clientSessionId)}`, {
+        cache: "no-store", credentials: "same-origin", signal,
+      }));
+      if (value.state === "missing") return value;
+      if (value.state === "closed" && ["saved", "no_changes", "pending_resolution", "rejected", "outcome_unconfirmed"].includes(value.saveStatus)) return value;
+      if (value.state !== "active" || typeof value.conversationId !== "string" || !value.conversationId
+        || typeof value.generating !== "boolean" || !Array.isArray(value.messages)
+        || value.messages.some(message => !message || !["user", "assistant"].includes(message.role) || typeof message.text !== "string")
+        || (value.pendingMessage !== undefined && typeof value.pendingMessage !== "string")
+        || (value.remainingIdleMs !== null && (!Number.isFinite(value.remainingIdleMs) || value.remainingIdleMs < 0))) invalid();
+      return value;
+    },
     async send(message: string, conversationId?: string, options: SendOptions = {}): Promise<ChatAnswer> {
       const response = await fetcher("/api/chat", { method: "POST", headers: {
         "Content-Type": "application/json", Accept: "application/x-ndjson",
-      }, body: JSON.stringify({ message, conversationId, clientRequestId: crypto.randomUUID() }),
+      }, body: JSON.stringify({ message, conversationId, clientSessionId: options.clientSessionId, clientRequestId: crypto.randomUUID() }),
       cache: "no-store", credentials: "same-origin", signal: options.signal });
       if (!response.ok || !response.headers.get("Content-Type")?.includes("application/x-ndjson"))
         return envelope<ChatAnswer>(response);

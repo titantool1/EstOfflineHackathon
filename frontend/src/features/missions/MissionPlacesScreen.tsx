@@ -23,9 +23,13 @@ export function MissionPlacesScreen({ batchId, itemId, returnTo }: {
     <header className="mt-5 rounded-3xl bg-[#eaf5e5] p-6 md:p-8">
       <p className="text-sm font-bold text-[#4b914e]">미션에 연결된 관련 장소</p>
       <h1 className="mt-2 text-2xl font-bold text-[#29452a] md:text-3xl">{detail.title}</h1>
-      <p className="mt-3 text-sm leading-6 text-[#60765e]">이 미션에 등록된 장소예요. 주소로 지도를 열고 방문 전 운영 여부를 확인해 주세요.</p>
+      <p className="mt-3 text-sm leading-6 text-[#60765e]">이 미션과 관련된 장소예요. 주소로 지도를 열고 방문 전 운영 여부와 참여 조건을 확인해 주세요.</p>
     </header>
 
+    {detail.places.some(place => place.relation_type === "candidate_action") && <p role="note"
+      className="mt-4 rounded-2xl bg-[#fff4e5] p-4 text-sm leading-6 text-[#7b5929]">
+      기존 장소 목록에서 실천 유형에 따라 연결했어요. 이 장소에서 해당 제도에 참여하거나 포인트를 받을 수 있는지는 확인되지 않았어요.
+    </p>}
     {detail.places.length === 0 ? <section aria-label="등록된 관련 장소 없음"
       className="mt-6 rounded-3xl bg-white p-8 text-center ring-1 ring-[#dfe9da]">
       <h2 className="text-lg font-bold text-[#345737]">등록된 관련 장소가 없어요</h2>
@@ -43,6 +47,10 @@ export function MissionPlacesScreen({ batchId, itemId, returnTo }: {
             </span>
           </div>
           <p className="mt-3 text-sm leading-6 text-[#627460]">{place.address || "등록 주소 없음"}</p>
+          {place.relation_type === "candidate_action" && <p className="mt-2 text-xs text-[#7b5929]">
+            {place.place_type} · 실천 관련 후보 · 혜택 적용 미확인
+            {place.source_checked_at && <span className="block mt-1">원자료 기준일 {place.source_checked_at}</span>}
+          </p>}
           <dl className="mt-4 space-y-2 text-xs text-[#728170]">
             <div><dt className="inline font-bold">일정 원문 </dt><dd className="inline">{displayValue(place.schedule) ?? "확인 필요"}</dd></div>
             <div><dt className="inline font-bold">시작일 </dt><dd className="inline">{place.announced_start ?? "미확인"}</dd></div>
@@ -57,13 +65,16 @@ export function MissionPlacesScreen({ batchId, itemId, returnTo }: {
               aria-label={`${place.title} 주소로 카카오맵 검색 열기`}
               className="rounded-xl bg-[#eaf5e5] px-4 py-3 font-bold text-[#347b3d]">주소로 카카오맵 검색 ↗</a>
               : <span className="rounded-xl bg-[#f4f5f2] px-4 py-3 text-[#788575]">검색할 주소 없음</span>}
-            <SourceLink source={place.source} label="장소 근거 출처" />
+            {place.source.url ? <SourceLink source={place.source} label="장소 근거 출처" />
+              : <span className="text-xs text-[#728170]">출처: {place.source.title} · 원문 링크 미확보</span>}
           </div>
         </article>;
       })}
     </section>}
 
     <div className="mt-6 flex flex-wrap gap-3">
+      <Link href={missionRouteHref("/chat", position, returnHref)}
+        className="rounded-xl bg-[#eaf5e5] px-5 py-3 font-bold text-[#347b3d]">이 미션을 챗봇에 물어보기</Link>
       <Link href={missionRouteHref("/missions/detail", position, returnHref)}
         aria-label="이 미션 상세로 돌아가기"
         className="rounded-xl bg-white px-5 py-3 font-bold text-[#347b3d] ring-1 ring-[#cfe0c9]">미션 상세 보기</Link>

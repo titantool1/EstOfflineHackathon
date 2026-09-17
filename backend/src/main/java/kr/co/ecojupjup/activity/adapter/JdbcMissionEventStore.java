@@ -2,6 +2,7 @@ package kr.co.ecojupjup.activity.adapter;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 import kr.co.ecojupjup.activity.application.MissionEvent;
 import kr.co.ecojupjup.activity.application.MissionEventStore;
@@ -12,14 +13,21 @@ import org.springframework.stereotype.Repository;
 public class JdbcMissionEventStore implements MissionEventStore {
     private final JdbcTemplate jdbc;
     public JdbcMissionEventStore(JdbcTemplate jdbc) { this.jdbc=jdbc; }
-    @Override public long completedMissionCount(UUID owner) {
-        return jdbc.queryForObject("""
-            SELECT count(DISTINCT (item.program_key, item.action_id))
+    @Override public List<CompletedMission> completedMissions(UUID owner) {
+        return missionsWithEvent(owner, "self_reported_completed");
+    }
+    @Override public List<CompletedMission> acceptedMissions(UUID owner) {
+        return missionsWithEvent(owner, "accepted");
+    }
+    private List<CompletedMission> missionsWithEvent(UUID owner, String eventType) {
+        return jdbc.query("""
+            SELECT DISTINCT item.program_key, item.action_id
             FROM app.mission_event event
             JOIN app.recommendation_item item
               ON item.batch_id=event.batch_id AND item.item_id=event.item_id AND item.user_id=event.user_id
-            WHERE event.user_id=? AND event.event_type='self_reported_completed'
-            """, Long.class, owner);
+            WHERE event.user_id=? AND event.event_type=?
+            ORDER BY item.program_key, item.action_id
+            """, (row,index) -> new CompletedMission(row.getString(1),row.getString(2)), owner, eventType);
     }
     @Override public void lockOwner(UUID owner) { jdbc.queryForObject("SELECT id FROM app.users WHERE id=? FOR UPDATE",UUID.class,owner); }
     @Override public Optional<MissionEvent> findByClientEvent(UUID owner,UUID clientEventId) {

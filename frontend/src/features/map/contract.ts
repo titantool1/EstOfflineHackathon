@@ -20,6 +20,8 @@ export function safeSourceUrl(value: unknown): string | null {
 }
 
 const messages: Record<string, string> = {
+  REGION_REQUIRED: "지역을 하나로 확인하지 못했어요. 시·도와 구 이름을 함께 입력해 주세요. 예: 서울 마포구 텀블러",
+  REGION_UNAVAILABLE: "지역을 확인하지 못했어요. 잠시 후 다시 검색해 주세요.",
   RATE_LIMITED: "요청이 많아요. 잠시 후 다시 시도해 주세요.",
   REQUEST_TOO_LARGE: "요청이 너무 커요. 입력 내용을 줄여 주세요.",
   INVALID_INPUT: "검색 조건과 좌표를 확인해 주세요.",
@@ -44,7 +46,7 @@ export const mapFailure = (status: number, code: string) => Response.json({ erro
 type PlaceResult = { docId: string; title: string; summary: string; category: string | null; address: string | null;
   sourceUrl: string | null; latitude: number | null; longitude: number | null; distanceKm: number | null };
 const nullableText = (value: unknown) => value === null || typeof value === "string";
-export function readPlaces(value: unknown): { results: PlaceResult[]; meta: { resultCount: number; tookMs: number } } {
+export function readPlaces(value: unknown): { results: PlaceResult[]; meta: { resultCount: number; tookMs: number; region?: { sido: string; sigungu: string } } } {
   if (!object(value) || !Array.isArray(value.results) || !object(value.meta)
     || !nonnegative(value.meta.resultCount) || !Number.isInteger(value.meta.resultCount) || !nonnegative(value.meta.tookMs)) throw new MapError("INVALID_RESPONSE");
   const results = value.results.map((item): PlaceResult => {
@@ -56,7 +58,11 @@ export function readPlaces(value: unknown): { results: PlaceResult[]; meta: { re
       address: item.address as string | null, sourceUrl: safeSourceUrl(item.sourceUrl), latitude: item.latitude as number | null,
       longitude: item.longitude as number | null, distanceKm: item.distanceKm == null ? null : item.distanceKm as number };
   });
-  return { results, meta: { resultCount: value.meta.resultCount, tookMs: value.meta.tookMs } };
+  const region = value.meta.region;
+  if (region !== undefined && (!object(region) || typeof region.sido !== "string" || !region.sido.trim()
+    || typeof region.sigungu !== "string" || !region.sigungu.trim())) throw new MapError("INVALID_RESPONSE");
+  return { results, meta: { resultCount: value.meta.resultCount, tookMs: value.meta.tookMs,
+    ...(region ? { region: region as { sido: string; sigungu: string } } : {}) } };
 }
 export function readRoute(value: unknown) {
   if (!object(value) || !Array.isArray(value.path) || value.path.length < 2 || !value.path.every(point)

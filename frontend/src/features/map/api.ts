@@ -2,7 +2,7 @@ import { jsonType, MapError, object, readPlaces, readRoute, validCoordinate, typ
 export type { Place, RoutePoint, EcoPlace } from "./contract.ts";
 export const mapApiPaths = { places: "/api/places", route: "/api/route" } as const;
 const SEOUL_CENTER = { latitude: 37.5665, longitude: 126.978 };
-type Options = { fetch?: typeof fetch; signal?: AbortSignal; timeoutMs?: number };
+type Options = { browseDistrict?: string; fetch?: typeof fetch; signal?: AbortSignal; timeoutMs?: number };
 
 async function request(path: string, body: unknown, options: Options, defaultTimeout: number): Promise<unknown> {
   const timeout = AbortSignal.timeout(options.timeoutMs ?? defaultTimeout);
@@ -21,12 +21,12 @@ async function request(path: string, body: unknown, options: Options, defaultTim
   }
 }
 export async function requestPlaces(query: string, options: Options = {}) {
-  const payload = readPlaces(await request(mapApiPaths.places, { query, region: "서울특별시", ...SEOUL_CENTER, distanceKm: 30 }, options, 95_000));
+  const payload = readPlaces(await request(mapApiPaths.places, { query, interpretRegion: Boolean(query.trim()), ...(options.browseDistrict ? { browseDistrict: options.browseDistrict } : {}), region: "서울특별시", ...SEOUL_CENTER, distanceKm: 30 }, options, 95_000));
   const places: Place[] = payload.results.flatMap(result => result.latitude === null || result.longitude === null ? [] : [{
     id: result.docId, name: result.title, category: result.category ?? "친환경 실천 장소", address: result.address ?? "주소 정보 없음",
     benefit: result.summary, sourceUrl: result.sourceUrl, distanceKm: result.distanceKm, latitude: result.latitude, longitude: result.longitude,
   }]);
-  return { places, tookMs: payload.meta.tookMs };
+  return { places, tookMs: payload.meta.tookMs, region: payload.meta.region ?? null };
 }
 export async function requestRoute(origin: RoutePoint, destination: RoutePoint, options: Options = {}) {
   return readRoute(await request(mapApiPaths.route, { origin, destination: { latitude: destination.latitude, longitude: destination.longitude } }, options, 20_000));

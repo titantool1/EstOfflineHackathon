@@ -18,7 +18,7 @@ class RecommendationServiceTest {
     @Test void selectedInterestsProduceOrderedSnapshotAndSameKeyReplaysIt() {
         var store=mock(RecommendationStore.class);var candidates=mock(MissionCandidateReader.class);var interests=mock(InterestService.class);
         when(interests.get(OWNER)).thenReturn(new InterestProfile(List.of(),List.of("eco-learning")));
-        when(candidates.find(List.of("eco-learning"),2)).thenReturn(List.of(new MissionCandidateReader.Candidate(
+        when(candidates.find(OWNER,List.of("eco-learning"),2)).thenReturn(List.of(new MissionCandidateReader.Candidate(
                 "P","A","basis","title","summary","raw",3,List.of("eco-learning"),1)));
         var service=new RecommendationService(store,candidates,interests,Clock.fixed(Instant.parse("2026-09-17T01:02:03.123456789Z"),ZoneOffset.UTC),5);
         var created=service.create(OWNER,KEY,2);
@@ -29,13 +29,13 @@ class RecommendationServiceTest {
         when(interests.get(OWNER)).thenReturn(new InterestProfile(List.of(),List.of("cleanup")));
         assertSame(created,service.create(OWNER,KEY,2,"interests"));
         verify(interests,times(1)).get(OWNER);
-        verify(candidates,times(1)).find(anyList(),anyInt());
+        verify(candidates,times(1)).find(eq(OWNER),anyList(),anyInt());
     }
     @Test void unsureExploresCatalogAndChangedLimitConflicts() {
         var store=mock(RecommendationStore.class);var candidates=mock(MissionCandidateReader.class);var interests=mock(InterestService.class);
         when(interests.get(OWNER)).thenReturn(new InterestProfile(List.of(),List.of("unsure")));
         var service=new RecommendationService(store,candidates,interests,Clock.systemUTC(),5);
-        var created=service.create(OWNER,KEY,null);assertEquals("catalog_exploration",created.selectionBasis());verify(candidates).find(List.of("unsure"),5);
+        var created=service.create(OWNER,KEY,null);assertEquals("catalog_exploration",created.selectionBasis());verify(candidates).find(OWNER,List.of("unsure"),5);
         when(store.findByRequest(OWNER,KEY)).thenReturn(Optional.of(
                 new RecommendationStore.StoredBatch(5,RecommendationMode.INTERESTS,created)));
         var error=assertThrows(RecommendationException.class,()->service.create(OWNER,KEY,4));assertEquals("IDEMPOTENCY_CONFLICT",error.code);
@@ -45,7 +45,7 @@ class RecommendationServiceTest {
         var store=mock(RecommendationStore.class);
         var candidates=mock(MissionCandidateReader.class);
         var interests=mock(InterestService.class);
-        when(candidates.find(List.of(),3)).thenReturn(List.of(new MissionCandidateReader.Candidate(
+        when(candidates.find(OWNER,List.of(),3)).thenReturn(List.of(new MissionCandidateReader.Candidate(
                 "P","A","basis","title","summary","raw",0,List.of(),0)));
         var service=new RecommendationService(store,candidates,interests,Clock.systemUTC(),5);
 
@@ -54,7 +54,7 @@ class RecommendationServiceTest {
         assertEquals("catalog_exploration",created.selectionBasis());
         assertEquals(List.of(),created.items().getFirst().matchedInterestIds());
         verifyNoInteractions(interests);
-        verify(candidates).find(List.of(),3);
+        verify(candidates).find(OWNER,List.of(),3);
         verify(store).save(OWNER,KEY,3,RecommendationMode.GENERAL,created);
     }
 

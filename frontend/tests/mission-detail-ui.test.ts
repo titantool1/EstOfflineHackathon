@@ -67,3 +67,13 @@ test("detail client distinguishes an empty-place success from an upstream failur
   await assert.rejects(() => failed(batchId, itemId), (caught: unknown) =>
     caught instanceof MissionDetailClientError && caught.status === 503 && caught.code === "DATABASE_UNAVAILABLE");
 });
+
+test("imported candidate source names are accepted without inventing URLs, but other missing sources fail", () => {
+  const place = { ...detail.detail.places[0], relation_type: "candidate_action",
+    source: { id: "legacy", url: "", title: "스마트서울맵", origin: "legacy_place_catalog" } };
+  const withPlace = (p: unknown) => ({ ...detail, detail: { ...detail.detail, places: [p] } });
+  assert.equal(isMissionItemDetail(withPlace(place)), true);
+  assert.equal(isMissionItemDetail(withPlace({ ...place, relation_type: "registered" })), false);
+  assert.equal(isMissionItemDetail(withPlace({ ...place, source: { ...place.source, origin: "unknown" } })), false);
+  assert.equal(isMissionItemDetail(withPlace({ ...place, source: { ...place.source, url: "javascript:alert(1)" } })), false);
+});

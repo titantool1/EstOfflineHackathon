@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RecommendationService {
-    public static final String ALGORITHM = "interest-mapped-catalog-order-v1";
+    public static final String ALGORITHM = "interest-mapped-unseen-first-v2";
     private final RecommendationStore store;
     private final MissionCandidateReader candidates;
     private final InterestService interests;
@@ -59,7 +59,7 @@ public class RecommendationService {
                 ? List.of() : interests.get(owner).interestIds();
         boolean exploration=requestMode == RecommendationMode.GENERAL
                 || selected.isEmpty() || selected.contains("unsure");
-        var source=candidates.find(selected,limit);
+        var source=candidates.find(owner,selected,limit);
         UUID batchId=UUID.randomUUID();
         var items=java.util.stream.IntStream.range(0,source.size()).mapToObj(position -> {
             var c=source.get(position);

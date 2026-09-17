@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { MissionPhotoToggle } from "./photo/MissionPhotoToggle";
 import { SourceLink } from "@/features/sources/SourceLink";
+import { actionDescription } from "./action-descriptions.ts";
+import { programSummary } from "./program-summaries.ts";
 import { displayValue } from "./detail-contract.ts";
 import { missionRouteHref, safeMissionReturnHref } from "./return-context.ts";
 import { useMissionDetail } from "./use-mission-detail.ts";
@@ -23,13 +25,19 @@ export function MissionDetailScreen({ batchId, itemId, returnTo }: {
     returnHref={returnHref} retry={state.retryDetail} />;
 
   const detail = state.detail.detail;
+  const action = actionDescription(detail.program_key, detail.action_id);
+  const summary = action?.summary ?? programSummary(detail.program_key);
   return <main className="[overflow-wrap:anywhere] mx-auto max-w-4xl px-5 py-8 md:py-12">
     <Link href={returnHref} aria-label="원래 미션 카드로 돌아가기"
       className="text-sm font-bold text-[#397d3e] hover:underline">← 미션 카드로 돌아가기</Link>
     <section className="mt-5 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#dfe9da] md:p-8">
       <p className="text-xs font-bold text-[#5b8c55]">등록된 제도·행동 상세</p>
-      <h1 className="mt-2 text-2xl font-bold text-[#29452a] md:text-3xl">{detail.title}</h1>
-      <p className="mt-3 break-all text-xs text-[#71816f]">행동 ID {detail.action_id} · {detail.identity_basis}</p>
+      <h1 className="mt-2 text-2xl font-bold text-[#29452a] md:text-3xl">{action?.title ?? detail.title}</h1>
+      {action && <p className="mt-2 text-sm text-[#71816f]">연결 제도 · {detail.title}</p>}
+      {summary && <section aria-labelledby="summary-title" className="mt-6 rounded-2xl bg-[#eef7e9] p-5">
+        <h2 id="summary-title" className="font-bold text-[#315f35]">한눈에 보기</h2>
+        <p className="mt-2 text-sm leading-6 text-[#526b50]">{summary}</p>
+      </section>}
       {programField(detail.program, "benefit") && <section aria-labelledby="benefit-title"
         className="mt-6 rounded-2xl bg-[#eef7e9] p-5">
         <h2 id="benefit-title" className="font-bold text-[#315f35]">등록 자료의 혜택 안내</h2>
@@ -55,7 +63,6 @@ export function MissionDetailScreen({ batchId, itemId, returnTo }: {
           key={String(entry.condition.id ?? index)} className="rounded-2xl bg-[#f7faf5] p-4">
           <p className="font-semibold text-[#345737]">{displayValue(entry.condition.requirement) ?? `조건 ${index + 1}`}</p>
           {displayValue(entry.condition.detail) && <p className="mt-2 text-sm leading-6 text-[#667864]">{displayValue(entry.condition.detail)}</p>}
-          <p className="mt-2 text-xs text-[#788775]">매핑 근거: {entry.mapping_basis}</p>
           {entry.sources.length > 0 && <ul aria-label={`조건 ${index + 1} 출처`} className="mt-3 space-y-1 text-sm">
             {entry.sources.map(source => <li key={source.id}><SourceLink source={source} /></li>)}
           </ul>}
@@ -70,6 +77,8 @@ export function MissionDetailScreen({ batchId, itemId, returnTo }: {
     </section>
 
     <div className="mt-6 grid gap-3 sm:grid-cols-2">
+      <Link href={missionRouteHref("/chat", position, returnHref)}
+        className="rounded-2xl bg-[#eaf5e5] px-5 py-4 text-center font-bold text-[#347b3d]">이 미션을 챗봇에 물어보기</Link>
       <Link href={missionRouteHref("/map/mission", position, returnHref)} aria-label="이 미션의 관련 장소 보기"
         className="rounded-2xl bg-[#2f843d] px-5 py-4 text-center font-bold text-white">관련 장소 {detail.places.length}건 보기</Link>
       <Link href={returnHref} aria-label="원래 미션 카드로 돌아가기"

@@ -1,3 +1,4 @@
+import { sessionFetch } from "./session-fetch.ts";
 import { isNeighborhoodView, isResolveResult, type Neighborhood } from "./neighborhood-contract.ts";
 
 type Envelope<T> = { data: T | null; error: { code: string; message: string } | null; requestId: string };
@@ -6,6 +7,7 @@ const record = (value: unknown): value is Record<string, unknown> => value !== n
 export class NeighborhoodClientError extends Error {
   readonly code: string;
   readonly status: number;
+  outcomeUnknown = false;
   constructor(code: string, message: string, status: number) { super(message); this.code = code; this.status = status; }
 }
 
@@ -25,7 +27,7 @@ async function response<T>(reply: Response, validate: (data: unknown) => data is
   return typed.data;
 }
 
-export function createNeighborhoodClient(fetcher: typeof fetch = fetch) {
+export function createNeighborhoodClient(fetcher: typeof fetch = sessionFetch) {
   return {
     async get(signal?: AbortSignal) {
       return (await response(await fetcher("/api/profile/neighborhood", { signal, cache: "no-store" }), isNeighborhoodView)).neighborhood;
@@ -39,10 +41,22 @@ export function createNeighborhoodClient(fetcher: typeof fetch = fetch) {
       const csrf = await response(await fetcher("/api/auth/csrf", { cache: "no-store" }),
         (value): value is { token: string; headerName: string } => record(value)
           && typeof value.token === "string" && value.headerName === "X-CSRF-TOKEN");
-      return (await response(await fetcher("/api/profile/neighborhood", {
+      try {
+        return (await response(await fetcher("/api/profile/neighborhood", {
         method: "PUT", headers: { "Content-Type": "application/json", [csrf.headerName]: csrf.token },
         body: JSON.stringify(neighborhood),
       }), (value): value is { neighborhood: Neighborhood } => isNeighborhoodView(value) && value.neighborhood !== null)).neighborhood;
+      } catch (error) {
+        // A new anonymous CSRF session can yield 403 after the old session expires.
+        // Distinguish it from a valid member's CSRF error before requesting login.
+        if (error instanceof NeighborhoodClientError && error.status === 403) {
+          await response(await fetcher("/api/profile/neighborhood", { cache: "no-store" }), isNeighborhoodView);
+        }
+        const failure = error instanceof NeighborhoodClientError ? error
+          : new NeighborhoodClientError("NETWORK_ERROR", "서버에 연결하지 못했어요.", 503);
+        failure.outcomeUnknown = failure.status >= 500;
+        throw failure;
+      }
     },
   };
 }

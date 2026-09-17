@@ -1,3 +1,4 @@
+import { sessionFetch } from "../profile/session-fetch.ts";
 import { isMissionProgress, type MissionProgress } from "./progress.ts";
 import {
   isMissionEvent,
@@ -57,7 +58,7 @@ function asClientError(error: unknown, signal?: AbortSignal): MissionClientError
   return new MissionClientError(503, "NETWORK_ERROR", "서버에 연결하지 못했어요.");
 }
 
-export function createMissionClient(fetcher: typeof fetch = fetch) {
+export function createMissionClient(fetcher: typeof fetch = sessionFetch) {
   async function request<T>(path: string, validate: (value: unknown) => value is T,
       init: RequestInit = {}, signal?: AbortSignal): Promise<T> {
     try {

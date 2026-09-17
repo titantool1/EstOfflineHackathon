@@ -28,7 +28,7 @@ test("window/concurrency budgets recover; release is idempotent and rollover kee
 test("invalid inputs do not spend budget; 429 stops upstream and carries safe headers", async () => {
   let now = 1000, calls = 0;
   const budget = new RequestBudget(1, 1, 60_000, () => now);
-  const options = { budget, fetch: async () => { calls++; return Response.json(empty); } };
+  const options = { budget, fetch: async () => { calls++; return Response.json({ data: empty, error: null, requestId: "limit-check" }); } };
   assert.equal((await searchPlaces(req(null), options)).status, 400);
   assert.equal((await searchPlaces(req({}), options)).status, 200);
   const request = req({}); request.headers.set("X-Request-Id", "limit-test");

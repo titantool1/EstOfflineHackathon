@@ -1,7 +1,11 @@
 "use client";
 import Link from "next/link";
+import { ProfilePreferences } from "@/features/profile/ProfilePreferences";
+import { SiteHeader } from "@/features/navigation/SiteHeader";
 import { useEffect, useRef, useState } from "react";
 import { AccountError, accountErrorMessage, createAccountClient, type Member } from "@/features/profile/account-client";
+
+
 
 type View = { kind: "loading" } | { kind: "ready"; member: Member }
   | { kind: "signedOut"; message: string } | { kind: "failed"; message: string };
@@ -38,21 +42,26 @@ export default function ProfilePage() {
           : accountErrorMessage(error) });
     } finally { logoutPending.current = false; setLoggingOut(false); }
   }
-  return <main className="min-h-screen bg-[#f5f8f1] px-5 py-12"><section className="mx-auto max-w-md rounded-3xl bg-white p-7">
-    <Link href="/" className="font-bold text-[#267a38]">에코줍줍</Link>
-    <h1 className="my-6 text-2xl font-bold">내 프로필</h1>
-    {view.kind === "loading" ? <p role="status">불러오는 중</p> : view.kind === "ready" ? <>
-      <p className="text-xl font-semibold">{view.member.nickname}님</p><p className="mt-2 text-sm">{view.member.email}</p>
-      <Link href="/profile/neighborhood" className="mt-5 block text-sm font-semibold text-[#267a38] underline">관심동네 설정</Link>
-      <Link href="/onboarding" className="mt-3 block text-sm font-semibold text-[#267a38] underline">관심사 설정</Link>
-      <button onClick={logout} disabled={loggingOut} className="mt-6 rounded-xl border px-4 py-2 disabled:opacity-60">
-        {loggingOut ? "로그아웃 중" : "로그아웃"}</button>
-    </> : view.kind === "signedOut" ? <>
-      <p role="status" className="mb-4">{view.message}</p>
-      <div className="flex gap-5"><Link href="/login" className="underline">로그인</Link><Link href="/signup" className="underline">회원가입</Link></div>
-    </> : <>
-      <p role="alert" className="text-red-700">{view.message}</p>
-      <button onClick={retry} className="mt-5 rounded-xl border px-4 py-2">다시 확인</button>
-    </>}
-  </section></main>;
+  return <div className="min-h-screen bg-[#f5f8f1] text-[#29452a]">
+    <SiteHeader />
+    <main className="mx-auto max-w-6xl px-5 py-8 sm:py-12 [overflow-wrap:anywhere]">
+      <p className="text-sm font-bold text-[#4b914e]">나의 에코줍줍</p>
+      <h1 className="mb-2 mt-2 text-2xl font-bold sm:text-3xl">내 프로필</h1>
+      <p className="mb-6 text-sm leading-6 text-[#61745f]">관심동네와 관심사를 설정하고, 나에게 맞는 실천을 찾아보세요.</p>
+      <section>
+        {view.kind === "loading" ? <p role="status" className="rounded-2xl bg-[#f3f7ef] p-5 text-sm text-[#61745f]">내 프로필을 불러오고 있어요…</p> : view.kind === "ready" ? <>
+          <div className="flex flex-wrap items-center justify-between gap-4"><div><h2 className="text-lg font-bold text-[#1e5831]">{view.member.nickname}님</h2><p className="mt-1 text-sm text-[#61745f]">{view.member.email}</p></div>
+            <button onClick={logout} disabled={loggingOut} className="min-h-11 rounded-xl border border-[#b8df91] bg-white px-4 py-2 text-sm font-bold text-[#397f40] disabled:opacity-60">{loggingOut ? "로그아웃 중…" : "로그아웃"}</button></div>
+          <ProfilePreferences key={view.member.userId} />
+        </> : view.kind === "signedOut" ? <>
+          <p role="status" className="rounded-2xl bg-[#eef5ea] p-4 text-sm leading-6">{view.message}</p>
+          <p className="mb-5 mt-4 text-sm leading-6 text-[#61745f]">로그인하면 내 관심사를 저장하고 실천 기록을 이어갈 수 있어요.</p>
+          <div className="grid grid-cols-2 gap-3"><Link href="/login" className="rounded-xl bg-[#2f843d] p-3 text-center font-bold text-white">로그인</Link><Link href="/signup" className="rounded-xl border border-[#cfddc8] p-3 text-center font-bold text-[#267a38]">회원가입</Link></div>
+        </> : <>
+          <p role="alert" className="rounded-2xl bg-[#fff5f0] p-4 text-sm leading-6 text-[#8c4934]">{view.message}</p>
+          <button onClick={retry} className="mt-4 min-h-11 rounded-xl border border-[#cfddc8] px-4 py-2 font-semibold text-[#267a38]">다시 확인</button>
+        </>}
+      </section>
+    </main>
+  </div>;
 }

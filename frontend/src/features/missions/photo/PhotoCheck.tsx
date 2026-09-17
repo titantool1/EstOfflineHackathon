@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { sessionFetch } from "../../profile/session-fetch.ts";
 import { useEffect, useId, useRef, useState } from "react";
 import { MAX_PHOTO_BYTES, PHOTO_TYPES, isPhotoResult, type PhotoResult } from "./contract.ts";
 
@@ -22,7 +22,6 @@ export function PhotoCheck() {
   const [preview, setPreview] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [loginNeeded, setLoginNeeded] = useState(false);
   const [result, setResult] = useState<PhotoResult | null>(null);
   const active = useRef<AbortController | null>(null);
   const objectUrl = useRef<string | null>(null);
@@ -31,7 +30,7 @@ export function PhotoCheck() {
   function select(next: File | null) {
     if (active.current) return;
     if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
-    objectUrl.current = null; setPreview(null); setFile(null); setResult(null); setError(""); setLoginNeeded(false);
+    objectUrl.current = null; setPreview(null); setFile(null); setResult(null); setError("");
     if (!next) { if (input.current) input.current.value = ""; return; }
     if (!PHOTO_TYPES.some(type => type === next.type) || next.size === 0 || next.size > MAX_PHOTO_BYTES) {
       setError("5MB 이하 JPG·PNG·WebP 사진을 선택해 주세요.");
@@ -44,14 +43,13 @@ export function PhotoCheck() {
     if (!file || active.current) return;
     const controller = new AbortController(); active.current = controller;
     const timeout = window.setTimeout(() => controller.abort(), 35_000);
-    setBusy(true); setResult(null); setError(""); setLoginNeeded(false);
+    setBusy(true); setResult(null); setError("");
     try {
       const image = await readPhoto(file, controller.signal);
-      const response = await fetch("/api/missions/photo-check", { method: "POST", credentials: "same-origin",
+      const response = await sessionFetch("/api/missions/photo-check", { method: "POST", credentials: "same-origin",
         headers: { "Content-Type": "application/json" }, body: JSON.stringify({ image }), signal: controller.signal });
       const body = await response.json();
       if (!response.ok || !isPhotoResult(body.data)) {
-        setLoginNeeded(response.status === 401);
         throw new Error(typeof body.error?.message === "string" ? body.error.message : "사진을 확인하지 못했어요. 다시 시도해 주세요.");
       }
       if (!controller.signal.aborted) setResult(body.data);
@@ -80,8 +78,7 @@ export function PhotoCheck() {
       className="mt-4 min-h-12 w-full rounded-xl bg-[#2f843d] px-5 py-3 font-bold text-white disabled:opacity-50">
       {busy ? "사진 확인 중…" : "사진 확인하기"}</button>
     {busy && <p role="status" className="mt-3 text-sm">사진을 살펴보고 있어요. 잠시 기다려 주세요.</p>}
-    {error && <div role="alert" className="mt-4 rounded-xl bg-[#fff4e5] p-4 text-sm text-[#7b5929]">{error}
-      {loginNeeded && <Link href="/login" className="ml-2 font-bold underline">로그인하기</Link>}</div>}
+    {error && <div role="alert" className="mt-4 rounded-xl bg-[#fff4e5] p-4 text-sm text-[#7b5929]">{error}</div>}
     {result && <div role="status" className="mt-4 rounded-xl bg-[#eef7e9] p-5">
       <h4 className="font-bold text-[#315f35]">{result.title}</h4><p className="mt-2 text-sm leading-6">{result.message}</p>
     </div>}

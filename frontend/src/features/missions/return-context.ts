@@ -91,7 +91,7 @@ export function safeMissionReturnHref(value: string | undefined, fallback: Missi
   return canonical;
 }
 
-export function missionRouteHref(pathname: "/missions/detail" | "/map/mission",
+export function missionRouteHref(pathname: "/missions/detail" | "/map/mission" | "/chat",
   position: MissionPosition, returnHref: string): string {
   const query = new URLSearchParams({
     batchId: position.batchId,

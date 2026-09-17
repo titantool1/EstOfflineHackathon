@@ -106,7 +106,7 @@ function currentInstructions(value: RunInput["instructions"]) {
 }
 
 function toolProgress(name: string) {
-  if (name === "search_catalog") return "searching" as const;
+  if (name === "search_catalog" || name === "search_places") return "searching" as const;
   if (name === "get_catalog_action") return "reading" as const;
   if (name === "load_user_conditions") return "checking_conditions" as const;
   if (name === "update_conditions") return "updating_conditions" as const;

@@ -96,3 +96,20 @@ test("embedding is required only for search and failures never become empty resu
   await assert.rejects(down.execute("search_catalog", search), /embedding failed/);
   assert.equal(calls, 1);
 });
+
+test("large place catalog bounds model context without claiming nearest or verified rewards", async () => {
+  const candidate = { ...detail.places[0], status: "unknown", relation_type: "candidate_action",
+    mapping_basis: "혜택 미확인", source: { id: "legacy", url: "", title: "스마트서울맵", origin: "legacy_place_catalog" } };
+  const places = Array.from({ length: 812 }, (_, i) => ({ ...candidate, place_id: `PLACE-${i}` }));
+  const result = await tools({ ...detail, places }).execute("get_catalog_action", { programKey: "P", actionId: "A" });
+  assert.ok(result.data && "places" in result.data);
+  const data = result.data as typeof detail & { place_count: number; places_truncated: boolean; place_selection: string };
+  assert.equal(data.places.length, 10);
+  assert.equal(data.place_count, 812);
+  assert.equal(data.places_truncated, true);
+  assert.equal(data.place_selection, "catalog_order_not_distance");
+  assert.deepEqual(data.conditions, detail.conditions);
+  assert.deepEqual(data.places[0], places[0]);
+  await assert.rejects(tools({ ...detail, places: [{ ...candidate, relation_type: "registered" }] })
+    .execute("get_catalog_action", { programKey: "P", actionId: "A" }), { code: "BACKEND_INVALID_RESPONSE" });
+});

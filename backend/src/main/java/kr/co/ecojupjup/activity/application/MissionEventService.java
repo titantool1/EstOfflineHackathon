@@ -5,6 +5,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import kr.co.ecojupjup.recommendation.application.RecommendationException;
 import kr.co.ecojupjup.recommendation.application.RecommendationService;
@@ -21,9 +22,11 @@ public class MissionEventService {
 
     @Transactional(readOnly=true) public Progress progress(UUID owner) {
         if (owner==null) throw new MissionEventException(401,"AUTHENTICATION_REQUIRED");
-        return new Progress(store.completedMissionCount(owner));
+        var completed=store.completedMissions(owner);
+        return new Progress(completed.size(),completed,store.acceptedMissions(owner));
     }
-    public record Progress(long completedMissionCount) {}
+    public record Progress(long completedMissionCount, List<MissionEventStore.CompletedMission> completedMissions,
+        List<MissionEventStore.CompletedMission> acceptedMissions) {}
 
     @Transactional public MissionEvent record(UUID owner,UUID clientEventId,UUID batchId,UUID itemId,String eventType,OffsetDateTime occurredAt) {
         if (owner==null || clientEventId==null || batchId==null || itemId==null || occurredAt==null

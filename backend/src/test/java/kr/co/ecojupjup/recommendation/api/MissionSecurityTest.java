@@ -47,14 +47,18 @@ class MissionSecurityTest {
     @AfterEach void close(){context.close();}
     @Test void progressUsesOnlyAuthenticatedOwnerAndIsNotCached() throws Exception {
         var service=context.getBean(MissionEventService.class);
-        when(service.progress(OWNER)).thenReturn(new MissionEventService.Progress(3));
+        when(service.progress(OWNER)).thenReturn(new MissionEventService.Progress(1, java.util.List.of(new kr.co.ecojupjup.activity.application.MissionEventStore.CompletedMission("p1","a1")), java.util.List.of(new kr.co.ecojupjup.activity.application.MissionEventStore.CompletedMission("p2","a2"))));
         mvc.perform(get("/api/missions/events/progress")).andExpect(status().isUnauthorized());
         var principal=new MemberPrincipal(OWNER,"a@example.test","hash","초록이");
         var auth=UsernamePasswordAuthenticationToken.authenticated(principal,null,List.of());
         mvc.perform(get("/api/missions/events/progress?userId="+UUID.randomUUID())
                 .header("X-User-Id",UUID.randomUUID()).with(authentication(auth)))
             .andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store"))
-            .andExpect(jsonPath("$.data.completedMissionCount").value(3));
+            .andExpect(jsonPath("$.data.completedMissionCount").value(1))
+            .andExpect(jsonPath("$.data.completedMissions[0].programKey").value("p1"))
+            .andExpect(jsonPath("$.data.completedMissions[0].actionId").value("a1"))
+            .andExpect(jsonPath("$.data.acceptedMissions[0].programKey").value("p2"))
+            .andExpect(jsonPath("$.data.acceptedMissions[0].actionId").value("a2"));
         verify(service).progress(OWNER);
     }
     @Test void missionWritesRequireAuthenticationAndCsrf() throws Exception {

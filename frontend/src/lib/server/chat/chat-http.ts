@@ -19,6 +19,22 @@ function failure(id: string, error: unknown) {
 }
 
 export function createChatHandlers(getRuntime: typeof getChatRuntime) {
+  async function GET(request: Request) {
+    const context = requestContext(request);
+    const sameSite = request.headers.has("Origin") ? sameOrigin(request)
+      : request.headers.get("Sec-Fetch-Site") === "same-origin";
+    if (!sameSite) return result(context.requestId, null,
+      { code: "CROSS_ORIGIN_REQUEST", message: "같은 사이트에서 다시 요청해 주세요." }, 403);
+    const sessionId = new URL(request.url).searchParams.get("clientSessionId");
+    if (!uuid(sessionId)) return result(context.requestId, null,
+      { code: "INVALID_CHAT_REQUEST", message: "상담 정보를 확인해 주세요." }, 400);
+    try {
+      const runtime = await getRuntime();
+      const member = await runtime.member(context.cookie, context.requestId, request.signal);
+      const data = await runtime.chat.restore(sessionId, member.userId, context.cookie);
+      return result(context.requestId, data, null);
+    } catch (error) { return failure(context.requestId, error); }
+  }
   async function POST(request: Request) {
     const context = requestContext(request);
     if (!sameOrigin(request))
@@ -90,5 +106,5 @@ export function createChatHandlers(getRuntime: typeof getChatRuntime) {
     } catch (error) { return failure(context.requestId, error); }
   }
 
-  return { POST, PATCH, DELETE };
+  return { GET, POST, PATCH, DELETE };
 }

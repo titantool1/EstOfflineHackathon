@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import kr.co.ecojupjup.catalog.application.MissionCandidateReader;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,11 +17,12 @@ public class JdbcMissionCandidateReader implements MissionCandidateReader {
     public JdbcMissionCandidateReader(NamedParameterJdbcTemplate jdbc) { this.jdbc = jdbc; }
 
     @Override
-    public List<Candidate> find(List<String> selectedInterestIds, int limit) {
+    public List<Candidate> find(UUID owner, List<String> selectedInterestIds, int limit) {
         boolean exploration = selectedInterestIds.isEmpty() || selectedInterestIds.contains("unsure");
         Map<String, Object> values = new HashMap<>();
         values.put("interests", exploration ? List.of("__catalog_exploration__") : selectedInterestIds);
         values.put("limit", limit);
+        values.put("owner", owner);
         return jdbc.query("""
             SELECT a.program_key,a.action_id,a.identity_basis,
               COALESCE(p.payload->>'display_title',p.payload->>'title','') AS program_title,
@@ -36,10 +38,15 @@ public class JdbcMissionCandidateReader implements MissionCandidateReader {
               (SELECT count(DISTINCT ap.place_id) FROM app.action_place ap
                 WHERE ap.program_key=a.program_key AND ap.action_id=a.action_id) AS related_place_count
             FROM app.catalog_action a JOIN app.catalog_program p USING(program_key)
+            LEFT JOIN LATERAL (
+              SELECT max(b.created_at) AS last_recommended
+              FROM app.recommendation_item ri JOIN app.recommendation_batch b USING(batch_id,user_id)
+              WHERE ri.user_id=:owner AND ri.program_key=a.program_key AND ri.action_id=a.action_id
+            ) history ON true
             WHERE :exploration OR EXISTS (SELECT 1 FROM app.catalog_action_interest ai
               WHERE ai.program_key=a.program_key AND ai.action_id=a.action_id
                 AND ai.interest_id IN (:interests))
-            ORDER BY a.program_key,a.action_id LIMIT :limit
+            ORDER BY history.last_recommended ASC NULLS FIRST, random() LIMIT :limit
             """, new org.springframework.jdbc.core.namedparam.MapSqlParameterSource(values)
                     .addValue("exploration", exploration), (row, index) -> new Candidate(
                 row.getString(1), row.getString(2), row.getString(3), row.getString(4),

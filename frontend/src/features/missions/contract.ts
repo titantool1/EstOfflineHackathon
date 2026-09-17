@@ -20,7 +20,7 @@ export type MissionRecommendationItem = {
 };
 export type MissionRecommendationBatch = {
   batchId: string;
-  algorithmVersion: "interest-mapped-catalog-order-v1";
+  algorithmVersion: "interest-mapped-catalog-order-v1" | "interest-mapped-unseen-first-v2";
   selectionBasis: "selected_interests" | "catalog_exploration";
   createdAt: string;
   items: MissionRecommendationItem[];
@@ -68,7 +68,7 @@ function isItem(value: unknown): value is MissionRecommendationItem {
 }
 export function isMissionRecommendationBatch(value: unknown): value is MissionRecommendationBatch {
   if (!record(value) || !exact(value, ["batchId", "algorithmVersion", "selectionBasis", "createdAt", "items"])
-    || !isUuid(value.batchId) || value.algorithmVersion !== "interest-mapped-catalog-order-v1"
+    || !isUuid(value.batchId) || !["interest-mapped-catalog-order-v1", "interest-mapped-unseen-first-v2"].includes(String(value.algorithmVersion))
     || !["selected_interests", "catalog_exploration"].includes(String(value.selectionBasis)) || !isTimestamp(value.createdAt)
     || !Array.isArray(value.items) || !value.items.every(isItem)) return false;
   return value.items.every((item, index) => item.position === index)

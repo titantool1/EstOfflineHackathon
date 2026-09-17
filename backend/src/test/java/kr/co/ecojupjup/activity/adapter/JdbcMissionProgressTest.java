@@ -27,8 +27,31 @@ class JdbcMissionProgressTest {
         assertEquals(1,reader.completedMissionCount(owner));
         add(jdbc,owner,"p2","a1","self_reported_completed",1); // same action ID, different program
         assertEquals(2,reader.completedMissionCount(owner));
+        assertEquals(java.util.List.of(
+            new kr.co.ecojupjup.activity.application.MissionEventStore.CompletedMission("p1","a1"),
+            new kr.co.ecojupjup.activity.application.MissionEventStore.CompletedMission("p2","a1")
+        ),reader.completedMissions(owner));
+        assertEquals(java.util.List.of(
+            new kr.co.ecojupjup.activity.application.MissionEventStore.CompletedMission("p2","a2")
+        ),reader.completedMissions(other));
         assertEquals(1,reader.completedMissionCount(other));
         assertEquals(0,reader.completedMissionCount(UUID.randomUUID()));
+        add(jdbc,owner,"p1","a2","accepted",2); // replay/new batch retains one accepted identity
+        add(jdbc,owner,"p2","a2","accepted",1); // program+action identity
+        add(jdbc,other,"p3","a3","accepted",1);
+        assertEquals(java.util.List.of(
+            new kr.co.ecojupjup.activity.application.MissionEventStore.CompletedMission("p1","a2"),
+            new kr.co.ecojupjup.activity.application.MissionEventStore.CompletedMission("p2","a2")
+        ),reader.acceptedMissions(owner));
+        assertEquals(java.util.List.of(
+            new kr.co.ecojupjup.activity.application.MissionEventStore.CompletedMission("p3","a3")
+        ),reader.acceptedMissions(other));
+        assertEquals(java.util.List.of(),reader.acceptedMissions(UUID.randomUUID()));
+        assertEquals(2,reader.completedMissionCount(owner)); // starting does not earn completion/level
+        add(jdbc,owner,"p1","a2","self_reported_completed",1);
+        assertEquals(3,reader.completedMissionCount(owner));
+        assertEquals(2,reader.acceptedMissions(owner).size()); // history remains, completion wins in UI
+
     }
     private static void add(JdbcTemplate jdbc,UUID owner,String program,String action,String type,int repeats) {
         var batch=UUID.randomUUID();var item=UUID.randomUUID();

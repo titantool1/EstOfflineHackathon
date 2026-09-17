@@ -1,6 +1,6 @@
 export type Neighborhood = { regionCode: string; sido: string; sigungu: string; dong: string };
 export type EmptyReason = "NO_RESULTS" | "ADMINISTRATIVE_NEIGHBORHOOD_REQUIRED" | null;
-export type ResolveResult = { candidates: Neighborhood[]; hasMore: boolean; emptyReason: EmptyReason };
+export type ResolveResult = { candidates: Neighborhood[]; hasMore: boolean; emptyReason: EmptyReason; usedAddressPoint?: boolean };
 
 const record = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === "object" && !Array.isArray(value);
@@ -22,6 +22,7 @@ export function isNeighborhoodView(value: unknown): value is { neighborhood: Nei
 export function isResolveResult(value: unknown): value is ResolveResult {
   return record(value) && Array.isArray(value.candidates) && value.candidates.every(isNeighborhood)
     && typeof value.hasMore === "boolean"
+    && (value.usedAddressPoint === undefined || typeof value.usedAddressPoint === "boolean")
     && (value.emptyReason === null || value.emptyReason === "NO_RESULTS"
       || value.emptyReason === "ADMINISTRATIVE_NEIGHBORHOOD_REQUIRED");
 }

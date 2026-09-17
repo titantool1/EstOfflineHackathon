@@ -5,7 +5,7 @@ import type { ConversationSession, ConversationTurn } from "../ai/conversation-c
 import type { ConversationResult } from "../ai/application/conversation-session.ts";
 import { createConditionSaveService } from "../ai/application/condition-save.ts";
 import type { ConditionSaveOutcome, ConditionSavePort } from "../ai/application/condition-save.ts";
-import type { ChatTurnEvent } from "../../chat-stream.ts";
+import type { ChatSnapshot, ChatTurnEvent } from "../../chat-stream.ts";
 
 type Runtime = {
   createSession(userId: string): ConversationSession;
@@ -21,6 +21,10 @@ type Authenticate = (cookie: string, signal: AbortSignal) => Promise<{ userId: s
 type SaveStatus = ConditionSaveOutcome["status"];
 type Entry = {
   owner: string;
+  clientSessionId?: string;
+  messages: { role: "user" | "assistant"; text: string }[];
+  pendingMessage?: string;
+  idleDeadline?: number;
   session: ConversationSession;
   save: ReturnType<typeof createConditionSaveService>;
   cookie: string;
@@ -31,7 +35,7 @@ type Entry = {
   timer?: Timer;
   closing?: Promise<{ closed: true; saveStatus: SaveStatus }>;
 };
-type Tombstone = { owner: string; saveStatus: SaveStatus; expiresAt: number };
+type Tombstone = { owner: string; clientSessionId?: string; saveStatus: SaveStatus; expiresAt: number };
 
 export class ChatFailure extends Error {
   readonly status: number;
@@ -68,15 +72,16 @@ export function createChatService(runtime: Runtime, options: {
   const clearTimer = (entry: Entry) => {
     if (entry.timer !== undefined) timers.clearTimeout(entry.timer);
     entry.timer = undefined;
+    entry.idleDeadline = undefined;
   };
   const setUnrefTimer = (callback: () => void, delay: number) => {
     const timer = timers.setTimeout(callback, delay);
     if (typeof timer === "object" && timer && "unref" in timer) (timer as NodeJS.Timeout).unref();
     return timer;
   };
-  const remember = (conversationId: string, owner: string, saveStatus: SaveStatus) => {
+  const remember = (conversationId: string, owner: string, saveStatus: SaveStatus, clientSessionId?: string) => {
     const expiresAt = now() + 30_000;
-    tombstones.set(conversationId, { owner, saveStatus, expiresAt });
+    tombstones.set(conversationId, { owner, clientSessionId, saveStatus, expiresAt });
     setUnrefTimer(() => {
       const current = tombstones.get(conversationId);
       if (current?.expiresAt === expiresAt) tombstones.delete(conversationId);
@@ -107,6 +112,7 @@ export function createChatService(runtime: Runtime, options: {
   const armIdle = (conversationId: string, entry: Entry) => {
     clearTimer(entry);
     const generation = ++entry.generation;
+    entry.idleDeadline = now() + idleMs;
     entry.timer = setUnrefTimer(() => { void expire(conversationId, generation); }, idleMs);
   };
 
@@ -126,7 +132,7 @@ export function createChatService(runtime: Runtime, options: {
       catch { /* The entry is discarded below even if provider cleanup fails. */ }
       finally {
         if (entries.get(conversationId) === entry) entries.delete(conversationId);
-        remember(conversationId, entry.owner, saveStatus);
+        remember(conversationId, entry.owner, saveStatus, entry.clientSessionId);
       }
       return { closed: true as const, saveStatus };
     })();
@@ -134,10 +140,29 @@ export function createChatService(runtime: Runtime, options: {
   }
 
   return {
-    async send(input: { conversationId?: string; clientRequestId: string; message: string }, context: {
+    async restore(clientSessionId: string, userId: string, cookie: string): Promise<ChatSnapshot> {
+      const found = [...entries].find(([, entry]) => entry.owner === userId && entry.clientSessionId === clientSessionId);
+      if (found) {
+        const [conversationId, entry] = found;
+        entry.cookie = cookie;
+        if (entry.closing) return { state: "closed", saveStatus: (await entry.closing).saveStatus };
+        return { state: "active", conversationId, messages: structuredClone(entry.messages),
+          generating: entry.generating, pendingMessage: entry.pendingMessage,
+          remainingIdleMs: entry.idleDeadline === undefined ? null : Math.max(0, entry.idleDeadline - now()) };
+      }
+      const ended = [...tombstones.values()].find(entry => entry.owner === userId
+        && entry.clientSessionId === clientSessionId && entry.expiresAt > now());
+      return ended ? { state: "closed", saveStatus: ended.saveStatus } : { state: "missing" };
+    },
+    async send(input: { conversationId?: string; clientSessionId?: string; clientRequestId: string; message: string }, context: {
       userId: string; cookie: string; requestId: string; signal: AbortSignal; onEvent?: (event: ChatTurnEvent) => void;
     }): Promise<{ conversationId: string; message: { role: "assistant"; text: string } }> {
+      context.signal.throwIfAborted();
       let conversationId = input.conversationId;
+      if (!conversationId && input.clientSessionId) {
+        conversationId = [...entries].find(([, entry]) => entry.owner === context.userId
+          && entry.clientSessionId === input.clientSessionId)?.[0];
+      }
       let entry = conversationId ? entries.get(conversationId) : undefined;
       if (conversationId && !entry) {
         if (findTombstone(conversationId, context.userId)) fail(409, "CONVERSATION_CLOSED");
@@ -149,7 +174,8 @@ export function createChatService(runtime: Runtime, options: {
         const port = options.conditionSavePort?.({ conversationId, ownerId: context.userId,
           getCookie: () => holder.entry?.cookie ?? context.cookie })
           ?? { async save() { return { status: "outcome_unconfirmed" as const }; } };
-        const created: Entry = { owner: context.userId, session: runtime.createSession(context.userId),
+        const created: Entry = { owner: context.userId, clientSessionId: input.clientSessionId, messages: [],
+          session: runtime.createSession(context.userId),
           save: createConditionSaveService({ conversationId, ownerId: context.userId, port }), cookie: context.cookie,
           generation: 0, generating: false };
         holder.entry = created;
@@ -164,10 +190,12 @@ export function createChatService(runtime: Runtime, options: {
       clearTimer(active);
       active.generation++;
       active.generating = true;
+      active.pendingMessage = input.message;
       active.turnDone = new Promise<void>(resolve => { active.finishTurn = resolve; });
       const finishTurn = () => {
         if (!active.generating && !active.turnDone) return;
         active.generating = false;
+        active.pendingMessage = undefined;
         active.finishTurn?.();
         active.finishTurn = undefined;
         active.turnDone = undefined;
@@ -176,9 +204,15 @@ export function createChatService(runtime: Runtime, options: {
         text: input.message, sessionHeaders: { Cookie: context.cookie }, requestId: context.requestId };
       try {
         let committed = false;
-        const answer = await runtime.runTurn(active.session, turn, { signal: context.signal, onEvent: context.onEvent,
+        // A reload detaches the stream, not an identified tab's in-flight turn.
+        // The runner's own 85-second limit still bounds generation.
+        const signal = active.clientSessionId ? AbortSignal.timeout(85_000) : context.signal;
+        const onEvent = active.clientSessionId ? (event: ChatTurnEvent) => {
+          if (!context.signal.aborted) { try { context.onEvent?.(event); } catch { /* Detached display. */ } }
+        } : context.onEvent;
+        const answer = await runtime.runTurn(active.session, turn, { signal, onEvent,
           commit: async result => {
-            context.signal.throwIfAborted();
+            signal.throwIfAborted();
             active.save.acceptSuccessfulTurn({ authenticatedOwnerId: context.userId, turnId: input.clientRequestId,
               observedAt: new Date(now()).toISOString(), memory: result.memory });
             committed = true;
@@ -186,6 +220,7 @@ export function createChatService(runtime: Runtime, options: {
         finishTurn();
         if (!committed) fail(503, "CHAT_COMMIT_FAILED");
         if (active.closing) { await active.closing; fail(409, "CONVERSATION_CLOSED"); }
+        active.messages.push({ role: "user", text: input.message }, { role: "assistant", text: answer.text });
         armIdle(conversationId, active);
         return { conversationId, message: { role: "assistant" as const, text: answer.text } };
       } catch (error) {

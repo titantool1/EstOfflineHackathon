@@ -29,11 +29,14 @@ test("null, arrays, wrong types and invalid coordinates are rejected before eith
   assert.equal(calls, 0);
 });
 
-test("valid zero coordinates, defaults and existing upstream wire formats survive", async () => {
+test("valid zero coordinates and defaults survive the team Spring contract", async () => {
   const response = await searchPlaces(req({ latitude: 0, longitude: 0 }), { fetch: async (url, init) => {
-    assert.match(String(url), /\/api\/places$/); assert.equal(init?.redirect, "error");
-    assert.deepEqual(JSON.parse(String(init?.body)), { query: "", region: "서울특별시", latitude: 0, longitude: 0, distance_km: 30, size: 40 });
-    return Response.json(places);
+    assert.equal(new URL(String(url)).pathname, "/api/places"); assert.equal(init?.redirect, "error");
+    assert.equal(init?.method, "GET");
+    assert.deepEqual(Object.fromEntries(new URL(String(url)).searchParams), {
+      query: "", region: "서울특별시", latitude: "0", longitude: "0", distanceKm: "30",
+    });
+    return Response.json({ data: places, error: null, requestId: "zero" });
   } });
   assert.equal(response.status, 200); assert.deepEqual(await response.json(), places);
   assert.equal(response.headers.get("Cache-Control"), "no-store");
@@ -74,7 +77,7 @@ test("browser clients reject malformed JSON/HTML/shape and hide raw server messa
 });
 
 test("place proxy rejects invalid responses and never leaks provider bodies", async () => {
-  for (const response of [() => Response.json(null), () => Response.json({ ...places, results: [{ ...place, longitude: 181 }] }),
+  for (const response of [() => Response.json(null), () => Response.json({ data: { ...places, results: [{ ...place, longitude: 181 }] }, error: null, requestId: "invalid" }),
     () => new Response("private-token", { headers: { "Content-Type": "text/html" } }), () => new Response("{private-token", { headers: { "Content-Type": "application/json" } })]) {
     const result = await searchPlaces(req({}), { fetch: async () => response() });
     assert.equal(result.status, 502); assert.ok(!(await result.text()).includes("private-token"));
@@ -119,4 +122,30 @@ test("real HTTP incomplete bodies time out in both server adapters and browser c
   await assert.rejects(requestRoute(input.origin, input.destination, { fetch: fetcher, timeoutMs: 50 }), code("TIMEOUT"));
   const controller = new AbortController(); controller.abort();
   await assert.rejects(requestPlaces("", { fetch: fetcher, signal: controller.signal }), code("CANCELLED"));
+});
+
+
+test("place search uses the team Spring GET contract and unwraps its envelope", async () => {
+  let called = false;
+  const response = await searchPlaces(req({ query: "성동구 개인컵", distanceKm: 5 }), {
+    baseUrl: "http://team-backend:8080", fetch: async (input, init) => {
+      called = true;
+      const url = new URL(String(input));
+      assert.equal(url.origin, "http://team-backend:8080");
+      assert.equal(url.pathname, "/api/places");
+      assert.equal(url.searchParams.get("query"), "성동구 개인컵");
+      assert.equal(url.searchParams.get("distanceKm"), "5");
+      assert.equal(init?.method, "GET");
+      assert.equal(init?.body, undefined);
+      return Response.json({ data: places, error: null, requestId: "place-check" });
+    },
+  });
+  assert.ok(called);
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), places);
+  const empty = await searchPlaces(req({}), { fetch: async () => Response.json({
+    data: { results: [], meta: { resultCount: 0, tookMs: 0 } }, error: null, requestId: "empty",
+  }) });
+  assert.equal(empty.status, 200);
+  assert.equal((await empty.json()).results.length, 0);
 });

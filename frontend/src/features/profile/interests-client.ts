@@ -1,3 +1,4 @@
+import { sessionFetch } from "./session-fetch.ts";
 import { isInterestProfile, type InterestProfile, type InterestSelectionInput } from "./interests-contract.ts";
 
 type Envelope<T> = { data: T | null; error: { code: string; message: string } | null; requestId: string };
@@ -34,7 +35,7 @@ function converted(error: unknown, signal?: AbortSignal): InterestClientError {
   return new InterestClientError(503, "NETWORK_ERROR", "서버에 연결하지 못했어요.");
 }
 
-export function createInterestClient(fetcher: typeof fetch = fetch) {
+export function createInterestClient(fetcher: typeof fetch = sessionFetch) {
   async function request<T>(path: string, validate: (value: unknown) => value is T,
       init: RequestInit = {}, signal?: AbortSignal): Promise<T> {
     try {

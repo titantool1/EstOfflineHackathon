@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { missionLevel, isMissionProgress } from "../src/features/missions/progress.ts";
+import { missionLevel, isMissionProgress, sameMission } from "../src/features/missions/progress.ts";
 import { createMissionClient } from "../src/features/missions/client.ts";
 import { createMissionsSpring } from "../src/lib/server/missions-spring.ts";
 import { createMissionHandlers } from "../src/lib/server/missions-bff.ts";
@@ -23,7 +23,7 @@ test("progress uses authenticated session, no cache and fixed paths even with a 
     const headers = new Headers(init?.headers);
     assert.equal(headers.get("Cookie"), "ECOTEAMSESSION=owner");
     assert.equal(headers.has("X-User-Id"), false);
-    return Response.json({ data: { completedMissionCount: 3 }, error: null, requestId: "progress-1" },
+    return Response.json({ data: { completedMissionCount: 1, acceptedMissions: [], completedMissions: [{ programKey: "p1", actionId: "a1" }] }, error: null, requestId: "progress-1" },
       { headers: { "X-Request-Id": "progress-1" } });
   }});
   const response = await createMissionHandlers({ spring }).getProgress(new Request("https://eco.test/api/missions/progress?userId=other", {
@@ -31,7 +31,7 @@ test("progress uses authenticated session, no cache and fixed paths even with a 
   }));
   assert.equal(response.status, 200);
   assert.equal(response.headers.get("Cache-Control"), "no-store");
-  assert.deepEqual((await response.json()).data, { completedMissionCount: 3 });
+  assert.deepEqual((await response.json()).data, { completedMissionCount: 1, acceptedMissions: [], completedMissions: [{ programKey: "p1", actionId: "a1" }] });
 });
 
 test("progress client rejects failed and invalid reads instead of displaying a fake zero", async () => {
@@ -44,4 +44,31 @@ test("progress client rejects failed and invalid reads instead of displaying a f
     });
     await assert.rejects(client.getProgress());
   }
+});
+
+
+test("completion identities must match the count and distinguish program plus action", () => {
+  const mission = { programKey: "p1", actionId: "a1" };
+  assert.equal(isMissionProgress({ completedMissionCount: 1, acceptedMissions: [], completedMissions: [mission] }), true);
+  assert.equal(isMissionProgress({ completedMissionCount: 0, acceptedMissions: [], completedMissions: [] }), true);
+  for (const value of [
+    { completedMissionCount: 1 },
+    { completedMissionCount: 1, acceptedMissions: [], completedMissions: [] },
+    { completedMissionCount: 2, acceptedMissions: [], completedMissions: [mission, mission] },
+    { completedMissionCount: 1, acceptedMissions: [], completedMissions: [{ actionId: "a1" }] },
+    { completedMissionCount: 1, acceptedMissions: [], completedMissions: [null] },
+  ]) assert.equal(isMissionProgress(value), false);
+  assert.equal(sameMission(mission, { ...mission }), true);
+  assert.equal(sameMission(mission, { ...mission, programKey: "p2" }), false);
+});
+
+test("accepted identities are required, unique, and never counted as completion", () => {
+  const mission = { programKey: "p1", actionId: "a1" };
+  const value = { completedMissionCount: 0, completedMissions: [], acceptedMissions: [mission] };
+  assert.equal(isMissionProgress(value), true);
+  assert.equal(missionLevel(value.completedMissionCount).level, 1);
+  for (const acceptedMissions of [undefined, null, [null], [{actionId:"a1"}], [mission, mission]])
+    assert.equal(isMissionProgress({ ...value, acceptedMissions }), false);
+  assert.equal(isMissionProgress({ ...value, acceptedMissions: [mission, { ...mission, programKey: "p2" }] }), true);
+  assert.equal(isMissionProgress({ ...value, completedMissionCount: 1, completedMissions: [mission] }), true);
 });

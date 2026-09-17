@@ -24,7 +24,7 @@ test("mission contracts reject extra owner fields, invalid bounds and malformed 
 
 test("BFF validates origin/body and forwards only session, csrf and fixed mission paths",async()=>{
   const calls:unknown[][]=[];const spring:MissionsSpring={
-    async getProgress(requestId,cookie){calls.push(["progress",requestId,cookie]);return ok({completedMissionCount:0},requestId!)},
+    async getProgress(requestId,cookie){calls.push(["progress",requestId,cookie]);return ok({completedMissionCount:0,acceptedMissions: [], completedMissions:[]},requestId!)},
     async createRecommendation(value,requestId,cookie,csrf){calls.push(["create",value,requestId,cookie,csrf]);return ok(batch,requestId!)},
     async getRecommendation(value,requestId,cookie){calls.push(["get",value,requestId,cookie]);return ok(batch,requestId!)},
     async recordEvent(value,requestId,cookie,csrf){calls.push(["event",value,requestId,cookie,csrf]);return ok(event,requestId!)},

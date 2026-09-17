@@ -54,3 +54,61 @@ test("malformed, upstream failure, missing key and timeout remain distinct safe 
   await assert.rejects(timeout.search("동네"), (error: unknown) => error instanceof KakaoLocalError
     && error.code === "KAKAO_TIMEOUT" && !error.message.includes("private"));
 });
+
+
+test("legal neighborhood without H code resolves its address point and marks the candidates", async () => {
+  const calls: URL[] = [];
+  const api = createKakaoLocal({ apiKey: "key", fetch: async (input) => {
+    const url = new URL(String(input)); calls.push(url);
+    if (url.pathname.endsWith("address.json")) return json({ meta: { is_end: true }, documents: [
+      { address_type: "REGION", x: "127.04", y: "37.54", address: { h_code: "", region_3depth_name: "성수동1가" } },
+      { address_type: "REGION", x: "127.05", y: "37.54", address: { h_code: "", region_3depth_name: "성수동2가" } },
+    ] });
+    assert.equal(url.pathname, "/v2/local/geo/coord2regioncode.json");
+    return json({ documents: [b, { ...h, code: "1120065000", region_1depth_name: "서울특별시", region_2depth_name: "성동구", region_3depth_name: "성수1가1동" }] });
+  } });
+  const result = await api.search("성수동");
+  assert.deepEqual(result, { candidates: [{ regionCode: "1120065000", sido: "서울특별시", sigungu: "성동구", dong: "성수1가1동" }],
+    hasMore: false, emptyReason: null, usedAddressPoint: true });
+  assert.equal(calls.length, 3);
+  assert.equal(calls[1].searchParams.get("x"), "127.04");
+  assert.doesNotMatch(JSON.stringify(result), /127\.04|37\.54|latitude|longitude|address_name/);
+});
+
+test("address point lookup is bounded and remaining results are marked", async () => {
+  let coordinates = 0;
+  const api = createKakaoLocal({ apiKey: "key", fetch: async input => {
+    if (new URL(String(input)).pathname.endsWith("address.json")) return json({ meta: { is_end: true }, documents:
+      Array.from({ length: 8 }, (_, i) => ({ address_type: "REGION", x: String(127 + i / 100), y: "37.5", address: { region_3depth_name: "동네" } })) });
+    coordinates++; return json({ documents: [h] });
+  } });
+  const result = await api.search("동네");
+  assert.equal(coordinates, 5); assert.equal(result.hasMore, true); assert.equal(result.candidates.length, 1);
+});
+
+test("invalid points and broad city or road names never become a guessed neighborhood", async () => {
+  const documents = [
+    { address_type: "REGION", x: "127", y: "37", address: { region_3depth_name: "" } },
+    { address_type: "ROAD", x: "127", y: "37", address: { region_3depth_name: "동네" } },
+    ...["", " ", "NaN", "Infinity", "181"].map(x => ({ address_type: "REGION", x, y: "37", address: { region_3depth_name: "동네" } })),
+    { address_type: "REGION", x: "127", y: "91", address: { region_3depth_name: "동네" } },
+  ];
+  const api = createKakaoLocal({ apiKey: "key", fetch: async input => {
+    assert.ok(new URL(String(input)).pathname.endsWith("address.json"));
+    return json({ meta: { is_end: true }, documents });
+  } });
+  assert.equal((await api.search("지역")).emptyReason, "ADMINISTRATIVE_NEIGHBORHOOD_REQUIRED");
+});
+
+test("address point upstream failures stay failures and a B-only result stays unselected", async () => {
+  for (const fails of [false, true]) {
+    const api = createKakaoLocal({ apiKey: "key", fetch: async input => {
+      if (new URL(String(input)).pathname.endsWith("address.json")) return json({ meta: { is_end: true }, documents: [
+        { address_type: "REGION_ADDR", x: "127", y: "37", address: { region_3depth_name: "동네" } },
+      ] });
+      return fails ? json({}, 503) : json({ documents: [b] });
+    } });
+    if (fails) await assert.rejects(api.search("주소"), { code: "KAKAO_UNAVAILABLE" });
+    else assert.equal((await api.search("주소")).emptyReason, "ADMINISTRATIVE_NEIGHBORHOOD_REQUIRED");
+  }
+});

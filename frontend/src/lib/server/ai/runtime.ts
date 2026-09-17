@@ -1,5 +1,6 @@
 import { createConversationProvider } from "./adapters/openai-conversation.ts";
 import { createConversationRunner } from "./application/conversation-session.ts";
+import { createPlaceTools } from "./tools/place-tools.ts";
 import { createCatalogTools } from "./tools/catalog-tools.ts";
 import { createUserConditionLoader } from "./adapters/user-condition-context.ts";
 import { createSpringClient } from "../spring-client.ts";
@@ -42,5 +43,6 @@ export async function createConversationRuntime() {
       return embedding.embed(query, signal);
     }),
     load: createUserConditionLoader({ baseUrl }),
+    places: createPlaceTools(createSpringClient({ baseUrl })),
   });
 }

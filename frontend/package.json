@@ -13,15 +13,15 @@
     "check:embedding": "node --conditions=react-server --experimental-strip-types scripts/check-embedding.ts",
     "test:memory": "node --experimental-strip-types --test --test-isolation=none tests/condition-memory.test.ts",
     "test:condition-save": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/condition-save.test.ts",
-    "test:chat": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/chat-basic.test.ts tests/chat-stream.test.ts tests/chat-lifecycle.test.ts tests/condition-save-port.test.ts",
+    "test:chat": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/chat-basic.test.ts tests/chat-stream.test.ts tests/chat-lifecycle.test.ts tests/chat-refresh.test.ts tests/condition-save-port.test.ts",
     "test:context": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/user-condition-context.test.ts",
     "test:map": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/map-errors.test.ts",
     "test:account": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/account.test.ts",
-    "test:conversation": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/conversation-flow.test.ts tests/conversation-session.test.ts tests/conversation-provider.test.ts",
+    "test:conversation": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/conversation-flow.test.ts tests/conversation-session.test.ts tests/conversation-provider.test.ts tests/place-tools.test.ts",
     "test:neighborhood": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/kakao-local.test.ts tests/neighborhood-bff.test.ts tests/neighborhood-client.test.ts tests/neighborhood-state.test.ts",
     "test:interests": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/interests.test.ts",
     "test:missions": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/missions.test.ts",
-    "test:mission-ui": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/mission-ui.test.ts tests/interest-ui.test.ts tests/mission-detail-bff.test.ts tests/mission-detail-ui.test.ts tests/mission-board.test.ts"
+    "test:mission-ui": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/mission-ui.test.ts tests/interest-ui.test.ts tests/mission-detail-bff.test.ts tests/mission-detail-ui.test.ts tests/mission-board.test.ts tests/action-descriptions.test.ts"
   },
   "dependencies": {
     "next": "16.3.5",

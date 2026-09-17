@@ -5,6 +5,7 @@ import { createConditionMemory } from "./condition-memory.ts";
 import type { ConversationEventSink, ConversationProvider, ConversationSession, ConversationTurn } from "../conversation-contracts.ts";
 import type { createCatalogTools } from "../tools/catalog-tools.ts";
 import type { createUserConditionLoader } from "../adapters/user-condition-context.ts";
+import type { createPlaceTools } from "../tools/place-tools.ts";
 import { createConversationTools } from "../tools/conversation-tools.ts";
 import { createConversationGraph } from "./conversation-flow.ts";
 import { createConversationContext } from "./conversation-context.ts";
@@ -12,6 +13,7 @@ import { createConversationContext } from "./conversation-context.ts";
 export type ConversationResult = { text: string; memory: ConditionMemory; modelCalls: number; toolCalls: number };
 
 export function createConversationRunner(ports: {
+  places?: ReturnType<typeof createPlaceTools>;
   provider: ConversationProvider; catalog: ReturnType<typeof createCatalogTools>; load: ReturnType<typeof createUserConditionLoader>;
 }) {
   const busy = new WeakSet<ConversationSession>(), closed = new WeakSet<ConversationSession>();

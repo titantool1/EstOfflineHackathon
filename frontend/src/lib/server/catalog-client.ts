@@ -1,4 +1,5 @@
 import "server-only";
+import { isPlaceSource } from "../../features/missions/place-source.ts";
 import { createSpringClient } from "./spring-client.ts";
 
 export type JsonObject = Record<string, unknown>;
@@ -46,7 +47,7 @@ export function isCatalogDetail(v: unknown): v is CatalogDetail {
       && text(c.condition.id) && Array.isArray(c.sources) && c.sources.every(source)
       && Array.isArray(c.common_groups) && c.common_groups.every(object) && text(c.mapping_basis))
     && Array.isArray(v.places) && v.places.every(p => object(p) && text(p.place_id) && text(p.title)
-      && typeof p.address === "string" && text(p.service_key) && source(p.source)
+      && typeof p.address === "string" && text(p.service_key) && isPlaceSource(p.source, p.relation_type)
       && (p.status === null || p.status === "unknown" || p.status === "closed")
       && "schedule" in p && "announced_start" in p && "announced_end_exclusive" in p);
 }

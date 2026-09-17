@@ -43,8 +43,10 @@ public class JdbcRecommendationStore implements RecommendationStore {
     private List<RecommendationBatch.Item> items(UUID owner,UUID batchId) {
         return jdbc.query("""
             SELECT item_id,position,program_key,action_id,identity_basis,program_title,program_summary,
-              program_status_raw,condition_count,matched_interest_ids,related_place_count
-            FROM app.recommendation_item WHERE user_id=? AND batch_id=? ORDER BY position
+              program_status_raw,condition_count,matched_interest_ids,
+              (SELECT count(DISTINCT ap.place_id) FROM app.action_place ap
+               WHERE ap.program_key=ri.program_key AND ap.action_id=ri.action_id) AS related_place_count
+            FROM app.recommendation_item ri WHERE user_id=? AND batch_id=? ORDER BY position
             """,(row,index) -> new RecommendationBatch.Item(row.getObject(1,UUID.class),row.getInt(2),row.getString(3),
                 row.getString(4),row.getString(5),row.getString(6),row.getString(7),row.getString(8),row.getInt(9),
                 strings(row.getArray(10)),"not_evaluated","unknown",row.getInt(11)),owner,batchId);

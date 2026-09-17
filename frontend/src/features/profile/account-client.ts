@@ -1,3 +1,4 @@
+import { sessionFetch } from "./session-fetch.ts";
 import { accountMessage, isAccountEnvelope } from "../../lib/account-response.ts";
 export type Member = { userId: string; email: string; nickname: string };
 export class AccountError extends Error {
@@ -12,7 +13,7 @@ export class AccountError extends Error {
 export function accountErrorMessage(error: unknown): string {
   return error instanceof AccountError ? error.message : accountMessage("INTERNAL_ERROR");
 }
-export function createAccountClient(fetcher: typeof fetch = fetch, timeoutMs = 15_000) {
+export function createAccountClient(fetcher: typeof fetch = sessionFetch, timeoutMs = 15_000) {
   async function request(path: string, init?: RequestInit): Promise<Record<string, unknown>> {
     const timeout = AbortSignal.timeout(timeoutMs);
     const signal = init?.signal ? AbortSignal.any([init.signal, timeout]) : timeout;

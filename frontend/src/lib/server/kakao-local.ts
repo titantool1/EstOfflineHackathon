@@ -32,6 +32,19 @@ function unique(values: Neighborhood[]) {
   return values.filter(value => !seen.has(value.regionCode) && Boolean(seen.add(value.regionCode)));
 }
 
+// A region name may cover several administrative neighborhoods. Its point is
+// only a candidate source; the UI must disclose this and require selection.
+function addressPoint(value: unknown): { latitude: number; longitude: number } | null {
+  if (!record(value) || !["REGION", "REGION_ADDR", "ROAD_ADDR"].includes(String(value.address_type))
+      || !record(value.address) || typeof value.address.region_3depth_name !== "string"
+      || !value.address.region_3depth_name.trim()) return null;
+  const coordinate = (value: unknown) => typeof value === "number" ? value
+    : typeof value === "string" && value.trim() ? Number(value) : NaN;
+  const longitude = coordinate(value.x), latitude = coordinate(value.y);
+  return Number.isFinite(longitude) && longitude >= -180 && longitude <= 180
+    && Number.isFinite(latitude) && latitude >= -90 && latitude <= 90 ? { latitude, longitude } : null;
+}
+
 export function createKakaoLocal(config: { apiKey: string | undefined; fetch?: typeof fetch; timeoutMs?: number }) {
   const fetcher = config.fetch ?? fetch;
   const timeoutMs = config.timeoutMs ?? 5_000;
@@ -51,6 +64,15 @@ export function createKakaoLocal(config: { apiKey: string | undefined; fetch?: t
       throw new KakaoLocalError(503, "KAKAO_UNAVAILABLE", "동네 검색 서비스에 연결할 수 없어요.");
     }
   }
+  async function coordinates(latitude: number, longitude: number): Promise<ResolveResult> {
+    const url = new URL(COORDINATE_URL); url.searchParams.set("x", String(longitude)); url.searchParams.set("y", String(latitude));
+    const raw = await request(url);
+    if (!record(raw) || !Array.isArray(raw.documents))
+      throw new KakaoLocalError(503, "KAKAO_INVALID_RESPONSE", "동네 검색 응답을 확인할 수 없어요.");
+    const candidates = unique(raw.documents.map(value => candidate(value, true)).filter((value): value is Neighborhood => value !== null));
+    return { candidates, hasMore: false, emptyReason: candidates.length ? null
+      : raw.documents.length ? "ADMINISTRATIVE_NEIGHBORHOOD_REQUIRED" : "NO_RESULTS" };
+  }
   return {
     async search(query: string): Promise<ResolveResult> {
       const url = new URL(ADDRESS_URL); url.searchParams.set("query", query); url.searchParams.set("size", "30"); url.searchParams.set("page", "1");
@@ -58,17 +80,16 @@ export function createKakaoLocal(config: { apiKey: string | undefined; fetch?: t
       if (!record(raw) || !Array.isArray(raw.documents) || !record(raw.meta) || typeof raw.meta.is_end !== "boolean")
         throw new KakaoLocalError(503, "KAKAO_INVALID_RESPONSE", "동네 검색 응답을 확인할 수 없어요.");
       const candidates = unique(raw.documents.map(value => candidate(value, false)).filter((value): value is Neighborhood => value !== null));
+      if (!candidates.length) {
+        const points = raw.documents.map(addressPoint).filter((point): point is NonNullable<ReturnType<typeof addressPoint>> => point !== null);
+        const resolved = await Promise.all(points.slice(0, 5).map(point => coordinates(point.latitude, point.longitude)));
+        const fromPoints = unique(resolved.flatMap(result => result.candidates));
+        if (fromPoints.length) return { candidates: fromPoints, hasMore: !raw.meta.is_end || points.length > 5,
+          emptyReason: null, usedAddressPoint: true };
+      }
       return { candidates, hasMore: !raw.meta.is_end, emptyReason: candidates.length ? null
         : raw.documents.length ? "ADMINISTRATIVE_NEIGHBORHOOD_REQUIRED" : "NO_RESULTS" };
     },
-    async coordinates(latitude: number, longitude: number): Promise<ResolveResult> {
-      const url = new URL(COORDINATE_URL); url.searchParams.set("x", String(longitude)); url.searchParams.set("y", String(latitude));
-      const raw = await request(url);
-      if (!record(raw) || !Array.isArray(raw.documents))
-        throw new KakaoLocalError(503, "KAKAO_INVALID_RESPONSE", "동네 검색 응답을 확인할 수 없어요.");
-      const candidates = unique(raw.documents.map(value => candidate(value, true)).filter((value): value is Neighborhood => value !== null));
-      return { candidates, hasMore: false, emptyReason: candidates.length ? null
-        : raw.documents.length ? "ADMINISTRATIVE_NEIGHBORHOOD_REQUIRED" : "NO_RESULTS" };
-    },
+    coordinates,
   };
 }

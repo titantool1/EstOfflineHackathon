@@ -5,6 +5,7 @@ import type { ConditionChange, ConditionMemory } from "../application/condition-
 import { applyConditionChanges, conditionView } from "../application/condition-memory.ts";
 import type { createUserConditionLoader } from "../adapters/user-condition-context.ts";
 import type { createCatalogTools } from "./catalog-tools.ts";
+import type { createPlaceTools } from "./place-tools.ts";
 import { compactCatalogEvidence } from "./catalog-evidence.ts";
 
 const object = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value);
@@ -34,18 +35,23 @@ const personalDefinitions: FunctionDefinition[] = [
 // One instance per turn: candidate facts and selected action IDs cannot leak across users/turns.
 export function createConversationTools(options: {
   catalog: ReturnType<typeof createCatalogTools>; load: ReturnType<typeof createUserConditionLoader>;
+  places?: ReturnType<typeof createPlaceTools>;
   turn: ConversationTurn; memory: ConditionMemory;
 }) {
   const { catalog, load, turn } = options;
   if (options.memory.userId !== turn.authenticatedUserId) throw new AiError("CONDITION_MEMORY_OWNER_MISMATCH");
-  let memory = structuredClone(options.memory), searches = 0, details = 0;
+  let memory = structuredClone(options.memory), searches = 0, details = 0, placeSearches = 0;
   const candidates = new Set<string>(), inspected = new Set<string>();
   const key = (program: unknown, action: unknown) => JSON.stringify([program, action]);
   return {
-    definitions: [...catalog.definitions, ...personalDefinitions] as FunctionDefinition[],
+    definitions: [...catalog.definitions, ...(options.places?.definitions ?? []), ...personalDefinitions] as FunctionDefinition[],
     memory: () => structuredClone(memory),
     async execute(name: string, args: unknown, signal: AbortSignal): Promise<unknown> {
       signal.throwIfAborted();
+      if (name === "search_places" && options.places) {
+        if (++placeSearches > 2) throw new AiError("PLACE_SEARCH_LIMIT");
+        return options.places.execute(name, args, { requestId: turn.requestId, signal, sessionHeaders: turn.sessionHeaders });
+      }
       if (name === "search_catalog") {
         if (++searches > 3) throw new AiError("CATALOG_SEARCH_LIMIT");
         const result = await catalog.execute(name, args, { requestId: turn.requestId, signal });

@@ -73,7 +73,12 @@ export function createCatalogTools(client = createSpringClient({
         const result = await catalog.detail(identifier(input.programKey), identifier(input.actionId), context.requestId, context.signal);
         if (result.status === 404 && result.body.error?.code === "CATALOG_ACTION_NOT_FOUND")
           return { status: "not_found", data: null, requestId: result.body.requestId, message: "등록된 제도·행동 자료가 없어요." };
-        return { status: "ok", data: unwrap(result), requestId: result.body.requestId, message: null };
+        const data = unwrap(result);
+        // The UI receives the complete list. Bound only the model's tool context.
+        const limited = data.places.length > 10 ? { ...data, places: data.places.slice(0, 10),
+          place_count: data.places.length, places_truncated: true,
+          place_selection: "catalog_order_not_distance", message: "관련 장소 일부만 표시. 가까운 순서가 아니며 개별 참여·혜택은 미확인." } : data;
+        return { status: "ok", data: limited, requestId: result.body.requestId, message: null };
       }
       throw new CatalogToolError("TOOL_NOT_AVAILABLE");
     },

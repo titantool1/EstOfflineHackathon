@@ -1,3 +1,4 @@
+import { isPlaceSource } from "./place-source.ts";
 import { isUuid } from "./contract.ts";
 
 export type MissionSource = {
@@ -21,6 +22,10 @@ export type MissionPlace = {
   address: string;
   district: string | null;
   service_key: string;
+  relation_type?: "registered" | "candidate_action";
+  mapping_basis?: string | null;
+  place_type?: string | null;
+  source_checked_at?: string | null;
   schedule: unknown;
   status: "unknown" | "closed" | null;
   announced_start: string | null;
@@ -70,7 +75,7 @@ function isPlace(value: unknown): value is MissionPlace {
     && nullableText(value.district) && text(value.service_key) && "schedule" in value
     && (value.status === null || value.status === "unknown" || value.status === "closed")
     && nullableText(value.announced_start) && nullableText(value.announced_end_exclusive)
-    && isSource(value.source);
+    && isPlaceSource(value.source, value.relation_type);
 }
 
 export function isMissionCatalogDetail(value: unknown): value is MissionCatalogDetail {
