@@ -58,6 +58,8 @@ services:
       DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-eco}?connectTimeout=2&socketTimeout=3
       DATABASE_USER: ${POSTGRES_USER:-eco}
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/setup-local.py first}
+      PRIVATE_FACTS_KEYRING_FILE: /run/secrets/private_facts_keyring
+      PRIVATE_FACTS_MIGRATION_ENABLED: ${PRIVATE_FACTS_MIGRATION_ENABLED:-false}
       SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
       CATALOG_ELASTICSEARCH_URL: http://elasticsearch:9200
       CATALOG_ELASTICSEARCH_INDEX: ${CATALOG_ELASTICSEARCH_INDEX:-eco-team-catalog-actions-v1-20260917}
@@ -65,6 +67,8 @@ services:
       CATALOG_ELASTICSEARCH_PASSWORD: ${ES_LOCAL_PASSWORD:?Run scripts/setup-local.py first}
     ports:
       - "127.0.0.1:${BACKEND_PORT:-18080}:8080"
+    secrets:
+      - private_facts_keyring
     healthcheck:
       test: ["CMD", "curl", "--fail", "--silent", "--max-time", "5", "http://localhost:8080/api/health"]
       interval: 10s
@@ -178,5 +182,7 @@ volumes:
   bge-model-cache:
 
 secrets:
+  private_facts_keyring:
+    file: ${PRIVATE_FACTS_KEYRING_HOST_FILE:-./.local/private-facts-keyring.json}
   ai_internal_token:
     file: ./.local/ai-internal-token
