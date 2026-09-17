@@ -23,4 +23,4 @@ docker compose --profile tools config --quiet
 
 ## 현재 한계와 다음 작업
 
-이번 커밋은 저장소·검색 기반과 키 입력 자리다. Next·Spring·LangGraph·임베딩의 앱 기동, 카탈로그 적재, 챗·미션·지도 기능 연결은 아직 통합 확인하지 않았다. 다음 단계는 웹 → Spring → PG의 상태 확인과 공통 API 골격이며, 전체 확인 후 main에 합친다.
+이번 커밋은 저장소·검색 기반과 키 입력 자리다. Next·Spring·LangGraph·임베딩의 앱 기동, 카탈로그 적재, 챗·미션·지도 기능 연결은 아직 통합 확인하지 않았다. 다음 단계는 웹 → Spring → PG의 상태 확인과 공통 API 골격이다. 이번 1단계부터 검증이 끝난 범위를 차례로 main에 반영한다.
