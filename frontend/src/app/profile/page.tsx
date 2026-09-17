@@ -44,6 +44,7 @@ export default function ProfilePage() {
     {view.kind === "loading" ? <p role="status">불러오는 중</p> : view.kind === "ready" ? <>
       <p className="text-xl font-semibold">{view.member.nickname}님</p><p className="mt-2 text-sm">{view.member.email}</p>
       <Link href="/profile/neighborhood" className="mt-5 block text-sm font-semibold text-[#267a38] underline">관심동네 설정</Link>
+      <Link href="/onboarding" className="mt-3 block text-sm font-semibold text-[#267a38] underline">관심사 설정</Link>
       <button onClick={logout} disabled={loggingOut} className="mt-6 rounded-xl border px-4 py-2 disabled:opacity-60">
         {loggingOut ? "로그아웃 중" : "로그아웃"}</button>
     </> : view.kind === "signedOut" ? <>
