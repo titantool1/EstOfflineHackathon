@@ -20,6 +20,8 @@ export function safeSourceUrl(value: unknown): string | null {
 }
 
 const messages: Record<string, string> = {
+  RATE_LIMITED: "요청이 많아요. 잠시 후 다시 시도해 주세요.",
+  REQUEST_TOO_LARGE: "요청이 너무 커요. 입력 내용을 줄여 주세요.",
   INVALID_INPUT: "검색 조건과 좌표를 확인해 주세요.",
   INVALID_RESPONSE: "지도 정보를 확인하지 못했어요. 잠시 후 다시 시도해 주세요.",
   UNAVAILABLE: "지도 정보 서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.",

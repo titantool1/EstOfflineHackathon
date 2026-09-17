@@ -25,6 +25,8 @@ export function isAccountEnvelope(value: unknown, status: number, path: string):
 }
 
 const messages: Record<string, string> = {
+  RATE_LIMITED: "요청이 많아요. 잠시 후 다시 시도해 주세요.",
+  REQUEST_TOO_LARGE: "요청이 너무 커요. 입력 내용을 줄여 주세요.",
   INVALID_CREDENTIALS: "이메일 또는 비밀번호를 확인해 주세요.",
   AUTHENTICATION_REQUIRED: "로그인이 필요하거나 세션이 만료됐어요. 다시 로그인해 주세요.",
   CSRF_INVALID: "요청 정보가 만료됐어요. 다시 시도해 주세요.",

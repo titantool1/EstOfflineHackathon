@@ -95,4 +95,29 @@ class SessionConfigurationTest {
         mvc.perform(get("/api/auth/csrf")).andExpect(status().isOk())
             .andExpect(jsonPath("$.data.headerName").value("X-CSRF-TOKEN"));
     }
+    @Test void loginFailuresAreAccountScopedAnd429PreservesEnvelope() throws Exception {
+        String body="{\"email\":\"A@example.test\",\"password\":\"wrong-password\"}";
+        for(int i=0;i<5;i++) mvc.perform(post("/api/auth/login").with(csrf()).contentType("application/json").content(body))
+            .andExpect(status().isUnauthorized());
+        mvc.perform(post("/api/auth/login").with(csrf()).header("X-Request-Id","limited-test").contentType("application/json").content(body))
+            .andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"))
+            .andExpect(jsonPath("$.error.code").value("RATE_LIMITED")).andExpect(jsonPath("$.requestId").value("limited-test"));
+        verify(context.getBean(JdbcAccounts.class),times(5)).findByEmail("a@example.test");
+        mvc.perform(post("/api/auth/login").with(csrf()).contentType("application/json")
+            .content("{\"email\":\"b@example.test\",\"password\":\"wrong-password\"}"))
+            .andExpect(status().isUnauthorized());
+    }
+    @Test void signup429StopsServiceAndCsrfStillRunsFirst() throws Exception {
+        var service=context.getBean(AccountService.class);
+        when(service.signup("a@example.test","password123",null)).thenReturn(OWNER);
+        String body="{\"email\":\"a@example.test\",\"password\":\"password123\"}";
+        for(int i=0;i<10;i++) mvc.perform(post("/api/signup").with(csrf()).contentType("application/json").content(body))
+            .andExpect(status().isCreated());
+        mvc.perform(post("/api/signup").with(csrf()).contentType("application/json").content(body))
+            .andExpect(status().isTooManyRequests()).andExpect(header().exists("Retry-After"));
+        verify(service,times(10)).signup("a@example.test","password123",null);
+        mvc.perform(post("/api/signup").contentType("application/json").content(body))
+            .andExpect(status().isForbidden()).andExpect(jsonPath("$.error.code").value("CSRF_INVALID"));
+    }
+
 }

@@ -1,4 +1,5 @@
 import "server-only";
+import { BodyTooLarge, readRequestBody } from "./request-body.ts";
 import { randomUUID } from "node:crypto";
 import { accountMessage, isAccountEnvelope } from "../account-response.ts";
 
@@ -25,7 +26,7 @@ export function createSessionProxy(config: { baseUrl: string; fetch?: typeof fet
         const value = request.headers.get(name);
         if (value) headers.set(name, value);
       }
-      const body = request.method === "GET" ? undefined : await request.text();
+      const body = request.method === "GET" ? undefined : await readRequestBody(request, AbortSignal.any([request.signal, timeout]));
       const upstream = await (config.fetch ?? fetch)(new URL(path, base), {
         method: request.method, headers, body, cache: "no-store", redirect: "error",
         signal: AbortSignal.any([request.signal, timeout]),
@@ -38,9 +39,13 @@ export function createSessionProxy(config: { baseUrl: string; fetch?: typeof fet
       if (!isAccountEnvelope(result, upstream.status, path) || result.requestId !== requestId
         || upstream.headers.get("X-Request-Id") !== requestId)
         return failure(503, "BACKEND_INVALID_RESPONSE");
+      const retryAfter = upstream.headers.get("Retry-After");
+      if (upstream.status === 429 && retryAfter && /^\d{1,4}$/.test(retryAfter) && Number(retryAfter) > 0)
+        responseHeaders.set("Retry-After", retryAfter);
       if (result.error) result.error.message = accountMessage(result.error.code, result.error.message);
       return Response.json(result, { status: upstream.status, headers: responseHeaders });
     } catch (error) {
+      if (error instanceof BodyTooLarge) return failure(413, "REQUEST_TOO_LARGE");
       if (request.signal.aborted) return failure(499, "REQUEST_CANCELLED");
       if (timeout.aborted) return failure(504, "BACKEND_TIMEOUT");
       return failure(503, error instanceof SyntaxError ? "BACKEND_INVALID_RESPONSE" : "BACKEND_UNAVAILABLE");

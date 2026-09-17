@@ -7,6 +7,7 @@ import kr.co.ecojupjup.common.api.ApiResponse;
 import kr.co.ecojupjup.common.api.RequestIdFilter;
 import kr.co.ecojupjup.identity.adapter.MemberPrincipal;
 import kr.co.ecojupjup.identity.application.AccountService;
+import kr.co.ecojupjup.identity.application.AccountRequestLimits;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,13 +21,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AccountController {
+    private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(AccountController.class);
+    private final AccountRequestLimits limits;
     private final AccountService accounts;
     private final AuthenticationManager manager;
     private final SessionAuthenticationStrategy sessions;
     private final SecurityContextRepository contexts;
     public AccountController(AccountService accounts, AuthenticationManager manager,
-            SessionAuthenticationStrategy sessions, SecurityContextRepository contexts) {
-        this.accounts=accounts; this.manager=manager; this.sessions=sessions; this.contexts=contexts;
+            SessionAuthenticationStrategy sessions, SecurityContextRepository contexts, AccountRequestLimits limits) {
+        this.limits=limits;this.accounts=accounts; this.manager=manager; this.sessions=sessions; this.contexts=contexts;
     }
     @GetMapping("/api/auth/csrf")
     public ApiResponse<Csrf> csrf(CsrfToken token,HttpServletRequest request) {
@@ -34,20 +37,28 @@ public class AccountController {
     }
     @PostMapping("/api/signup")
     public ResponseEntity<ApiResponse<UserId>> signup(@RequestBody Signup body,HttpServletRequest request) {
-        return ResponseEntity.status(201).body(ApiResponse.success(
-            new UserId(accounts.signup(body.email(),body.password(),body.nickname())),id(request)));
+        AccountService.email(body.email());AccountService.password(body.password(),true);
+        try(var attempt=limits.signup()) {
+            return ResponseEntity.status(201).body(ApiResponse.success(
+                new UserId(accounts.signup(body.email(),body.password(),body.nickname())),id(request)));
+        }
     }
     @PostMapping("/api/auth/login")
     public ApiResponse<UserId> login(@RequestBody Login body,HttpServletRequest request,HttpServletResponse response) {
         String email=AccountService.email(body.email()); AccountService.password(body.password(),false);
-        try {
+        try(var attempt=limits.login(email)) {
+          try {
             var authentication=manager.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(email,body.password()));
             sessions.onAuthentication(authentication,request,response);
             var context=SecurityContextHolder.createEmptyContext();context.setAuthentication(authentication);
             SecurityContextHolder.setContext(context);contexts.saveContext(context,request,response);
+            attempt.success();
             return ApiResponse.success(new UserId(((MemberPrincipal) authentication.getPrincipal()).userId()),id(request));
-        } catch (BadCredentialsException error) {
+          } catch (BadCredentialsException error) {
+            attempt.failed();
+            LOG.warn("event=authentication_failed requestId={} status=401",id(request));
             throw new AccountService.Failure(401,"INVALID_CREDENTIALS","이메일 또는 비밀번호를 확인해 주세요.");
+          }
         }
     }
     @GetMapping("/api/auth/me")
@@ -57,6 +68,12 @@ public class AccountController {
     @ExceptionHandler(AccountService.Failure.class)
     public ResponseEntity<ApiResponse<Void>> failure(AccountService.Failure error,HttpServletRequest request) {
         return ResponseEntity.status(error.status).body(ApiResponse.failure(error.code,error.getMessage(),id(request)));
+    }
+    @ExceptionHandler(AccountRequestLimits.Rejected.class)
+    public ResponseEntity<ApiResponse<Void>> limited(AccountRequestLimits.Rejected error,HttpServletRequest request) {
+        LOG.warn("event=request_limited requestId={} status=429",id(request));
+        return ResponseEntity.status(429).header("Retry-After",Long.toString(error.retryAfter))
+            .body(ApiResponse.failure("RATE_LIMITED","요청이 많아요. 잠시 후 다시 시도해 주세요.",id(request)));
     }
     private static String id(HttpServletRequest request) { return (String) request.getAttribute(RequestIdFilter.ATTRIBUTE); }
     public record Signup(String email,String password,String nickname) {}

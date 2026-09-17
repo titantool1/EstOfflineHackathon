@@ -1,4 +1,7 @@
 import "server-only";
+import { BodyTooLarge, readRequestBody } from "../request-body.ts";
+import { RequestBudget, mapBudget, limitedResponse } from "./request-budget.ts";
+const defaultBudget = mapBudget("route");
 import { jsonType, MapError, mapFailure, nonnegative, object, point, validCoordinate, type RoutePoint } from "../../../features/map/contract.ts";
 
 function samplePath(points: RoutePoint[], limit = 2000) {
@@ -28,15 +31,24 @@ function readKakaoRoute(payload: unknown) {
   if (path.length < 2) throw new MapError("NO_ROUTE");
   return { path: samplePath(path), distanceMeters: route.summary.distance, durationSeconds: route.summary.duration };
 }
-export async function findRoute(request: Request, options: { fetch?: typeof fetch; apiKey?: string; timeoutMs?: number } = {}) {
+export async function findRoute(request: Request, options: { fetch?: typeof fetch; apiKey?: string; timeoutMs?: number; budget?: RequestBudget } = {}) {
   if (!jsonType(request.headers)) return mapFailure(415, "INVALID_INPUT");
   let body: unknown;
-  try { body = await request.json(); } catch { return mapFailure(400, "INVALID_INPUT"); }
+  const bodyTimeout = AbortSignal.timeout(Math.min(options.timeoutMs ?? 10_000, 10_000));
+  try { body = JSON.parse(await readRequestBody(request, AbortSignal.any([request.signal, bodyTimeout]))); }
+  catch (error) {
+    if (error instanceof BodyTooLarge) return mapFailure(413, "REQUEST_TOO_LARGE");
+    if (request.signal.aborted) return mapFailure(499, "CANCELLED");
+    if (bodyTimeout.aborted) return mapFailure(504, "TIMEOUT");
+    return mapFailure(400, "INVALID_INPUT");
+  }
   if (!object(body) || !point(body.origin) || !point(body.destination)) return mapFailure(400, "INVALID_INPUT");
   const apiKey = options.apiKey ?? process.env.KAKAO_REST_API_KEY;
   if (!apiKey) return mapFailure(503, "UNAVAILABLE");
   const params = new URLSearchParams({ origin: `${body.origin.longitude},${body.origin.latitude}`,
     destination: `${body.destination.longitude},${body.destination.latitude}`, priority: "RECOMMEND", alternatives: "false", road_details: "false" });
+  const permit = (options.budget ?? defaultBudget).acquire();
+  if ("retryAfter" in permit) return limitedResponse(request, "route", permit.retryAfter);
   const timeout = AbortSignal.timeout(options.timeoutMs ?? 15_000);
   try {
     const response = await (options.fetch ?? fetch)(`https://apis-navi.kakaomobility.com/v1/directions?${params}`, {
@@ -51,5 +63,5 @@ export async function findRoute(request: Request, options: { fetch?: typeof fetc
     if (timeout.aborted) return mapFailure(504, "TIMEOUT");
     if (error instanceof MapError) return mapFailure(error.code === "NO_ROUTE" ? 404 : 502, error.code);
     return mapFailure(error instanceof SyntaxError ? 502 : 503, error instanceof SyntaxError ? "INVALID_RESPONSE" : "UNAVAILABLE");
-  }
+  } finally { permit.release(); }
 }

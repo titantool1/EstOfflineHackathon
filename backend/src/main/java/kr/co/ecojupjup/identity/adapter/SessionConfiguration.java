@@ -29,6 +29,14 @@ import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 public class SessionConfiguration {
+    @Bean kr.co.ecojupjup.identity.application.AccountRequestLimits accountRequestLimits(
+            @org.springframework.beans.factory.annotation.Value("${eco.limits.account-failures:5}") int failures,
+            @org.springframework.beans.factory.annotation.Value("${eco.limits.login-per-minute:60}") int loginMax,
+            @org.springframework.beans.factory.annotation.Value("${eco.limits.login-concurrent:4}") int loginConcurrent,
+            @org.springframework.beans.factory.annotation.Value("${eco.limits.signup-per-minute:10}") int signupMax,
+            @org.springframework.beans.factory.annotation.Value("${eco.limits.signup-concurrent:2}") int signupConcurrent) {
+        return new kr.co.ecojupjup.identity.application.AccountRequestLimits(failures,loginMax,loginConcurrent,signupMax,signupConcurrent);
+    }
     @Bean PasswordEncoder passwordEncoder() { return PasswordEncoderFactories.createDelegatingPasswordEncoder(); }
     @Bean UserDetailsService users(JdbcAccounts accounts) {
         return email -> accounts.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
@@ -65,6 +73,7 @@ public class SessionConfiguration {
     }
     private static void failure(HttpServletRequest request,HttpServletResponse response,ObjectMapper mapper,
             int status,String code,String message) throws IOException {
+        org.slf4j.LoggerFactory.getLogger(SessionConfiguration.class).warn("event=access_rejected requestId={} code={} status={}",request.getAttribute(RequestIdFilter.ATTRIBUTE),code,status);
         response.setStatus(status);response.setContentType("application/json");
         mapper.writeValue(response.getOutputStream(),ApiResponse.failure(code,message,
             (String)request.getAttribute(RequestIdFilter.ATTRIBUTE)));
