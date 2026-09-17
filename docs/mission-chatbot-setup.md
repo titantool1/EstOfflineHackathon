@@ -17,6 +17,8 @@ git clone --branch codex/mission-chatbot-integration --single-branch \
 cd EstOfflineHackathon
 python3 scripts/setup-local.py
 npm ci --prefix frontend
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
 ```
 
 공유 API 키 TXT가 있으면 값을 출력하거나 Git에 넣지 말고 다음처럼 가져온다.
@@ -39,8 +41,12 @@ docker compose up -d --wait elasticsearch
 
 ```bash
 cd EstOfflineHackathon
+.venv/bin/python scripts/restore-search-index.py \
+  --input search-data/eco-jupjup-vector-v2.full.jsonl.gz
 AI_SERVER_PORT=18000 ./run-ai.sh
 ```
+
+처음 한 번만 검색 인덱스를 복원한다. 이미 `eco-jupjup-vector-v2` 인덱스가 있으면 복원 명령은 기존 데이터를 보호하기 위해 중단되므로 생략한다.
 
 터미널 3에서 Next 개발 서버를 실행한다.
 
@@ -60,9 +66,9 @@ npm run dev
 
 개발 중에는 `localhost`와 `127.0.0.1`을 섞지 않는다. 브라우저 저장소도 서로 다른 출처로 취급된다.
 
-## 검색 데이터 주의
+## 검색 데이터
 
-Git에는 Elasticsearch의 `eco-jupjup-vector-v2` 인덱스 17,828건이 포함되지 않는다. 새 Docker 볼륨으로 설치한 팀원은 검색 인덱스 스냅샷 또는 원본 CSV와 적재 절차를 별도로 공유받아야 한다. 인덱스가 없어도 화면·로그인·미션은 실행되지만 챗봇 검색 결과는 나오지 않는다.
+`search-data/eco-jupjup-vector-v2.full.jsonl.gz`에 정책·행동·장소 17,828건과 384차원 임베딩이 포함돼 있다. 위 복원 명령을 실행하면 모델로 전체 데이터를 다시 임베딩하지 않고 챗봇 검색을 시작할 수 있다. 자세한 검증값과 교체 방법은 `search-data/README.md`를 따른다.
 
 ## 전체 통합 Compose 방식
 
@@ -110,4 +116,3 @@ npm run build
 cd EstOfflineHackathon
 ./stop.sh
 ```
-
