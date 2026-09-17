@@ -15,6 +15,9 @@ const selected = { programKey: "P", actionId: "A" };
 const input: ConditionInput = { inputKey: "membership.is_member", selector: { service_code: "eco_mileage" },
   target: { kind: "self", id: owner }, scope: { kind: "user" }, valueType: "boolean" };
 const slotId = conditionSlotId(input);
+const otherInput: ConditionInput = { inputKey: "household.member_count", selector: {},
+  target: { kind: "self", id: owner }, scope: { kind: "user" }, valueType: "integer" };
+const otherSlotId = conditionSlotId(otherInput);
 const call = (name: string, args: unknown, n: number): ModelReply => ({ text: null, calls: [{ callId: `call-${n}`, name, arguments: JSON.stringify(args) }] });
 function ports() {
   const requests: string[] = [];
@@ -27,7 +30,9 @@ function ports() {
       assert.equal(address.searchParams.has("userId"), false);
       data = { userId: owner, ...selected, eligibilityStatus: "not_evaluated", unselectedInputs: [], unmappedConditionIds: ["unmapped"], households: [],
         inputs: [{ ...input, target: { kind: "self", id: owner, householdId: null }, conditionIds: ["c1"],
-          fact: { value: false, evidence: [{ observedAt: "2026-09-17T00:00:00Z", sourceKind: "user_statement", reference: null }] } }] };
+          fact: { value: false, evidence: [{ observedAt: "2026-09-17T00:00:00Z", sourceKind: "user_statement", reference: null }] } },
+        { ...otherInput, target: { kind: "self", id: owner, householdId: null }, conditionIds: ["c2"],
+          fact: { value: 3, evidence: [{ observedAt: "2026-09-17T00:00:00Z", sourceKind: "user_statement", reference: null }] } }] };
     } else if (address.pathname.endsWith("/detail")) {
       data = { program_key: "P", action_id: "A", title: "에코마일리지", identity_basis: "explicit", program_status: null,
         program: {}, overview_sources: [], conditions: [], places: [], eligibility_status: "not_evaluated" };
@@ -40,14 +45,17 @@ function ports() {
   return { catalog: createCatalogTools(createSpringClient(config)), load: createUserConditionLoader(config), requests };
 }
 function scripted(replies: ModelReply[]) {
-  const restored: HistoryMessage[][] = [], closed: string[] = [];
+  const restored: HistoryMessage[][] = [], closed: string[] = [], instructions: string[] = [];
   let count = 0;
   const provider: ConversationProvider = {
     create: async history => { restored.push(structuredClone(history)); return { id: `conv-${++count}`, responseIds: [] }; },
-    respond: async handle => { handle.responseIds.push(`resp-${handle.responseIds.length}`); const result = replies.shift(); assert.ok(result); return result; },
+    respond: async (handle, _input, _tools, currentInstructions) => {
+      instructions.push(currentInstructions);
+      handle.responseIds.push(`resp-${handle.responseIds.length}`); const result = replies.shift(); assert.ok(result); return result;
+    },
     close: async handle => { closed.push(handle.id); },
   };
-  return { provider, restored, closed };
+  return { provider, restored, closed, instructions };
 }
 function personalTurn() {
   return [call("search_catalog", { query: "에코마일리지", limit: 10, offset: 0 }, 1),
@@ -57,7 +65,10 @@ function personalTurn() {
 }
 
 test("catalog→details→DB seeds→quoted correction commit only after answer acceptance", async () => {
-  const model = scripted(personalTurn()), api = ports();
+  const model = scripted([...personalTurn(),
+    call("search_catalog", { query: "에코마일리지", limit: 10, offset: 0 }, 5),
+    call("get_catalog_action", selected, 6), call("load_user_conditions", selected, 7),
+    { text: "정정된 조건을 계속 사용했어요.", calls: [] }]), api = ports();
   const runner = createConversationRunner({ ...api, provider: model.provider }), session = runner.createSession(owner);
   let commits = 0;
   const result = await runner.runTurn(session, turn, { commit: async candidate => {
@@ -67,8 +78,20 @@ test("catalog→details→DB seeds→quoted correction commit only after answer 
   } });
   assert.equal(commits, 1); assert.equal(result.modelCalls, 5); assert.equal(result.toolCalls, 4);
   assert.equal(readConditionFact(session.memory, slotId).value, true);
+  assert.equal(readConditionFact(session.memory, otherSlotId).value, 3);
+  assert.match(model.instructions[3], /\"value\":false/);
+  assert.match(model.instructions[4], /\"value\":true/);
   assert.equal(session.history.length, 2);
-  assert.deepEqual(api.requests, ["/api/catalog/actions", "/api/catalog/actions/detail", "/api/profile/condition-context"]);
+  await runner.runTurn(session, { ...turn, turnId: "turn-2", text: "조건 다시 확인해줘" }, { commit: async () => {} });
+  assert.match(model.instructions[8], /\"value\":true/);
+  assert.match(model.instructions[8], /household\.member_count/);
+  assert.match(model.instructions[8], /\"value\":3/);
+  assert.equal(readConditionFact(session.memory, slotId).value, true);
+  assert.equal(readConditionFact(session.memory, otherSlotId).value, 3);
+  assert.deepEqual(api.requests, [
+    "/api/catalog/actions", "/api/catalog/actions/detail", "/api/profile/condition-context",
+    "/api/catalog/actions", "/api/catalog/actions/detail", "/api/profile/condition-context",
+  ]);
 });
 
 test("failed answer commit keeps memory/history and recreates provider from completed turns", async () => {
@@ -77,6 +100,7 @@ test("failed answer commit keeps memory/history and recreates provider from comp
   session.history = [{ role: "user", content: "이전 질문" }, { role: "assistant", content: "완료된 답변" }];
   const before = structuredClone({ memory: session.memory, history: session.history });
   await assert.rejects(runner.runTurn(session, turn, { commit: async () => { throw new Error("save failed"); } }), /save failed/);
+  assert.match(model.instructions[4], /\"value\":true/);
   assert.deepEqual({ memory: session.memory, history: session.history }, before);
   assert.equal(session.provider, null); assert.deepEqual(model.closed, ["conv-1"]);
   model.provider.respond = async () => ({ text: "다시 답변", calls: [] });

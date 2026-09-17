@@ -133,6 +133,10 @@ export function readConditionFact(memory: ConditionMemory, slotId: string): Cond
   return structuredClone(slot.change ?? slot.initial ?? { status: "missing", value: null, source: null });
 }
 
+export function conditionView(memory: ConditionMemory) {
+  return memory.slots.map(slot => ({ slotId: slot.id, input: structuredClone(slot.input), fact: readConditionFact(memory, slot.id) }));
+}
+
 // Starting another purchase removes only that case's temporary inputs.
 export function clearConditionCase(memory: ConditionMemory, userId: string, caseId: string): ConditionMemory {
   checkOwner(memory, userId);

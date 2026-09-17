@@ -19,6 +19,7 @@
 | `ai/application/conversation-flow.ts` | model→tool→model, 종료/호출상한/오류/취소 |
 | `ai/application/conversation-session.ts` | 사용자 격리, 한 세션의 동시 실행 차단, 성공 commit·실패 복원 |
 | `ai/application/conversation-instructions.ts` | 검증된 공개도구 v2 지시와 현재 개인화 지원 범위 |
+| `ai/application/conversation-context.ts` | 고정 응대 원칙과 매 모델 호출 시점의 도구·유효 조건 문맥 조립 |
 | `ai/tools/conversation-tools.ts` | 공개 도구와 개인화 읽기·임시 정정 도구 연결 |
 | `ai/adapters/openai-conversation.ts` | SDK Conversations/Responses와 provider 자원 정리 |
 | `ai/runtime.ts` | 환경값과 실제 SDK/HTTP 구현 조립 |
@@ -52,6 +53,8 @@ await runtime.closeSession(session);
 
 `update_conditions`는 이미 등록된 슬롯만 현재 발화의 정확한 인용과 함께 갱신한다. 변경은 working memory에만 적용하고 답변 생성 및 호출자의 `commit` 성공 뒤 session에 반영한다. 의미가 모호한 수긍·다른 사람·새 구매 건의 해석은 모델 지시로 제한하며 정확한 인용 자체가 의미적 정확성을 증명하지는 않는다. 이 실행부는 새 사람/새 구매 건 슬롯 등록이나 질문 상태기를 추가하지 않는다.
 
+응대 원칙은 역할·응대, 검색·도구 사용, 근거·답변, 개인화·정정, 완료·저장 경계의 책임으로 이름을 붙였다. 원칙의 기존 의미는 유지한다. 원문 대화는 provider 이력에 두고 instructions에 복제하지 않는다. 대신 매 모델 호출 직전에 실제 제공 도구 이름과 `conditionView`의 유효 조건을 working memory에서 다시 조립한다. 따라서 조건 조회 뒤에는 DB 초기값을, 같은 상담의 정정 뒤에는 정정값을 다음 모델 호출이 사용한다. DB 재조회는 기존 정정을 덮지 않으며, 이 조립 자체는 조회·정정·저장을 실행하지 않는다.
+
 정상 조회0건과 조회 오류를 구분한다. 도구 오류는 민감한 원문 대신 코드만 모델에 전달하고 같은 턴의 상한 안에서 수정할 수 있다. 모델6회·도구5회, 응답당 함수호출1개, 검색3회·상세2회까지다. 전역85초/SDK45초 제한과 취소를 전달하며 SDK 자동 재시도는0이다.
 
 Responses에 같은 Conversation ID를 전달한다. 도구 결과는 call_id에 연결해 다음 Responses input으로 넣으며 최종 답변을 수동으로 중복 append하지 않는다. SDK response ID는 working memory와 독립적으로 기록한다.
@@ -69,7 +72,7 @@ Responses에 같은 Conversation ID를 전달한다. 도구 결과는 call_id에
 
 ## 확인 범위와 다음 단계
 
-`frontend`에서 `npm run test:conversation`: graph7, session/도구 연결5, SDK4개 단위검사. 모델은 고정 응답, Spring은 fetch 대역으로 검사했다. SDK 역시 실제 클라이언트에 fake fetch를 주입했으며 유료 모델/API 호출은 없다. 변경 파일 타입 검사도 통과했다.
+고정 모델·HTTP 대역으로 실제 runner/graph/tools 경로를 실행해 DB false→상담 true→다음 턴 DB false 재조회 뒤에도 true 유지, 미언급 슬롯 보존, commit 실패 시 확정 session 불변을 확인한다. 일반 대화는 도구0회·모델1회를 유지한다. 모델은 고정 응답, Spring은 fetch 대역이므로 유료 모델/API 호출이나 브라우저 검증은 아니다. 변경 파일의 범위 지정 타입 검사도 함께 수행한다.
 
 별도 환경의 공개 도구 시험 v2를 기반으로 했지만, 이번 개인화 지시와 합쳐진 모델의 자연어 품질을 실제 호출로 검증한 것은 아니다. 기존 QA의 요청 상태/수락·보충 및 답변 근거 개선 후보는 자동으로 이식하지 않았다. 그 결과를 확인해 후속으로 반영한다.
 
