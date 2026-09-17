@@ -41,6 +41,9 @@ export function MissionDetailScreen({ batchId, itemId }: { batchId: string; item
       </p>
     </section>
 
+    {detail.action_id === "KR-CNP-GREEN-2026-A17" && <Link href="/missions/photo-check"
+      className="mt-6 block rounded-2xl bg-[#eef7e9] p-5 font-bold text-[#397d3e]">다회용기 사진 확인 체험 →</Link>}
+
     <section aria-labelledby="condition-title" className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#dfe9da] md:p-8">
       <h2 id="condition-title" className="text-xl font-bold text-[#29452a]">행동 조건과 근거</h2>
       {detail.conditions.length === 0 ? <p className="mt-4 text-sm text-[#6a7b68]">등록된 행동 조건이 없어요. 출처에서 현재 조건을 확인해 주세요.</p>
