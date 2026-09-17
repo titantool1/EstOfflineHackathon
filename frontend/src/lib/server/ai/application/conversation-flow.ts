@@ -18,7 +18,7 @@ type RunInput = {
   conversation: ConversationHandle;
   text: string;
   turnId: string;
-  instructions: string;
+  instructions: string | (() => string);
   tools: FunctionDefinition[];
   execute: (name: string, args: unknown, signal: AbortSignal) => Promise<unknown>;
 };
@@ -84,7 +84,7 @@ function toolOutput(value: unknown) {
 function validateInput(input: RunInput) {
   if (typeof input.text !== "string" || !input.text.trim() || input.text.length > 2000
       || typeof input.turnId !== "string" || !input.turnId.trim() || input.turnId.length > 100
-      || typeof input.instructions !== "string" || !Array.isArray(input.tools)
+      || !["string", "function"].includes(typeof input.instructions) || !Array.isArray(input.tools)
       || typeof input.execute !== "function") throw new AiError("INVALID_INPUT");
   const names = new Set<string>();
   for (const tool of input.tools) {
@@ -93,6 +93,12 @@ function validateInput(input: RunInput) {
     names.add(tool.name);
   }
   return names;
+}
+
+function currentInstructions(value: RunInput["instructions"]) {
+  const instructions = typeof value === "function" ? value() : value;
+  if (typeof instructions !== "string") throw new AiError("INVALID_INPUT");
+  return instructions;
 }
 
 export function createConversationGraph(provider: Pick<ConversationProvider, "respond">) {
@@ -106,8 +112,9 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
         if (state.modelCalls >= MODEL_CALL_LIMIT) throw new AiError("MODEL_CALL_LIMIT");
         let reply: ModelReply;
         try {
+          const instructions = currentInstructions(input.instructions);
           reply = validateReply(await provider.respond(input.conversation, state.nextInput,
-            input.tools, input.instructions, signal));
+            input.tools, instructions, signal));
         } catch (error) {
           if (isAbort(error, signal)) cancelled(signal);
           throw error instanceof AiError ? error : new AiError("MODEL_FAILED");

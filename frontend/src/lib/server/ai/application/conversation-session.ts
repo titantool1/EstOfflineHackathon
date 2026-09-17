@@ -5,9 +5,9 @@ import { createConditionMemory } from "./condition-memory.ts";
 import type { ConversationProvider, ConversationSession, ConversationTurn } from "../conversation-contracts.ts";
 import type { createCatalogTools } from "../tools/catalog-tools.ts";
 import type { createUserConditionLoader } from "../adapters/user-condition-context.ts";
-import { conditionView, createConversationTools } from "../tools/conversation-tools.ts";
+import { createConversationTools } from "../tools/conversation-tools.ts";
 import { createConversationGraph } from "./conversation-flow.ts";
-import { conversationInstructions } from "./conversation-instructions.ts";
+import { createConversationContext } from "./conversation-context.ts";
 
 export type ConversationResult = { text: string; memory: ConditionMemory; modelCalls: number; toolCalls: number };
 
@@ -43,7 +43,7 @@ export function createConversationRunner(ports: {
         const tools = createConversationTools({ ...ports, turn, memory: session.memory });
         const reply = await run({ conversation: session.provider, text: turn.text, turnId: turn.turnId,
           tools: tools.definitions, execute: tools.execute,
-          instructions: conversationInstructions + "\n현재 상담의 사용자 조건: " + JSON.stringify(conditionView(session.memory)),
+          instructions: () => createConversationContext({ memory: tools.memory(), tools: tools.definitions }),
         }, signal);
         signal.throwIfAborted();
         const result = { ...reply, memory: tools.memory() };

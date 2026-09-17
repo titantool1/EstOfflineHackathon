@@ -1,42 +1,62 @@
-const AI_SERVER_URL = process.env.AI_SERVER_URL ?? "http://127.0.0.1:8000";
+import { randomUUID } from "node:crypto";
+import { ChatFailure } from "@/lib/server/chat/chat-service";
+import { getChatRuntime } from "@/lib/server/chat/runtime";
+import { chatRequest, sameOrigin, uuid } from "@/lib/server/chat/request-boundary";
 
-type ChatRequest = { query?: unknown; region?: unknown };
-
-export async function POST(request: Request) {
-  if (!request.headers.get("content-type")?.includes("application/json")) {
-    return Response.json({ error: "JSON 요청만 지원합니다." }, { status: 415 });
-  }
-  let body: ChatRequest;
-  try {
-    body = (await request.json()) as ChatRequest;
-  } catch {
-    return Response.json({ error: "요청 형식을 확인해 주세요." }, { status: 400 });
-  }
-  const query = typeof body.query === "string" ? body.query.trim() : "";
-  const region = typeof body.region === "string" ? body.region.trim() : "서울특별시";
-  if (!query || query.length > 500) {
-    return Response.json({ error: "질문은 1자 이상 500자 이하로 입력해 주세요." }, { status: 400 });
-  }
-  try {
-    const response = await fetch(`${AI_SERVER_URL}/api/search`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query, region, size: 5 }),
-      cache: "no-store",
-      signal: AbortSignal.timeout(90_000),
-    });
-    if (!response.ok) {
-      return Response.json(
-        { error: "검색 서버가 응답하지 않았어요. 잠시 후 다시 시도해 주세요." },
-        { status: response.status >= 500 ? 503 : 400 },
-      );
-    }
-    return Response.json(await response.json());
-  } catch {
-    return Response.json(
-      { error: "검색 서버에 연결할 수 없어요. Elasticsearch와 AI 서버를 확인해 주세요." },
-      { status: 503 },
-    );
-  }
+export const runtime = "nodejs";
+function result(requestId: string, data: unknown, error: { code: string; message: string } | null, status = 200) {
+  return Response.json({ data, error, requestId }, { status, headers: { "Cache-Control": "no-store", "X-Request-Id": requestId } });
+}
+function requestContext(request: Request) {
+  const candidate = request.headers.get("X-Request-Id");
+  return { requestId: candidate && /^[A-Za-z0-9_-]{1,64}$/.test(candidate) ? candidate : randomUUID(),
+    cookie: request.headers.get("Cookie") ?? "" };
+}
+function failure(id: string, error: unknown) {
+  return error instanceof ChatFailure
+    ? result(id, null, { code: error.code, message: error.message }, error.status)
+    : result(id, null, { code: "CHAT_UNAVAILABLE", message: "답변을 만들지 못했어요. 잠시 후 다시 시도해 주세요." }, 503);
 }
 
+export async function POST(request: Request) {
+  const context = requestContext(request);
+  if (!sameOrigin(request))
+    return result(context.requestId, null, { code: "CROSS_ORIGIN_REQUEST", message: "같은 사이트에서 다시 요청해 주세요." }, 403);
+  if (!request.headers.get("content-type")?.includes("application/json")) {
+    return result(context.requestId, null, { code: "UNSUPPORTED_MEDIA_TYPE", message: "JSON 요청만 지원합니다." }, 415);
+  }
+  let body;
+  try {
+    const value: unknown = await request.json();
+    body = chatRequest(value);
+    if (!body) throw new Error();
+  } catch {
+    return result(context.requestId, null, { code: "INVALID_CHAT_REQUEST", message: "요청 형식을 확인해 주세요." }, 400);
+  }
+  try {
+    const runtime = await getChatRuntime();
+    const member = await runtime.member(context.cookie, context.requestId, request.signal);
+    const data = await runtime.chat.send(body, { ...context, userId: member.userId, signal: request.signal });
+    return result(context.requestId, data, null);
+  } catch (error) { return failure(context.requestId, error); }
+}
+
+export async function DELETE(request: Request) {
+  const context = requestContext(request);
+  if (!sameOrigin(request))
+    return result(context.requestId, null, { code: "CROSS_ORIGIN_REQUEST", message: "같은 사이트에서 다시 요청해 주세요." }, 403);
+  let body: { conversationId?: unknown };
+  try {
+    const value: unknown = await request.json();
+    if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error();
+    body = value;
+  }
+  catch { return result(context.requestId, null, { code: "INVALID_CHAT_REQUEST", message: "종료할 상담을 확인해 주세요." }, 400); }
+  if (!uuid(body.conversationId)) return result(context.requestId, null, { code: "INVALID_CHAT_REQUEST", message: "종료할 상담을 확인해 주세요." }, 400);
+  try {
+    const runtime = await getChatRuntime();
+    const member = await runtime.member(context.cookie, context.requestId, request.signal);
+    await runtime.chat.close(body.conversationId, member.userId);
+    return result(context.requestId, { closed: true }, null);
+  } catch (error) { return failure(context.requestId, error); }
+}

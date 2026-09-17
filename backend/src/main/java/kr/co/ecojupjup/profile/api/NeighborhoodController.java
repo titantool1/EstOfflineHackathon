@@ -2,6 +2,7 @@ package kr.co.ecojupjup.profile.api;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
+import kr.co.ecojupjup.identity.application.MemberRequestContext;
 import kr.co.ecojupjup.common.api.ApiResponse;
 import kr.co.ecojupjup.common.api.RequestIdFilter;
 import kr.co.ecojupjup.profile.application.Neighborhood;
@@ -20,7 +21,7 @@ public class NeighborhoodController {
     @GetMapping("/api/profile/neighborhood")
     public ResponseEntity<?> get(HttpServletRequest request) {
         String requestId = id(request);
-        UUID owner = owner(request);
+        UUID owner = MemberRequestContext.owner(request);
         if (owner == null) return failure(401, "AUTHENTICATION_REQUIRED", "로그인이 필요합니다.", requestId);
         return ResponseEntity.ok().header("Cache-Control", "no-store")
                 .body(ApiResponse.success(new View(service.get(owner).orElse(null)), requestId));
@@ -29,7 +30,7 @@ public class NeighborhoodController {
     @PutMapping("/api/profile/neighborhood")
     public ResponseEntity<?> put(@RequestBody Input input, HttpServletRequest request) {
         String requestId = id(request);
-        UUID owner = owner(request);
+        UUID owner = MemberRequestContext.owner(request);
         if (owner == null) return failure(401, "AUTHENTICATION_REQUIRED", "로그인이 필요합니다.", requestId);
         try {
             if (input == null) throw new IllegalArgumentException("INVALID_NEIGHBORHOOD");
@@ -42,10 +43,6 @@ public class NeighborhoodController {
         }
     }
 
-    private static UUID owner(HttpServletRequest request) {
-        Object owner = request.getAttribute(ConditionContextController.CURRENT_USER_ID);
-        return owner instanceof UUID id ? id : null;
-    }
     private static String id(HttpServletRequest request) {
         return (String) request.getAttribute(RequestIdFilter.ATTRIBUTE);
     }

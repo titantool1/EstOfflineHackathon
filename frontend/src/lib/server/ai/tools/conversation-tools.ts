@@ -2,7 +2,7 @@ import "server-only";
 import { AiError } from "../contracts.ts";
 import type { ConversationTurn, FunctionDefinition } from "../conversation-contracts.ts";
 import type { ConditionChange, ConditionMemory } from "../application/condition-memory.ts";
-import { applyConditionChanges, readConditionFact } from "../application/condition-memory.ts";
+import { applyConditionChanges, conditionView } from "../application/condition-memory.ts";
 import type { createUserConditionLoader } from "../adapters/user-condition-context.ts";
 import type { createCatalogTools } from "./catalog-tools.ts";
 
@@ -29,10 +29,6 @@ const personalDefinitions: FunctionDefinition[] = [
       } },
     } } },
 ];
-
-export function conditionView(memory: ConditionMemory) {
-  return memory.slots.map(slot => ({ slotId: slot.id, input: structuredClone(slot.input), fact: readConditionFact(memory, slot.id) }));
-}
 
 // One instance per turn: candidate facts and selected action IDs cannot leak across users/turns.
 export function createConversationTools(options: {

@@ -2,6 +2,7 @@ package kr.co.ecojupjup.profile.api;
 
 import java.util.Optional;
 import java.util.UUID;
+import kr.co.ecojupjup.identity.application.MemberRequestContext;
 import kr.co.ecojupjup.common.api.ApiExceptionHandler;
 import kr.co.ecojupjup.common.api.RequestIdFilter;
 import kr.co.ecojupjup.profile.application.Neighborhood;
@@ -28,7 +29,7 @@ class NeighborhoodControllerTest {
 
     @Test void missingSelectionIsExplicitNullAndOwnerComesOnlyFromSessionContext() throws Exception {
         when(store.find(OWNER)).thenReturn(Optional.empty());
-        mvc.perform(get("/api/profile/neighborhood").requestAttr(ConditionContextController.CURRENT_USER_ID, OWNER)
+        mvc.perform(get("/api/profile/neighborhood").requestAttr(MemberRequestContext.ATTRIBUTE, OWNER)
                         .param("userId", UUID.randomUUID().toString()).header("X-User-Id", UUID.randomUUID()))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.data.neighborhood").isEmpty())
                 .andExpect(header().string("Cache-Control", "no-store"));
@@ -37,13 +38,13 @@ class NeighborhoodControllerTest {
 
     @Test void savesAndReloadsTheAuthenticatedOwnersSelection() throws Exception {
         String body = "{\"regionCode\":\"1230059000\",\"sido\":\"전남광주통합특별시\",\"sigungu\":\"북구\",\"dong\":\"용봉동\"}";
-        mvc.perform(put("/api/profile/neighborhood").requestAttr(ConditionContextController.CURRENT_USER_ID, OWNER)
+        mvc.perform(put("/api/profile/neighborhood").requestAttr(MemberRequestContext.ATTRIBUTE, OWNER)
                         .contentType("application/json").content(body))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.data.neighborhood.regionCode").value("1230059000"))
                 .andExpect(jsonPath("$.data.neighborhood.dong").value("용봉동"));
         verify(store).save(OWNER, NEIGHBORHOOD);
         when(store.find(OWNER)).thenReturn(Optional.of(NEIGHBORHOOD));
-        mvc.perform(get("/api/profile/neighborhood").requestAttr(ConditionContextController.CURRENT_USER_ID, OWNER))
+        mvc.perform(get("/api/profile/neighborhood").requestAttr(MemberRequestContext.ATTRIBUTE, OWNER))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.data.neighborhood.sido").value("전남광주통합특별시"));
     }
 
@@ -53,7 +54,7 @@ class NeighborhoodControllerTest {
                 .andExpect(jsonPath("$.error.code").value("AUTHENTICATION_REQUIRED"));
         mvc.perform(put("/api/profile/neighborhood").contentType("application/json").content(valid))
                 .andExpect(status().isUnauthorized());
-        mvc.perform(put("/api/profile/neighborhood").requestAttr(ConditionContextController.CURRENT_USER_ID, OWNER)
+        mvc.perform(put("/api/profile/neighborhood").requestAttr(MemberRequestContext.ATTRIBUTE, OWNER)
                         .contentType("application/json").content(valid.replace("1230059000", "bad")))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.error.code").value("INVALID_NEIGHBORHOOD"));
         verifyNoInteractions(store);
