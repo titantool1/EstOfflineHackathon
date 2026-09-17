@@ -58,9 +58,9 @@ public class JdbcConditionContextLookup implements ConditionContextService.Looku
                 .map(StoredFact::values).orElseGet(mapper::createObjectNode);
         }
         JsonNode welfare(String code,String scope,UUID member) {
-            String cacheKey="welfare:"+scope;
+            String cacheKey="welfare:"+scope+":"+member;
             var rows=cache.computeIfAbsent(cacheKey,k->facts.listWelfare(owner,scope,
-                scope.equals("member")?selection.householdId():null));
+                scope.equals("member")?selection.householdId():null,member));
             return rows.stream().filter(r->java.util.Objects.equals(r.key().memberId(),member)
                 && code.equals(r.values().path("welfare_code").asText())).findFirst()
                 .map(r->factNode(r.values(),"has_status")).orElseGet(()->mapper.nullNode());

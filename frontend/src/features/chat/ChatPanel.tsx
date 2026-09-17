@@ -1,13 +1,20 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { createChatClient } from "./chat-client";
+import { createChatClient, type ChatSaveStatus } from "./chat-client";
 import type { ChatProgress } from "../../lib/chat-stream";
 import { SourceText } from "../sources/SourceText";
 
 type Message = { id: string; role: "assistant" | "user"; text: string; isError?: boolean };
 const welcome: Message = { id: "welcome", role: "assistant", text: "안녕하세요! 친환경 제도와 실천 방법을 함께 찾아볼게요. 무엇이 궁금한가요?" };
 const suggestions = ["텀블러를 사용하면 받을 수 있는 혜택을 알려줘", "친환경 자동차 구매 지원이 궁금해", "일상에서 탄소를 줄이는 방법을 알려줘"];
+const closeNotices: Record<ChatSaveStatus, string> = {
+  saved: "변경한 정보가 저장되었습니다. 새 상담을 시작했어요.",
+  no_changes: "상담을 종료했습니다. 저장할 변경은 없었습니다.",
+  pending_resolution: "확인되지 않은 변경이 있어 저장하지 않고 상담을 종료했습니다.",
+  rejected: "변경한 정보를 저장하지 못했습니다. 기존 정보는 유지되며 새 상담을 시작했어요.",
+  outcome_unconfirmed: "저장 결과를 확인하지 못했지만 상담은 종료했습니다. 새 상담을 시작했어요.",
+};
 
 const progressLabels: Record<ChatProgress, string> = {
   thinking: "질문을 살펴보고 있어요…", searching: "관련 정보를 검색하고 있어요…",
@@ -21,11 +28,22 @@ export function ChatPanel() {
   const [conversationId, setConversationId] = useState<string>();
   const [input, setInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [needsNewConversation, setNeedsNewConversation] = useState(false);
   const [draft, setDraft] = useState("");
   const [progress, setProgress] = useState<ChatProgress>("thinking");
   const activeRequest = useRef<AbortController | null>(null);
-  useEffect(() => () => { activeRequest.current?.abort(); }, []);
+  const conversation = useRef<string | undefined>(undefined);
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const activityTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const pendingActivity = useRef(false);
+  const closeEpoch = useRef(0);
+  useEffect(() => { conversation.current = conversationId; }, [conversationId]);
+  useEffect(() => () => {
+    activeRequest.current?.abort();
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    if (activityTimer.current) clearTimeout(activityTimer.current);
+  }, []);
   const history = useRef<HTMLDivElement>(null);
   const composer = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
@@ -37,9 +55,64 @@ export function ChatPanel() {
     if (node) { node.style.height = "auto"; node.style.height = `${Math.min(node.scrollHeight, 96)}px`; }
   }, [input]);
 
+  function clearConversationTimers() {
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    if (activityTimer.current) clearTimeout(activityTimer.current);
+    idleTimer.current = undefined;
+    activityTimer.current = undefined;
+    pendingActivity.current = false;
+  }
+  function resetConversation(notice?: string) {
+    clearConversationTimers();
+    conversation.current = undefined;
+    setConversationId(undefined); setNeedsNewConversation(false); setInput(""); setDraft("");
+    setMessages(notice ? [welcome, { id: crypto.randomUUID(), role: "assistant", text: notice }] : [welcome]);
+  }
+  async function finishConversation(id: string, epoch: number, fallback?: string) {
+    if (conversation.current !== id || epoch !== closeEpoch.current) return;
+    setIsClosing(true); clearConversationTimers();
+    let notice = fallback ?? closeNotices.outcome_unconfirmed;
+    try {
+      const result = await client.close(id);
+      notice = closeNotices[result.saveStatus];
+    } catch { /* A finite failed close still resets this browser conversation. */ }
+    if (conversation.current === id && epoch === closeEpoch.current) resetConversation(notice);
+    if (epoch === closeEpoch.current) setIsClosing(false);
+  }
+  function armIdle(id: string) {
+    if (idleTimer.current) clearTimeout(idleTimer.current);
+    const epoch = closeEpoch.current;
+    idleTimer.current = setTimeout(() => { void finishConversation(id, epoch); }, 90_000);
+  }
+  function sendActivity(id: string) {
+    if (conversation.current !== id || isThinking || isClosing) return;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10_000);
+    void client.keepAlive(id, controller.signal).catch(() => {}).finally(() => clearTimeout(timeout));
+  }
+  function flushActivity(id: string) {
+    if (conversation.current !== id || isThinking || isClosing) {
+      activityTimer.current = undefined; pendingActivity.current = false; return;
+    }
+    if (pendingActivity.current) { pendingActivity.current = false; sendActivity(id); }
+    activityTimer.current = setTimeout(() => {
+      if (pendingActivity.current) flushActivity(id);
+      else activityTimer.current = undefined;
+    }, 10_000);
+  }
+  function recordTypingActivity() {
+    const id = conversation.current;
+    if (!id || isThinking || isClosing) return;
+    armIdle(id);
+    pendingActivity.current = true;
+    // One leading call and repeated trailing calls carry the last real keystroke to the server.
+    if (!activityTimer.current) flushActivity(id);
+  }
+
   async function send(text: string) {
     const question = text.trim();
-    if (!question || activeRequest.current || isThinking || needsNewConversation) return;
+    if (!question || activeRequest.current || isThinking || isClosing || needsNewConversation) return;
+    clearConversationTimers();
     setMessages(current => [...current, { id: crypto.randomUUID(), role: "user", text: question }]);
     const request = new AbortController();
     activeRequest.current = request;
@@ -52,23 +125,30 @@ export function ChatPanel() {
         else setProgress(event.stage);
       } });
       if (request.signal.aborted) return;
+      conversation.current = answer.conversationId;
       setConversationId(answer.conversationId);
       setMessages(current => [...current, { id: crypto.randomUUID(), role: "assistant", text: answer.message.text }]);
       setInput("");
+      armIdle(answer.conversationId);
     } catch (error) {
       if (request.signal.aborted) return;
-      setInput(question);
-      setNeedsNewConversation(true);
-      setMessages(current => [...current, { id: crypto.randomUUID(), role: "assistant", isError: true,
-        text: error instanceof Error ? error.message : "답변을 만들지 못했어요. 새 상담에서 다시 질문해 주세요." }]);
+      const text = error instanceof Error ? error.message : "답변을 만들지 못했어요. 새 상담에서 다시 질문해 주세요.";
+      const currentId = conversation.current;
+      if (currentId) {
+        await finishConversation(currentId, closeEpoch.current, `${text}\n${closeNotices.outcome_unconfirmed}`);
+      } else {
+        resetConversation(text);
+      }
     } finally {
       if (activeRequest.current === request) activeRequest.current = null;
       if (!request.signal.aborted) { setDraft(""); setIsThinking(false); }
     }
   }
   async function startNew() {
-    if (conversationId) { try { await client.close(conversationId); } catch {} }
-    setConversationId(undefined); setNeedsNewConversation(false); setMessages([welcome]);
+    const id = conversation.current;
+    const epoch = ++closeEpoch.current;
+    if (id) await finishConversation(id, epoch);
+    else resetConversation();
   }
   function submit(event: FormEvent) { event.preventDefault(); void send(input); }
 
@@ -76,7 +156,7 @@ export function ChatPanel() {
     <div className="flex shrink-0 items-center justify-between border-b border-[#e8eee3] p-3 sm:p-5">
       <div className="flex items-center gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#e7f5e1] text-xl">🌿</span>
         <div><h1 className="font-bold">줍줍이</h1><p className="mt-0.5 text-xs text-[#5f9a55]">친환경 제도·실천 상담</p></div></div>
-      <button type="button" onClick={() => void startNew()} disabled={isThinking} className="rounded-xl border border-[#dce8d7] min-h-11 px-3 py-2 text-xs font-bold text-[#347d40] disabled:opacity-50">새 상담</button>
+      <button type="button" onClick={() => void startNew()} disabled={isThinking || isClosing} className="rounded-xl border border-[#dce8d7] min-h-11 px-3 py-2 text-xs font-bold text-[#347d40] disabled:opacity-50">새 상담</button>
     </div>
     <div ref={history} role="log" aria-label="상담 대화" className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain bg-[#fafcf8] p-3 sm:p-5" aria-live="polite">
       {messages.map(message => <div key={message.id} className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -96,7 +176,7 @@ export function ChatPanel() {
     </div>
     <form onSubmit={submit} className="shrink-0 border-t border-[#e8eee3] p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4 sm:pt-4">
       <div className="flex gap-2 rounded-2xl bg-[#f3f7f0] p-2"><label htmlFor="chat-question" className="sr-only">친환경 질문</label>
-        <textarea ref={composer} rows={1} id="chat-question" value={input} maxLength={2000} onChange={event => setInput(event.target.value)} disabled={isThinking || needsNewConversation}
+        <textarea ref={composer} rows={1} id="chat-question" value={input} maxLength={2000} onChange={event => { setInput(event.target.value); recordTypingActivity(); }} disabled={isThinking || isClosing || needsNewConversation}
           onKeyDown={event => {
             if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing && event.keyCode !== 229
                 && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
@@ -104,7 +184,7 @@ export function ChatPanel() {
             }
           }}
           placeholder="예: 다회용기를 쓰면 어떤 혜택이 있어?" className="min-h-11 max-h-24 min-w-0 flex-1 resize-none bg-transparent px-2 py-2.5 text-base leading-6 outline-none disabled:opacity-60" />
-        <button type="submit" disabled={!input.trim() || isThinking || needsNewConversation} className="min-h-11 shrink-0 self-end rounded-xl bg-[#2f843d] px-4 py-3 text-sm font-bold text-white disabled:bg-[#b8cbb4]">보내기</button></div>
+        <button type="submit" disabled={!input.trim() || isThinking || isClosing || needsNewConversation} className="min-h-11 shrink-0 self-end rounded-xl bg-[#2f843d] px-4 py-3 text-sm font-bold text-white disabled:bg-[#b8cbb4]">보내기</button></div>
     </form>
 
   </section>;

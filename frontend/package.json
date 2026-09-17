@@ -13,6 +13,7 @@
     "check:embedding": "node --conditions=react-server --experimental-strip-types scripts/check-embedding.ts",
     "test:memory": "node --experimental-strip-types --test --test-isolation=none tests/condition-memory.test.ts",
     "test:condition-save": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/condition-save.test.ts",
+    "test:chat": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/chat-basic.test.ts tests/chat-stream.test.ts tests/chat-lifecycle.test.ts tests/condition-save-port.test.ts",
     "test:context": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/user-condition-context.test.ts",
     "test:map": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/map-errors.test.ts",
     "test:account": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/account.test.ts",

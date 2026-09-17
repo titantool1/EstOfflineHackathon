@@ -1,21 +1,23 @@
-# 대화 조건 저장 1단위
+# 상담 종료와 조건 저장
 
-`condition-save.ts`는 한 상담 안에서 성공한 턴의 조건 변경만 모아 저장 포트에 전달한다. 아직 채팅 종료 API나 화면, Spring 어댑터, DB에는 연결하지 않았다.
+새 상담을 누르거나 응답 완료 후 90초 동안 입력이 없으면 상담을 종료한다. 답변 생성 중에는 자동 종료하지 않는다. 실제 입력은 브라우저의 마감 시각을 갱신하고 인증된 활동 요청을 제한된 빈도로 서버에 보낸다. 페이지가 사라져도 서버가 남은 상담을 만료한다. 로그인 세션은 유지한다.
 
-호출자는 성공 응답이 commit된 직후 `acceptSuccessfulTurn`에 서버 관측 시각과 그 턴의 `ConditionMemory` snapshot을 넘긴다. 실패한 턴에는 호출하지 않는다. `requestSave`는 명시적 상담 종료나 새 상담 전환의 저장 경계에서 호출한다. 실제 연결 시에는 현재 `conversation-session.runTurn(..., { commit })`의 성공 commit 경계에서 snapshot을 채택하고, 기존 `chat-service.close`가 session을 지우기 전에 저장 결과를 확정해야 한다.
+성공한 턴에서 변경된 사용자 조건만 모아 종료 시 Spring으로 한 번 전달한다. 대화 내용 전체를 저장하지 않는다. 조회만 한 값은 변경 대상에서 제외하고, `false`도 유효한 값으로 저장한다. 새 상담은 빈 대화·메모리로 시작하며 필요한 조건을 DB에서 다시 조회한다. 상담 사이 이력이나 메모리를 복사하지 않는다.
 
-`known` 변경은 `set`으로 보존하며 `false`도 값으로 전달한다. 조회만 한 `initial`은 변경으로 보내지 않고 조회 당시 값은 `baseline`으로만 싣는다. 각 변경의 `observedAt`은 처음 채택한 성공 턴의 값을 재시도에도 그대로 쓴다. 포트 요청은 복사 후 freeze하여 호출자나 포트의 변경이 고정된 시도를 바꾸지 못하게 한다.
+Spring의 `saved` 응답을 확인한 경우에만 “변경한 정보가 저장되었습니다”를 표시한다. 변경 없음·미분류·저장 거부·저장 결과 미확인은 각각 구분해서 알린다. 모든 종료 결과에서 대화와 메모리를 초기화하며, 실패한 상담을 재시도나 교정을 위해 보존하지 않는다. 응답 유실은 저장 실패로 단정하지 않는다. 생성 중 종료 요청은 해당 턴이 끝난 다음 저장하고, 중복 종료 요청은 같은 처리를 공유한다.
 
-`unknown`과 `refused`만으로는 기존 저장 사실을 유지하거나 지우지 않는다. 앞선 성공 턴의 미저장 후보가 있으면 분류를 기다리는 동안 메모리에 그대로 두지만, `pending_resolution`으로 전체 포트 호출을 막으므로 그 후보를 저장하지 않는다. 서버의 별도 검증 경계가 같은 slot과 현재 turn에 `clear_saved_fact` 또는 `retain_saved_fact`를 붙여야 한다. `retain_saved_fact`는 임시 후보를 제거해 DB의 기존 사실을 건드리지 않고, `clear_saved_fact`만 clear 후보로 교체한다. 이 값은 신뢰 표식 자체가 아니며, 후속 연결에서 인증된 현재 요청과 사용자의 명시 의도를 대조한 서버 코드만 만들어야 한다. 이전 turn의 분류는 거부되고, 뒤의 `known` 정정은 이전 clear 후보를 교체한다.
+`unknown`/`refused`를 삭제 의도로 추측하지 않는다. 현재 대화에서 분류되지 않은 변경이 있으면 전체 저장을 보류한 채 상담을 종료한다. 저장 서비스의 검증된 `clear`는 지원하지만 사용자에게 별도의 삭제 확인 화면이나 종료 후 충돌 교정 화면을 제공하지 않는다.
 
-포트의 `saved`만 저장 완료로 취급한다. 예외와 `outcome_unconfirmed` 뒤에는 같은 attempt ID와 고정 요청을 유지하며 버리거나 교체할 수 없다. `rejected`는 명시적인 `releaseRejectedAttemptForCorrection` 뒤에만 교정 턴을 받을 수 있고, 교정된 집합은 새 attempt ID로 요청한다. 이는 자동 rebase가 아니다. 동시에 들어온 같은 attempt는 한 호출을 공유하고 다른 attempt나 새 snapshot 채택은 막는다. `saved`와 `no_changes` 뒤에는 해당 상담 서비스를 terminal로 닫으며, 같은 완료 attempt의 재호출만 이전 결과를 돌려준다.
+## 저장 경계
 
-현재 `SavePort`는 transport-neutral 시험 경계다. Spring 내부 `PrivateFactsStore`에는 HTTP API, 요청 멱등 기록, 사실별 비교 기준이 없고 현재 ConditionMemory의 baseline에도 DB revision이 없다. 따라서 아래 항목은 아직 보장하지 않는다.
+`POST /api/profile/condition-save`는 Spring 인증 세션과 CSRF를 요구한다. owner·대상 소유권·입력키·selector·타입·관계를 검증하며, 새로운 가족·주택·차량 같은 대상을 추측해서 생성하지 않는다. 기존 여덟 계열 개인 사실은 공통 `PrivateFactsStore`를 거쳐 암호화한다.
 
-- 프로세스 재시작이나 여러 Next 인스턴스를 넘는 attempt replay
-- commit 뒤 응답 유실 때의 durable 결과 조회
-- baseline과 현재 DB 사실의 정확한 충돌 비교
-- 한 트랜잭션 전체 저장, 암호화, 대상 소유권과 관계 제약의 실제 DB 검증
-- `clear`를 Spring의 필드 제거 또는 행 삭제에 안전하게 매핑하는 규칙
+동일 소유자의 profile anchor를 잠근 상태에서 사실별 baseline을 현재 값과 비교한다. 같은 사실이 바뀌었으면 전체 요청을 거부하며, 다른 필드 수정은 보존한다. 예를 들어 생년월일 수정·제거가 동네 값을 지우지 않는다. 지역 목록은 relation별 집합으로 비교한다. nullable 필드의 제거와 필수 필드의 거부는 구분한다.
 
-후속 어댑터는 인증 owner를 다시 확정하고 user scope와 대상 소유권을 검증해야 한다. 사실별 revision 또는 동등한 비교 기준, attempt 결과 저장, 원자적 적용을 Spring 경계에 추가한 뒤에만 위 보장을 제품 동작으로 표시할 수 있다.
+V12의 `condition_save_receipts`는 성공한 owner+attempt 요청의 중복 적용을 막는다. 비교할 요청 내용도 별도 암호화 domain으로 저장하고, 사실 변경과 receipt를 한 트랜잭션으로 commit한다. 같은 요청의 재전송은 이전 성공을 반환하며 최신 사실을 다시 덮어쓰지 않는다. 같은 attempt에 다른 요청을 붙이면 거부한다.
+
+## 실행 범위와 확인
+
+현재 Next 프로세스 안에서 상담 메모리와 만료 타이머를 유지한다. 프로세스 재시작 이전의 미저장 메모리 복원, 여러 Next 인스턴스 사이 상담 이동, 로그아웃 저장, 브라우저 종료 요청의 전달 보장은 제공하지 않는다. Spring의 성공 receipt는 프로세스를 넘어 보존되지만 종료된 대화의 자동 재시도에는 사용하지 않는다.
+
+실제 DB·대화 연결·화면 검증 결과와 배포 전 확인은 [통합 결과](condition-save-integration.md)에 기록한다. 운영 키와 운영 데이터 이관은 [개인 사실 보호 저장](private-facts-storage.md)의 절차를 따른다.

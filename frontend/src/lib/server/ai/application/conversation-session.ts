@@ -71,9 +71,11 @@ export function createConversationRunner(ports: {
         if (session.provider) { session.retired.push(session.provider); session.provider = null; }
         closed.add(session);
         await cleanup(session, signal);
+      } finally {
         session.history = [];
         session.memory = createConditionMemory(session.userId, []);
-      } finally { busy.delete(session); }
+        busy.delete(session);
+      }
     },
   };
 }

@@ -33,6 +33,9 @@ public class PrivateFactsService implements PrivateFactsStore {
     public List<StoredFact> listWelfare(UUID owner, String subjectScope, UUID householdId) {
         return persistence.listWelfare(owner, subjectScope, householdId);
     }
+    @Override public List<StoredFact> listWelfare(UUID owner,String subjectScope,UUID householdId,UUID memberId) {
+        return persistence.listWelfare(owner,subjectScope,householdId,memberId);
+    }
 
     @Override
     public Optional<StoredFact> find(UUID owner, FactKey key) {

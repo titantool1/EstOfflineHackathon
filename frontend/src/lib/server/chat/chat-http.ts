@@ -61,10 +61,34 @@ export function createChatHandlers(getRuntime: typeof getChatRuntime) {
     try {
       const runtime = await getRuntime();
       const member = await runtime.member(context.cookie, context.requestId, request.signal);
-      await runtime.chat.close(body.conversationId, member.userId);
-      return result(context.requestId, { closed: true }, null);
+      const data = await runtime.chat.close(body.conversationId, member.userId, context.cookie);
+      return result(context.requestId, data, null);
     } catch (error) { return failure(context.requestId, error); }
   }
 
-  return { POST, DELETE };
+  async function PATCH(request: Request) {
+    const context = requestContext(request);
+    if (!sameOrigin(request))
+      return result(context.requestId, null, { code: "CROSS_ORIGIN_REQUEST", message: "같은 사이트에서 다시 요청해 주세요." }, 403);
+    if (!request.headers.get("content-type")?.includes("application/json"))
+      return result(context.requestId, null, { code: "UNSUPPORTED_MEDIA_TYPE", message: "JSON 요청만 지원합니다." }, 415);
+    let body: { conversationId?: unknown };
+    try {
+      const value: unknown = await request.json();
+      if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error();
+      body = value;
+    } catch {
+      return result(context.requestId, null, { code: "INVALID_CHAT_REQUEST", message: "상담 정보를 확인해 주세요." }, 400);
+    }
+    if (!uuid(body.conversationId))
+      return result(context.requestId, null, { code: "INVALID_CHAT_REQUEST", message: "상담 정보를 확인해 주세요." }, 400);
+    try {
+      const runtime = await getRuntime();
+      const member = await runtime.member(context.cookie, context.requestId, request.signal);
+      const data = await runtime.chat.keepAlive(body.conversationId, member.userId, context.cookie);
+      return result(context.requestId, data, null);
+    } catch (error) { return failure(context.requestId, error); }
+  }
+
+  return { POST, PATCH, DELETE };
 }

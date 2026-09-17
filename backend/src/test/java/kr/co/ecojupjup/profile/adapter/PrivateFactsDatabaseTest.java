@@ -160,6 +160,39 @@ class PrivateFactsDatabaseTest {
                 var neighborhoodStore=context.getBean(NeighborhoodService.Store.class);
                 neighborhoodStore.save(fresh,new Neighborhood("1111010100","서울특별시","종로구","부암동"));
                 assertThat(neighborhoodStore.find(fresh).orElseThrow().dong()).isEqualTo("부암동");
+
+                // A receipt and the encrypted fact commit together; exact replay never reapplies the old value.
+                String serviceCode=db.queryForObject("SELECT min(service_code) FROM app.services",String.class);
+                ConditionSaveService conditionSaves=context.getBean(ConditionSaveService.class);
+                UUID conversation=UUID.randomUUID(),attempt=UUID.randomUUID();
+                var membershipInput=new ConditionSaveCommand.Input("membership.is_member",Map.of("service_code",serviceCode),
+                    new ConditionSaveCommand.Target("self",fresh,null),"boolean");
+                var initialChange=new ConditionSaveCommand.Change("server-parser-validates-slot",membershipInput,
+                    new ConditionSaveCommand.Operation("set",json.valueToTree(true)),
+                    new ConditionSaveCommand.Observation("2026-09-18T11:00:00+09:00","user_statement","turn-1"),
+                    new ConditionSaveCommand.Baseline("missing",null));
+                var firstCommand=new ConditionSaveCommand(conversation,fresh,attempt,List.of(initialChange),new byte[]{1,2,3});
+                conditionSaves.save(fresh,firstCommand);
+                PrivateFactsStore conditionFacts=context.getBean(PrivateFactsStore.class);
+                StoredFact membershipFact=conditionFacts.list(fresh,FactTable.MEMBERSHIP).getFirst();
+                long savedRevision=membershipFact.revision();
+                conditionSaves.save(fresh,firstCommand);
+                assertThat(conditionFacts.find(fresh,membershipFact.key()).orElseThrow().revision()).isEqualTo(savedRevision);
+
+                db.execute("CREATE FUNCTION app.reject_condition_receipt_test() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'TEST_RECEIPT_FAILURE'; END $$");
+                db.execute("CREATE TRIGGER reject_condition_receipt_test BEFORE INSERT ON app.condition_save_receipts FOR EACH ROW EXECUTE FUNCTION app.reject_condition_receipt_test()");
+                try {
+                    var update=new ConditionSaveCommand.Change("server-parser-validates-slot",membershipInput,
+                        new ConditionSaveCommand.Operation("set",json.valueToTree(false)),
+                        new ConditionSaveCommand.Observation("2026-09-18T11:01:00+09:00","user_statement","turn-2"),
+                        new ConditionSaveCommand.Baseline("known",json.valueToTree(true)));
+                    var failed=new ConditionSaveCommand(UUID.randomUUID(),fresh,UUID.randomUUID(),List.of(update),new byte[]{4,5,6});
+                    assertThatThrownBy(()->conditionSaves.save(fresh,failed)).isInstanceOf(org.springframework.dao.DataAccessException.class);
+                    assertThat(conditionFacts.find(fresh,membershipFact.key()).orElseThrow().values().path("is_member").booleanValue()).isTrue();
+                } finally {
+                    db.execute("DROP TRIGGER reject_condition_receipt_test ON app.condition_save_receipts");
+                    db.execute("DROP FUNCTION app.reject_condition_receipt_test()");
+                }
                 assertThatThrownBy(()->injected.applyChanges(fresh,List.of(
                     new FactChange(key(FactTable.PROFILE,fresh),patch("{\"neighborhood_dong\":\"rollback-value\"}"),null,false),
                     new FactChange(key(FactTable.VEHICLE,UUID.randomUUID()),patch("{\"seating_capacity\":0}"),0L,false))))
@@ -196,10 +229,10 @@ class PrivateFactsDatabaseTest {
             "AND action_id='KR-CNP-GREEN-2026-A02' AND interest_id='green-shopping'",Integer.class)).isZero();
         String catalogMappings=jdbc.queryForObject("SELECT string_agg(program_key||'|'||action_id||'|'||interest_id||'|'||mapping_basis,E'\\n' " +
             "ORDER BY program_key,action_id,interest_id) FROM app.catalog_action_interest",String.class);
+        ObjectNode recommendationBatchBefore=(ObjectNode)json.readTree(row("recommendation_batch","batch_id=?",batch));
         List<String> memberAndMissionRows=List.of(
             row("users","id=?",owner),row("user_accounts","user_id=?",owner),row("user_interests","user_id=?",owner),
-            row("recommendation_batch","batch_id=?",batch),row("recommendation_item","item_id=?",item),
-            row("mission_event","event_id=?",event));
+            row("recommendation_item","item_id=?",item),row("mission_event","event_id=?",event));
         ConditionContext conditionBefore=legacy(selected);
 
         flyway("latest",true).migrate();
@@ -213,8 +246,10 @@ class PrivateFactsDatabaseTest {
 
         assertThat(List.of(
             row("users","id=?",owner),row("user_accounts","user_id=?",owner),row("user_interests","user_id=?",owner),
-            row("recommendation_batch","batch_id=?",batch),row("recommendation_item","item_id=?",item),
-            row("mission_event","event_id=?",event))).containsExactlyElementsOf(memberAndMissionRows);
+            row("recommendation_item","item_id=?",item),row("mission_event","event_id=?",event))).containsExactlyElementsOf(memberAndMissionRows);
+        ObjectNode recommendationBatchAfter=(ObjectNode)json.readTree(row("recommendation_batch","batch_id=?",batch));
+        assertThat(recommendationBatchAfter.remove("request_mode").asText()).isEqualTo("interests");
+        assertThat(recommendationBatchAfter).isEqualTo(recommendationBatchBefore);
         assertThat(jdbc.queryForObject("SELECT string_agg(program_key||'|'||action_id||'|'||interest_id||'|'||mapping_basis,E'\\n' " +
             "ORDER BY program_key,action_id,interest_id) FROM app.catalog_action_interest",String.class)).isEqualTo(catalogMappings);
     }

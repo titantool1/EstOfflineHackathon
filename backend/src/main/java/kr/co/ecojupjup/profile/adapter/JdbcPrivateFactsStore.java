@@ -73,6 +73,17 @@ public class JdbcPrivateFactsStore implements PrivateFactsStore {
     }
 
     @Override
+    public List<StoredFact> listWelfare(UUID owner,String subjectScope,UUID householdId,UUID memberId) {
+        if ("self".equals(subjectScope)) {
+            if (householdId != null || memberId != null) invalidKey();
+            return query(owner,FactTable.WELFARE," AND subject_scope='self'",new Object[]{owner});
+        }
+        if (!"member".equals(subjectScope) || householdId == null || memberId == null) invalidKey();
+        return query(owner,FactTable.WELFARE," AND subject_scope='member' AND household_id=? AND member_id=?",
+                new Object[]{owner,householdId,memberId});
+    }
+
+    @Override
     public Optional<StoredFact> find(UUID owner, FactKey key) {
         validateKey(owner, key);
         return query(owner, key.table(), keyPredicate(key), keyArguments(owner, key)).stream().findFirst();

@@ -44,7 +44,7 @@ test("conversation IDs are server-owned and another member cannot use or close t
   const other = context("00000000-0000-4000-8000-000000000002");
   await assert.rejects(chat.send({ conversationId: first.conversationId, clientRequestId: "turn-2", message: "탈취" }, other),
     (error: unknown) => error instanceof ChatFailure && error.status === 404);
-  await assert.rejects(chat.close(first.conversationId, other.userId),
+  await assert.rejects(chat.close(first.conversationId, other.userId, other.cookie),
     (error: unknown) => error instanceof ChatFailure && error.status === 404);
 });
 

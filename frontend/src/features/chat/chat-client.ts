@@ -2,6 +2,7 @@ import type { ChatAnswer, ChatProgress, ChatTurnEvent } from "../../lib/chat-str
 export type { ChatAnswer } from "../../lib/chat-stream.ts";
 type Envelope<T> = { data: T | null; error: { code: string; message: string } | null; requestId: string };
 type SendOptions = { signal?: AbortSignal; onEvent?: (event: ChatTurnEvent) => void };
+export type ChatSaveStatus = "saved" | "no_changes" | "pending_resolution" | "rejected" | "outcome_unconfirmed";
 const stages: ChatProgress[] = ["thinking", "searching", "reading", "checking_conditions", "updating_conditions", "answering"];
 export class ChatClientError extends Error {
   readonly status: number;
@@ -77,10 +78,15 @@ export function createChatClient(fetcher: typeof fetch = fetch) {
         return envelope<ChatAnswer>(response);
       return readAnswer(response, options);
     },
-    async close(conversationId: string) {
-      return envelope<{ closed: true }>(await fetcher("/api/chat", { method: "DELETE",
+    async keepAlive(conversationId: string, signal?: AbortSignal) {
+      return envelope<{ active: true }>(await fetcher("/api/chat", { method: "PATCH",
         headers: { "Content-Type": "application/json" }, body: JSON.stringify({ conversationId }),
-        cache: "no-store", credentials: "same-origin" }));
+        cache: "no-store", credentials: "same-origin", signal }));
+    },
+    async close(conversationId: string, signal: AbortSignal = AbortSignal.timeout(30_000)) {
+      return envelope<{ closed: true; saveStatus: ChatSaveStatus }>(await fetcher("/api/chat", { method: "DELETE",
+        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ conversationId }),
+        cache: "no-store", credentials: "same-origin", signal }));
     },
   };
 }
