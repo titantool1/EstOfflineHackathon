@@ -1,0 +1,1399 @@
+[
+  {
+    "program_key": "scheme:G002",
+    "condition_id": "G002-C01",
+    "action_ids": [
+      "G002-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G002-A01 이용자"
+  },
+  {
+    "program_key": "scheme:G002",
+    "condition_id": "G002-C02",
+    "action_ids": [
+      "G002-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "G002-A02"
+  },
+  {
+    "program_key": "scheme:G003",
+    "condition_id": "G003-C01",
+    "action_ids": [
+      "G003-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G003-A01 이용자"
+  },
+  {
+    "program_key": "scheme:G003",
+    "condition_id": "G003-C02",
+    "action_ids": [
+      "G003-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G003-A01"
+  },
+  {
+    "program_key": "scheme:G003",
+    "condition_id": "G003-C03",
+    "action_ids": [
+      "G003-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G003-A01"
+  },
+  {
+    "program_key": "scheme:G003",
+    "condition_id": "G003-C04",
+    "action_ids": [
+      "G003-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G003-A01 이용자"
+  },
+  {
+    "program_key": "scheme:G004",
+    "condition_id": "G004-C01",
+    "action_ids": [
+      "G004-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G004-A01 구매 건"
+  },
+  {
+    "program_key": "scheme:G004",
+    "condition_id": "G004-C02",
+    "action_ids": [
+      "G004-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G004-A01 구매 건"
+  },
+  {
+    "program_key": "scheme:G004",
+    "condition_id": "G004-C03",
+    "action_ids": [
+      "G004-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G004-A01 구매 건"
+  },
+  {
+    "program_key": "scheme:G004",
+    "condition_id": "G004-C04",
+    "action_ids": [
+      "G004-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G004-A01 구매 건"
+  },
+  {
+    "program_key": "scheme:G007",
+    "condition_id": "G007-C01",
+    "action_ids": [
+      "G007-A01"
+    ],
+    "basis": "single_action",
+    "note": "자료 이용 행동"
+  },
+  {
+    "program_key": "scheme:G008",
+    "condition_id": "G008-C01",
+    "action_ids": [
+      "G008-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "이용자·G008-A01"
+  },
+  {
+    "program_key": "scheme:G008",
+    "condition_id": "G008-C02",
+    "action_ids": [
+      "G008-A01"
+    ],
+    "basis": "single_action",
+    "note": "만 13세 가입자"
+  },
+  {
+    "program_key": "scheme:G008",
+    "condition_id": "G008-C03",
+    "action_ids": [
+      "G008-A01"
+    ],
+    "basis": "single_action",
+    "note": "이용권 구매·대여 행동"
+  },
+  {
+    "program_key": "scheme:G021",
+    "condition_id": "G021-C01",
+    "action_ids": [
+      "G021-A01"
+    ],
+    "basis": "single_action",
+    "note": "신청자·신청주소 전기사용 계약"
+  },
+  {
+    "program_key": "scheme:G021",
+    "condition_id": "G021-C02",
+    "action_ids": [
+      "G021-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G021-A01"
+  },
+  {
+    "program_key": "scheme:G021",
+    "condition_id": "G021-C03",
+    "action_ids": [
+      "G021-A01"
+    ],
+    "basis": "single_action",
+    "note": "신청자·신청주소 전기사용 계약"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C01",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C02",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "구매 건"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C03",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C04",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C05",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C06",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C07",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C08",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C09",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G022",
+    "condition_id": "G022-C10",
+    "action_ids": [
+      "G022-A01"
+    ],
+    "basis": "single_action",
+    "note": "구매 건"
+  },
+  {
+    "program_key": "scheme:G024",
+    "condition_id": "G024-C01",
+    "action_ids": [
+      "G024-A01"
+    ],
+    "basis": "single_action",
+    "note": "제품 정보 조회 행동"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C01",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "건축물·공사"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C02",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "공사"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C03",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "건축주·공사"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C04",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "사업자·건축주"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C05",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "건축주"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C06",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "건축주"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C07",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "건축주"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C09",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "건축주"
+  },
+  {
+    "program_key": "scheme:G027",
+    "condition_id": "G027-C08",
+    "action_ids": [
+      "G027-A01"
+    ],
+    "basis": "single_action",
+    "note": "건축물·공사"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C01",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 수급자; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C02",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 본인 또는 등본상 세대원; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C03",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 세대; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C04",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G031-A01 세대"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C05",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 본인 또는 등본상 세대원; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C06",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 본인 또는 등본상 세대원; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C07",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 본인 또는 등본상 세대원; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C08",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 본인 또는 등본상 세대원; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C09",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 본인 또는 등본상 세대원; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C10",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 본인 또는 등본상 세대원; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C11",
+    "action_ids": [
+      "G031-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 세대; applies_to 약칭 A01을 G031-A01로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C12",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "A02 세대; applies_to 약칭 A02를 G031-A02로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C13",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "A02 세대; applies_to 약칭 A02를 G031-A02로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C14",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "A02 세대; applies_to 약칭 A02를 G031-A02로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C15",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "A02 세대; applies_to 약칭 A02를 G031-A02로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C16",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "A02 세대; applies_to 약칭 A02를 G031-A02로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C17",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "A02 세대; applies_to 약칭 A02를 G031-A02로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C18",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "A02 세대; applies_to 약칭 A02를 G031-A02로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C19",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "A02 세대; applies_to 약칭 A02를 G031-A02로 확장"
+  },
+  {
+    "program_key": "scheme:G031",
+    "condition_id": "G031-C20",
+    "action_ids": [
+      "G031-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "G031-A02 중 본인부담 등 기타 전환 세대"
+  },
+  {
+    "program_key": "scheme:G034",
+    "condition_id": "G034-C01",
+    "action_ids": [
+      "G034-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "구매 건·G034-A01"
+  },
+  {
+    "program_key": "scheme:G034",
+    "condition_id": "G034-C02",
+    "action_ids": [
+      "G034-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "구매 건·G034-A01"
+  },
+  {
+    "program_key": "scheme:G035",
+    "condition_id": "G035-C01",
+    "action_ids": [
+      "G035-A01"
+    ],
+    "basis": "single_action",
+    "note": "제품 정보 조회 행동"
+  },
+  {
+    "program_key": "scheme:G038",
+    "condition_id": "G038-C01",
+    "action_ids": [
+      "G038-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "배출 품목·G038-A01"
+  },
+  {
+    "program_key": "scheme:G038",
+    "condition_id": "G038-C02",
+    "action_ids": [
+      "G038-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "배출 품목·G038-A01"
+  },
+  {
+    "program_key": "scheme:G038",
+    "condition_id": "G038-C03",
+    "action_ids": [
+      "G038-A01"
+    ],
+    "basis": "single_action",
+    "note": "추가 배출 품목"
+  },
+  {
+    "program_key": "scheme:G038",
+    "condition_id": "G038-C04",
+    "action_ids": [
+      "G038-A01"
+    ],
+    "basis": "single_action",
+    "note": "배출 장소·품목"
+  },
+  {
+    "program_key": "scheme:G039",
+    "condition_id": "G039-C01",
+    "action_ids": [
+      "G039-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "개인·G039-A01"
+  },
+  {
+    "program_key": "scheme:G039",
+    "condition_id": "G039-C02",
+    "action_ids": [
+      "G039-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "예약 건·G039-A01"
+  },
+  {
+    "program_key": "scheme:G042",
+    "condition_id": "G042-C01",
+    "action_ids": [
+      "G042-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "반환 용기·G042-A01"
+  },
+  {
+    "program_key": "scheme:G042",
+    "condition_id": "G042-C02",
+    "action_ids": [
+      "G042-A01"
+    ],
+    "basis": "single_action",
+    "note": "반환자·반환 건"
+  },
+  {
+    "program_key": "scheme:G042",
+    "condition_id": "G042-C03",
+    "action_ids": [
+      "G042-A01"
+    ],
+    "basis": "single_action",
+    "note": "반환 용기"
+  },
+  {
+    "program_key": "scheme:G047",
+    "condition_id": "G047-C01",
+    "action_ids": [
+      "G047-A01"
+    ],
+    "basis": "single_action",
+    "note": "신청자·설치 장소"
+  },
+  {
+    "program_key": "scheme:G047",
+    "condition_id": "G047-C02",
+    "action_ids": [
+      "G047-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "G047-A01"
+  },
+  {
+    "program_key": "scheme:G048",
+    "condition_id": "G048-C01",
+    "action_ids": [
+      "G048-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G048",
+    "condition_id": "G048-C02",
+    "action_ids": [
+      "G048-A01"
+    ],
+    "basis": "single_action",
+    "note": "고지분·가구"
+  },
+  {
+    "program_key": "scheme:G048",
+    "condition_id": "G048-C03",
+    "action_ids": [
+      "G048-A01"
+    ],
+    "basis": "single_action",
+    "note": "가구"
+  },
+  {
+    "program_key": "scheme:G070",
+    "condition_id": "G070-C02",
+    "action_ids": [
+      "G070-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G070",
+    "condition_id": "G070-C03",
+    "action_ids": [
+      "G070-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G070",
+    "condition_id": "G070-C04",
+    "action_ids": [
+      "G070-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G070",
+    "condition_id": "G070-C05",
+    "action_ids": [
+      "G070-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G070",
+    "condition_id": "G070-C06",
+    "action_ids": [
+      "G070-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G075",
+    "condition_id": "G075-C02",
+    "action_ids": [
+      "G075-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G075",
+    "condition_id": "G075-C03",
+    "action_ids": [
+      "G075-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G075",
+    "condition_id": "G075-C04",
+    "action_ids": [
+      "G075-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G075",
+    "condition_id": "G075-C05",
+    "action_ids": [
+      "G075-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G075",
+    "condition_id": "G075-C06",
+    "action_ids": [
+      "G075-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G080",
+    "condition_id": "G080-C02",
+    "action_ids": [
+      "G080-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G080",
+    "condition_id": "G080-C03",
+    "action_ids": [
+      "G080-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G080",
+    "condition_id": "G080-C04",
+    "action_ids": [
+      "G080-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G080",
+    "condition_id": "G080-C05",
+    "action_ids": [
+      "G080-A01"
+    ],
+    "basis": "single_action",
+    "note": "대상자 또는 세대"
+  },
+  {
+    "program_key": "scheme:G101",
+    "condition_id": "G101-C01",
+    "action_ids": [
+      "G101-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "신청자·G101-A01"
+  },
+  {
+    "program_key": "scheme:G101",
+    "condition_id": "G101-C02",
+    "action_ids": [
+      "G101-A01"
+    ],
+    "basis": "single_action",
+    "note": "설비·접수 건"
+  },
+  {
+    "program_key": "scheme:G117",
+    "condition_id": "G117-C01",
+    "action_ids": [
+      "G117-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "수강 행동·G117-A01"
+  },
+  {
+    "program_key": "scheme:G117",
+    "condition_id": "G117-C02",
+    "action_ids": [
+      "G117-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "수료증·G117-A01"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C01",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A01",
+      "KR-CNP-GREEN-2026-A02",
+      "KR-CNP-GREEN-2026-A03",
+      "KR-CNP-GREEN-2026-A04",
+      "KR-CNP-GREEN-2026-A05",
+      "KR-CNP-GREEN-2026-A06",
+      "KR-CNP-GREEN-2026-A07",
+      "KR-CNP-GREEN-2026-A08",
+      "KR-CNP-GREEN-2026-A09",
+      "KR-CNP-GREEN-2026-A10",
+      "KR-CNP-GREEN-2026-A11",
+      "KR-CNP-GREEN-2026-A12",
+      "KR-CNP-GREEN-2026-A13",
+      "KR-CNP-GREEN-2026-A14",
+      "KR-CNP-GREEN-2026-A15",
+      "KR-CNP-GREEN-2026-A16",
+      "KR-CNP-GREEN-2026-A17"
+    ],
+    "basis": "program_common",
+    "note": "모든 입력 행동"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C02",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A01"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C03",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A02"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C04",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A03"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A03"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C05",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A04"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A04"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C06",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A05"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A05"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C07",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A06"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A06"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C08",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A07"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A07"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C09",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A08"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A08"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C10",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A09"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A09"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C11",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A10"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A10"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C12",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A11"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A11"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C13",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A12"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A12"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C14",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A13"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A13"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C15",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A14"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A14"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C16",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A15"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A15"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C17",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A16"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A16"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C18",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A17"
+    ],
+    "basis": "explicit_ids",
+    "note": "KR-CNP-GREEN-2026-A17"
+  },
+  {
+    "program_key": "scheme:KR-CNP-GREEN-2026",
+    "condition_id": "KR-CNP-GREEN-2026-C19",
+    "action_ids": [
+      "KR-CNP-GREEN-2026-A01",
+      "KR-CNP-GREEN-2026-A02",
+      "KR-CNP-GREEN-2026-A03",
+      "KR-CNP-GREEN-2026-A04",
+      "KR-CNP-GREEN-2026-A05",
+      "KR-CNP-GREEN-2026-A06",
+      "KR-CNP-GREEN-2026-A07",
+      "KR-CNP-GREEN-2026-A08",
+      "KR-CNP-GREEN-2026-A09",
+      "KR-CNP-GREEN-2026-A10",
+      "KR-CNP-GREEN-2026-A11",
+      "KR-CNP-GREEN-2026-A12",
+      "KR-CNP-GREEN-2026-A13",
+      "KR-CNP-GREEN-2026-A14",
+      "KR-CNP-GREEN-2026-A15",
+      "KR-CNP-GREEN-2026-A16",
+      "KR-CNP-GREEN-2026-A17"
+    ],
+    "basis": "program_common",
+    "note": "모든 입력 행동"
+  },
+  {
+    "program_key": "scheme:SDG-FOOD-REDUCER-H2-2026",
+    "condition_id": "SDG-FOOD-REDUCER-H2-2026-C01",
+    "action_ids": [
+      "SDG-FOOD-REDUCER-H2-2026-A01"
+    ],
+    "basis": "single_action",
+    "note": "A01 신청 세대"
+  },
+  {
+    "program_key": "scheme:SDG-FOOD-REDUCER-H2-2026",
+    "condition_id": "SDG-FOOD-REDUCER-H2-2026-C02",
+    "action_ids": [
+      "SDG-FOOD-REDUCER-H2-2026-A01"
+    ],
+    "basis": "single_action",
+    "note": "A01 구매 건"
+  },
+  {
+    "program_key": "scheme:SDG-FOOD-REDUCER-H2-2026",
+    "condition_id": "SDG-FOOD-REDUCER-H2-2026-C03",
+    "action_ids": [
+      "SDG-FOOD-REDUCER-H2-2026-A01"
+    ],
+    "basis": "single_action",
+    "note": "A01 신청 건"
+  },
+  {
+    "program_key": "scheme:SDG-ZEV-2026",
+    "condition_id": "SDG-ZEV-2026-C01",
+    "action_ids": [
+      "SDG-ZEV-2026-A01",
+      "SDG-ZEV-2026-A02",
+      "SDG-ZEV-2026-A03"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01 전기차, A02 수소차, A03 전기이륜차; 명시 A01/A02/A03을 프로그램 ID로 확장"
+  },
+  {
+    "program_key": "scheme:SDG-ZEV-2026",
+    "condition_id": "SDG-ZEV-2026-C02",
+    "action_ids": [
+      "SDG-ZEV-2026-A01",
+      "SDG-ZEV-2026-A02",
+      "SDG-ZEV-2026-A03"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01/A02/A03; 명시 A01/A02/A03을 프로그램 ID로 확장"
+  },
+  {
+    "program_key": "scheme:SDG-ZEV-2026",
+    "condition_id": "SDG-ZEV-2026-C03",
+    "action_ids": [
+      "SDG-ZEV-2026-A01",
+      "SDG-ZEV-2026-A02",
+      "SDG-ZEV-2026-A03"
+    ],
+    "basis": "explicit_ids",
+    "note": "A01/A02/A03; 명시 A01/A02/A03을 프로그램 ID로 확장"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-BLDG-2026",
+    "condition_id": "SEOUL-EM-BLDG-2026-C01",
+    "action_ids": [
+      "SEOUL-EM-BLDG-2026-A01",
+      "SEOUL-EM-BLDG-2026-A02",
+      "SEOUL-EM-BLDG-2026-A03",
+      "SEOUL-EM-BLDG-2026-A04",
+      "SEOUL-EM-BLDG-2026-A05"
+    ],
+    "basis": "explicit_range",
+    "note": "A01~A05"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-BLDG-2026",
+    "condition_id": "SEOUL-EM-BLDG-2026-C02",
+    "action_ids": [
+      "SEOUL-EM-BLDG-2026-A01",
+      "SEOUL-EM-BLDG-2026-A02",
+      "SEOUL-EM-BLDG-2026-A03",
+      "SEOUL-EM-BLDG-2026-A04",
+      "SEOUL-EM-BLDG-2026-A05"
+    ],
+    "basis": "explicit_range",
+    "note": "A01~A05"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-BLDG-2026",
+    "condition_id": "SEOUL-EM-BLDG-2026-C03",
+    "action_ids": [
+      "SEOUL-EM-BLDG-2026-A01",
+      "SEOUL-EM-BLDG-2026-A02",
+      "SEOUL-EM-BLDG-2026-A03",
+      "SEOUL-EM-BLDG-2026-A04",
+      "SEOUL-EM-BLDG-2026-A05"
+    ],
+    "basis": "explicit_range",
+    "note": "A01~A05"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-BLDG-2026",
+    "condition_id": "SEOUL-EM-BLDG-2026-C04",
+    "action_ids": [
+      "SEOUL-EM-BLDG-2026-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-BLDG-2026-A01"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-BLDG-2026",
+    "condition_id": "SEOUL-EM-BLDG-2026-C05",
+    "action_ids": [
+      "SEOUL-EM-BLDG-2026-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-BLDG-2026-A02"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-BLDG-2026",
+    "condition_id": "SEOUL-EM-BLDG-2026-C06",
+    "action_ids": [
+      "SEOUL-EM-BLDG-2026-A03"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-BLDG-2026-A03"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-BLDG-2026",
+    "condition_id": "SEOUL-EM-BLDG-2026-C07",
+    "action_ids": [
+      "SEOUL-EM-BLDG-2026-A04"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-BLDG-2026-A04"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-BLDG-2026",
+    "condition_id": "SEOUL-EM-BLDG-2026-C08",
+    "action_ids": [
+      "SEOUL-EM-BLDG-2026-A05"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-BLDG-2026-A05"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-CAR-2026",
+    "condition_id": "SEOUL-EM-CAR-2026-C01",
+    "action_ids": [
+      "SEOUL-EM-CAR-2026-A01",
+      "SEOUL-EM-CAR-2026-A02",
+      "SEOUL-EM-CAR-2026-A03",
+      "SEOUL-EM-CAR-2026-A04",
+      "SEOUL-EM-CAR-2026-A05"
+    ],
+    "basis": "program_common",
+    "note": "승용차 참여; eligibility_logic의 승용차 참여 공통조건으로 5개 행동에 연결"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-CAR-2026",
+    "condition_id": "SEOUL-EM-CAR-2026-C02",
+    "action_ids": [
+      "SEOUL-EM-CAR-2026-A01",
+      "SEOUL-EM-CAR-2026-A02",
+      "SEOUL-EM-CAR-2026-A03",
+      "SEOUL-EM-CAR-2026-A04",
+      "SEOUL-EM-CAR-2026-A05"
+    ],
+    "basis": "program_common",
+    "note": "승용차 참여; eligibility_logic의 승용차 참여 공통조건으로 5개 행동에 연결"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-CAR-2026",
+    "condition_id": "SEOUL-EM-CAR-2026-C03",
+    "action_ids": [
+      "SEOUL-EM-CAR-2026-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-CAR-2026-A01"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-CAR-2026",
+    "condition_id": "SEOUL-EM-CAR-2026-C04",
+    "action_ids": [
+      "SEOUL-EM-CAR-2026-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-CAR-2026-A02"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-CAR-2026",
+    "condition_id": "SEOUL-EM-CAR-2026-C05",
+    "action_ids": [
+      "SEOUL-EM-CAR-2026-A03"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-CAR-2026-A03"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-CAR-2026",
+    "condition_id": "SEOUL-EM-CAR-2026-C06",
+    "action_ids": [
+      "SEOUL-EM-CAR-2026-A04"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-CAR-2026-A04"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-CAR-2026",
+    "condition_id": "SEOUL-EM-CAR-2026-C07",
+    "action_ids": [
+      "SEOUL-EM-CAR-2026-A05"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-CAR-2026-A05"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C01",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A01",
+      "SEOUL-EM-GREEN-2026-A02",
+      "SEOUL-EM-GREEN-2026-A03",
+      "SEOUL-EM-GREEN-2026-A04",
+      "SEOUL-EM-GREEN-2026-A05",
+      "SEOUL-EM-GREEN-2026-A06",
+      "SEOUL-EM-GREEN-2026-A07",
+      "SEOUL-EM-GREEN-2026-A08",
+      "SEOUL-EM-GREEN-2026-A09",
+      "SEOUL-EM-GREEN-2026-A10"
+    ],
+    "basis": "explicit_range",
+    "note": "A01~A10"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C02",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A01",
+      "SEOUL-EM-GREEN-2026-A02",
+      "SEOUL-EM-GREEN-2026-A03",
+      "SEOUL-EM-GREEN-2026-A04"
+    ],
+    "basis": "explicit_range",
+    "note": "SEOUL-EM-GREEN-2026-A01~A04"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C03",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A10"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A10"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C04",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A05",
+      "SEOUL-EM-GREEN-2026-A06",
+      "SEOUL-EM-GREEN-2026-A07",
+      "SEOUL-EM-GREEN-2026-A08",
+      "SEOUL-EM-GREEN-2026-A09"
+    ],
+    "basis": "explicit_range",
+    "note": "SEOUL-EM-GREEN-2026-A05~A09"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C05",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A01"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A01"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C06",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A02"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A02"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C07",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A03"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A03"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C08",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A04"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A04"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C09",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A05"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A05"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C10",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A06"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A06"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C11",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A07"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A07"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C12",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A08"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A08"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C13",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A09"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A09"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C14",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A10"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A10"
+  },
+  {
+    "program_key": "scheme:SEOUL-EM-GREEN-2026",
+    "condition_id": "SEOUL-EM-GREEN-2026-C15",
+    "action_ids": [
+      "SEOUL-EM-GREEN-2026-A10"
+    ],
+    "basis": "explicit_ids",
+    "note": "SEOUL-EM-GREEN-2026-A10"
+  }
+]

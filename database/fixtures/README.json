@@ -1,0 +1,20 @@
+{
+  "status": "public_catalog_snapshots_and_synthetic_tests",
+  "source_date": "2026-09-17",
+  "catalogs": {
+    "schemes.json": "d2349e3592867a02d4f11c9a9bdb96b7b73d0c6eaeefd62b30e9dd9d0e060d5f",
+    "districts.json": "fce591d445130b2d4fab750a7f47f0b78d291e471dab699b858297451fc5e184"
+  },
+  "counts": {
+    "scheme_programs": 28,
+    "scheme_actions": 65,
+    "district_candidates": 41,
+    "conditions": 263
+  },
+  "limitations": [
+    "source verification levels preserved in each record",
+    "not all candidates active or deduplicated",
+    "user fixtures use generated UUIDs and test-prefixed region IDs",
+    "no real tester logs or user database dump"
+  ]
+}

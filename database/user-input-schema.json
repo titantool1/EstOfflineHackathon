@@ -1,0 +1,621 @@
+{
+  "status": "design_draft_not_installed",
+  "source": "approved input classification and verified catalog action links",
+  "storage_mode": "current_known_facts_only",
+  "tables": {
+    "user_profiles": {
+      "primary_key": [
+        "user_id"
+      ],
+      "fields": {
+        "user_id": {
+          "type": "same_as_auth_user_primary_key",
+          "references": "users.id (logical reference, physical identity pending)",
+          "nullable": false
+        },
+        "birth_date": {
+          "type": "date",
+          "nullable": true
+        },
+        "observed_at": {
+          "type": "timestamptz",
+          "meaning": "time of user statement; not historical state reconstruction",
+          "nullable": true
+        },
+        "source_kind": {
+          "type": "enum",
+          "values": [
+            "user_statement"
+          ],
+          "nullable": true
+        }
+      },
+      "constraints": [
+        "birth_date present requires observed_at and source_kind",
+        "birth_date absent permits absent metadata"
+      ]
+    },
+    "user_regions": {
+      "primary_key": [
+        "user_id",
+        "relation",
+        "region_id"
+      ],
+      "fields": {
+        "user_id": {
+          "type": "same_as_auth_user_primary_key",
+          "references": "users.id (logical reference, physical identity pending)",
+          "nullable": false
+        },
+        "relation": {
+          "type": "enum",
+          "values": [
+            "registered_residence",
+            "work",
+            "study",
+            "business"
+          ],
+          "nullable": false
+        },
+        "region_id": {
+          "type": "same_as_region_primary_key",
+          "references": "regions.id (reference catalog pending)",
+          "nullable": false
+        },
+        "observed_at": {
+          "type": "timestamptz",
+          "meaning": "time of user statement; not historical state reconstruction",
+          "nullable": false
+        },
+        "source_kind": {
+          "type": "enum",
+          "values": [
+            "user_statement"
+          ],
+          "nullable": false
+        }
+      },
+      "constraints": [
+        "at most one registered_residence row per user",
+        "work/study/business may have multiple regions"
+      ]
+    },
+    "user_memberships": {
+      "primary_key": [
+        "user_id",
+        "service_code"
+      ],
+      "fields": {
+        "user_id": {
+          "type": "same_as_auth_user_primary_key",
+          "references": "users.id (logical reference, physical identity pending)",
+          "nullable": false
+        },
+        "service_code": {
+          "type": "text",
+          "references": "services.service_code",
+          "nullable": false
+        },
+        "is_member": {
+          "type": "boolean",
+          "nullable": false
+        },
+        "observed_at": {
+          "type": "timestamptz",
+          "meaning": "time of user statement; not historical state reconstruction",
+          "nullable": false
+        },
+        "source_kind": {
+          "type": "enum",
+          "values": [
+            "user_statement"
+          ],
+          "nullable": false
+        }
+      },
+      "constraints": [
+        "missing row is unknown, not false"
+      ]
+    }
+  },
+  "logical_external_references": [
+    "users",
+    "regions",
+    "services"
+  ],
+  "service_codes": {
+    "eco_mileage": "서울 에코마일리지",
+    "carbon_green": "탄소중립포인트 녹색생활실천",
+    "climate_action_15": "기후행동1.5℃",
+    "dobong_carbon": "도봉 탄소공감마일리지",
+    "seocho_coin": "착한 서초코인"
+  },
+  "input_definitions": {
+    "person.birth_date": {
+      "table": "user_profiles",
+      "column": "birth_date",
+      "type": "date",
+      "selector": null
+    },
+    "location.region_ids": {
+      "table": "user_regions",
+      "column": "region_id",
+      "type": "region_id_array",
+      "selector": "relation"
+    },
+    "membership.is_member": {
+      "table": "user_memberships",
+      "column": "is_member",
+      "type": "boolean",
+      "selector": "service_code"
+    }
+  },
+  "representative_condition_inputs": [
+    {
+      "program_key": "scheme:SEOUL-EM-BLDG-2026",
+      "condition_id": "SEOUL-EM-BLDG-2026-C01",
+      "action_ids": [
+        "SEOUL-EM-BLDG-2026-A01",
+        "SEOUL-EM-BLDG-2026-A02",
+        "SEOUL-EM-BLDG-2026-A03",
+        "SEOUL-EM-BLDG-2026-A04",
+        "SEOUL-EM-BLDG-2026-A05"
+      ],
+      "input_key": "membership.is_member",
+      "selector": {
+        "service_code": "eco_mileage"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "서울 에코마일리지 가입; 개인·단체 유형 분리",
+      "source_applies_to": "A01~A05",
+      "sources": [
+        {
+          "id": "SEOUL-EM-BLDG-2026-S01",
+          "url": "https://news.seoul.go.kr/env/archives/566790",
+          "title": "에코마일리지제 개편·참여신청제 도입",
+          "status": "공식 본문 확인",
+          "as_of": "2026-01-06",
+          "checked_at": "2026-09-17",
+          "supports": "2026-01-05부터 건물 참여신청제"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-S02",
+          "url": "https://news.seoul.go.kr/env/archives/568914",
+          "title": "에코마일리지 건물편",
+          "status": "공식 본문 확인",
+          "as_of": "2026-04-27",
+          "checked_at": "2026-09-17",
+          "supports": "에너지 절감·구간별 개인 보상 안내"
+        }
+      ]
+    },
+    {
+      "program_key": "scheme:SEOUL-EM-GREEN-2026",
+      "condition_id": "SEOUL-EM-GREEN-2026-C01",
+      "action_ids": [
+        "SEOUL-EM-GREEN-2026-A01",
+        "SEOUL-EM-GREEN-2026-A02",
+        "SEOUL-EM-GREEN-2026-A03",
+        "SEOUL-EM-GREEN-2026-A04",
+        "SEOUL-EM-GREEN-2026-A05",
+        "SEOUL-EM-GREEN-2026-A06",
+        "SEOUL-EM-GREEN-2026-A07",
+        "SEOUL-EM-GREEN-2026-A08",
+        "SEOUL-EM-GREEN-2026-A09",
+        "SEOUL-EM-GREEN-2026-A10"
+      ],
+      "input_key": "membership.is_member",
+      "selector": {
+        "service_code": "eco_mileage"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "에코마일리지 회원으로서 녹색실천 항목별 신청·인증",
+      "source_applies_to": "A01~A10",
+      "sources": [
+        {
+          "id": "SEOUL-EM-GREEN-2026-S01",
+          "url": "https://news.seoul.go.kr/env/archives/566790",
+          "title": "에코마일리지제 개편·녹색실천 신설",
+          "status": "공식 본문 확인",
+          "as_of": "2026-01-06",
+          "checked_at": "2026-09-17",
+          "supports": "녹색실천 항목군·기본 단가 범위·참여신청제"
+        }
+      ]
+    },
+    {
+      "program_key": "scheme:KR-CNP-GREEN-2026",
+      "condition_id": "KR-CNP-GREEN-2026-C01",
+      "action_ids": [
+        "KR-CNP-GREEN-2026-A01",
+        "KR-CNP-GREEN-2026-A02",
+        "KR-CNP-GREEN-2026-A03",
+        "KR-CNP-GREEN-2026-A04",
+        "KR-CNP-GREEN-2026-A05",
+        "KR-CNP-GREEN-2026-A06",
+        "KR-CNP-GREEN-2026-A07",
+        "KR-CNP-GREEN-2026-A08",
+        "KR-CNP-GREEN-2026-A09",
+        "KR-CNP-GREEN-2026-A10",
+        "KR-CNP-GREEN-2026-A11",
+        "KR-CNP-GREEN-2026-A12",
+        "KR-CNP-GREEN-2026-A13",
+        "KR-CNP-GREEN-2026-A14",
+        "KR-CNP-GREEN-2026-A15",
+        "KR-CNP-GREEN-2026-A16",
+        "KR-CNP-GREEN-2026-A17"
+      ],
+      "input_key": "membership.is_member",
+      "selector": {
+        "service_code": "carbon_green"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "탄소중립포인트 회원가입",
+      "source_applies_to": "모든 입력 행동",
+      "sources": [
+        {
+          "id": "KR-CNP-GREEN-2026-S01",
+          "url": "https://www.cpoint.or.kr/netzero/site/cntnts/CNTNTS_001.do",
+          "title": "제도소개",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "대상·회원가입·17항목·혜택과 연 최대 한도"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-S03",
+          "url": "https://www.cpoint.or.kr/netzero/site/cntnts/CNTNTS_003.do",
+          "title": "참여방법",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "회원가입부터 수령까지의 절차 및 행동별 방식"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-S04",
+          "url": "https://www.cpoint.or.kr/netzero/faq/nv_faqList.do",
+          "title": "FAQ",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "자동 실적연계·지급수단·2026 누락실적 범위"
+        }
+      ]
+    },
+    {
+      "program_key": "scheme:G002",
+      "condition_id": "G002-C01",
+      "action_ids": [
+        "G002-A01"
+      ],
+      "input_key": "membership.is_member",
+      "selector": {
+        "service_code": "climate_action_15"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "회원가입 후 실천기록·퀴즈·게임 메뉴 이용",
+      "source_applies_to": "G002-A01 이용자",
+      "sources": [
+        {
+          "id": "G002-S01",
+          "url": "https://c-action.kr/web/index.html",
+          "title": "기후행동1.5℃ 공식 사이트",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-17 화면",
+          "checked_at": "2026-09-17",
+          "supports": "A01 메뉴·회원가입·기록/퀴즈/게임 안내, A02 스쿨챌린지 메뉴·현재 이벤트 표시"
+        }
+      ]
+    },
+    {
+      "program_key": "scheme:G003",
+      "condition_id": "G003-C01",
+      "action_ids": [
+        "G003-A01"
+      ],
+      "input_key": "person.birth_date",
+      "selector": {},
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "만 19세 이상",
+      "source_applies_to": "G003-A01 이용자",
+      "sources": [
+        {
+          "id": "G003-S02",
+          "url": "https://nabo.go.kr/board/file/bulkDown.do?bid=19&idx=8961",
+          "title": "국회예산정책처 K-패스 사업 개요(국토교통부 자료 인용)",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "만19세·참여지자체·월15회, 기존 정률 및 2026 정액패스 구분"
+        }
+      ]
+    },
+    {
+      "program_key": "scheme:G003",
+      "condition_id": "G003-C04",
+      "action_ids": [
+        "G003-A01"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "registered_residence"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "K-패스 참여 지자체에 주민등록",
+      "source_applies_to": "G003-A01 이용자",
+      "sources": [
+        {
+          "id": "G003-S02",
+          "url": "https://nabo.go.kr/board/file/bulkDown.do?bid=19&idx=8961",
+          "title": "국회예산정책처 K-패스 사업 개요(국토교통부 자료 인용)",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "만19세·참여지자체·월15회, 기존 정률 및 2026 정액패스 구분"
+        }
+      ]
+    },
+    {
+      "program_key": "scheme:SEOUL-EM-GREEN-2026",
+      "condition_id": "SEOUL-EM-GREEN-2026-C15",
+      "action_ids": [
+        "SEOUL-EM-GREEN-2026-A10"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "registered_residence"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "서울시민 및 교육기관별 거주지역 기준",
+      "source_applies_to": "SEOUL-EM-GREEN-2026-A10",
+      "sources": [
+        {
+          "id": "SEOUL-EM-GREEN-2026-S03",
+          "url": "https://news.seoul.go.kr/env/archives/569743",
+          "title": "2026 환경교육포인트제",
+          "status": "공식 본문 확인",
+          "as_of": "2026-08-04",
+          "checked_at": "2026-09-17",
+          "supports": "만14세·서울시민·에코마일리지 회원·지역기준·연간 한도"
+        }
+      ]
+    },
+    {
+      "program_key": "district:W01",
+      "condition_id": "W01-C01",
+      "action_ids": [
+        "candidate:W01"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "registered_residence"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "도봉구민 또는 도봉구 생활권자",
+      "source_applies_to": "가입자",
+      "sources": [
+        {
+          "id": "W01-S01",
+          "url": "https://www.dobong.go.kr/Contents.asp?code=10010186",
+          "title": "탄소공감마일리지 공식 안내",
+          "status": "공식 본문 확인",
+          "as_of": "페이지 표시 2026-08-11",
+          "checked_at": "2026-09-17",
+          "supports": "대상·절차·조건·혜택 안내"
+        }
+      ]
+    },
+    {
+      "program_key": "district:W01",
+      "condition_id": "W01-C01",
+      "action_ids": [
+        "candidate:W01"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "work"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "도봉구민 또는 도봉구 생활권자",
+      "source_applies_to": "가입자",
+      "sources": [
+        {
+          "id": "W01-S01",
+          "url": "https://www.dobong.go.kr/Contents.asp?code=10010186",
+          "title": "탄소공감마일리지 공식 안내",
+          "status": "공식 본문 확인",
+          "as_of": "페이지 표시 2026-08-11",
+          "checked_at": "2026-09-17",
+          "supports": "대상·절차·조건·혜택 안내"
+        }
+      ]
+    },
+    {
+      "program_key": "district:W01",
+      "condition_id": "W01-C01",
+      "action_ids": [
+        "candidate:W01"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "study"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "도봉구민 또는 도봉구 생활권자",
+      "source_applies_to": "가입자",
+      "sources": [
+        {
+          "id": "W01-S01",
+          "url": "https://www.dobong.go.kr/Contents.asp?code=10010186",
+          "title": "탄소공감마일리지 공식 안내",
+          "status": "공식 본문 확인",
+          "as_of": "페이지 표시 2026-08-11",
+          "checked_at": "2026-09-17",
+          "supports": "대상·절차·조건·혜택 안내"
+        }
+      ]
+    },
+    {
+      "program_key": "district:W01",
+      "condition_id": "W01-C01",
+      "action_ids": [
+        "candidate:W01"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "business"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "도봉구민 또는 도봉구 생활권자",
+      "source_applies_to": "가입자",
+      "sources": [
+        {
+          "id": "W01-S01",
+          "url": "https://www.dobong.go.kr/Contents.asp?code=10010186",
+          "title": "탄소공감마일리지 공식 안내",
+          "status": "공식 본문 확인",
+          "as_of": "페이지 표시 2026-08-11",
+          "checked_at": "2026-09-17",
+          "supports": "대상·절차·조건·혜택 안내"
+        }
+      ]
+    },
+    {
+      "program_key": "district:W01",
+      "condition_id": "W01-C02",
+      "action_ids": [
+        "candidate:W01"
+      ],
+      "input_key": "membership.is_member",
+      "selector": {
+        "service_code": "dobong_carbon"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "전용 앱 설치·회원가입",
+      "source_applies_to": "참여자",
+      "sources": [
+        {
+          "id": "W01-S01",
+          "url": "https://www.dobong.go.kr/Contents.asp?code=10010186",
+          "title": "탄소공감마일리지 공식 안내",
+          "status": "공식 본문 확인",
+          "as_of": "페이지 표시 2026-08-11",
+          "checked_at": "2026-09-17",
+          "supports": "대상·절차·조건·혜택 안내"
+        }
+      ]
+    },
+    {
+      "program_key": "district:S07",
+      "condition_id": "S07-C01",
+      "action_ids": [
+        "candidate:S07"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "registered_residence"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "서초구민 또는 서초구 소재 사업장 대표·종사자",
+      "source_applies_to": "회원",
+      "sources": [
+        {
+          "id": "S07-S01",
+          "url": "https://www.seocho.go.kr/site/seocho/04/10425020000002024091910.jsp",
+          "title": "착한 서초코인",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "가입대상·가입·적립한도·활동별 QR/확인·단가"
+        }
+      ]
+    },
+    {
+      "program_key": "district:S07",
+      "condition_id": "S07-C01",
+      "action_ids": [
+        "candidate:S07"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "work"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "서초구민 또는 서초구 소재 사업장 대표·종사자",
+      "source_applies_to": "회원",
+      "sources": [
+        {
+          "id": "S07-S01",
+          "url": "https://www.seocho.go.kr/site/seocho/04/10425020000002024091910.jsp",
+          "title": "착한 서초코인",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "가입대상·가입·적립한도·활동별 QR/확인·단가"
+        }
+      ]
+    },
+    {
+      "program_key": "district:S07",
+      "condition_id": "S07-C01",
+      "action_ids": [
+        "candidate:S07"
+      ],
+      "input_key": "location.region_ids",
+      "selector": {
+        "relation": "business"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "서초구민 또는 서초구 소재 사업장 대표·종사자",
+      "source_applies_to": "회원",
+      "sources": [
+        {
+          "id": "S07-S01",
+          "url": "https://www.seocho.go.kr/site/seocho/04/10425020000002024091910.jsp",
+          "title": "착한 서초코인",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "가입대상·가입·적립한도·활동별 QR/확인·단가"
+        }
+      ]
+    },
+    {
+      "program_key": "district:S07",
+      "condition_id": "S07-C01",
+      "action_ids": [
+        "candidate:S07"
+      ],
+      "input_key": "membership.is_member",
+      "selector": {
+        "service_code": "seocho_coin"
+      },
+      "scope": "input_dependency_only_not_entire_condition",
+      "source_requirement": "서초구민 또는 서초구 소재 사업장 대표·종사자",
+      "source_applies_to": "회원",
+      "sources": [
+        {
+          "id": "S07-S01",
+          "url": "https://www.seocho.go.kr/site/seocho/04/10425020000002024091910.jsp",
+          "title": "착한 서초코인",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "가입대상·가입·적립한도·활동별 QR/확인·단가"
+        }
+      ]
+    }
+  ],
+  "deferred_domains": [
+    "welfare",
+    "households_and_members",
+    "homes",
+    "vehicles"
+  ],
+  "excluded": [
+    "request-specific facts",
+    "benefit criteria and operational information",
+    "historical reconstruction",
+    "overall eligibility decision"
+  ]
+}

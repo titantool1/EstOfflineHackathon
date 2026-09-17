@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "started_at": "2026-09-17T05:53:36.532114+00:00",
+  "finished_at": "2026-09-17T05:54:26.366297+00:00",
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 database/test_detail_storage.py",
+  "postgres_version": "18.6 (Debian 18.6-1.pgdg12+2)",
+  "image_id": "sha256:1c59e2c3c818eaa0f0628f695b36e7c9e362d6b219b36a54a32df645cbd7e1af",
+  "checks": {
+    "catalog": 129,
+    "basic_user": 55,
+    "detail_user": 56,
+    "total": 240
+  },
+  "catalog_counts": {
+    "actions": 106,
+    "sources": 106,
+    "programs": 69,
+    "districts": 25,
+    "conditions": 263,
+    "common_groups": 31,
+    "sample_places": 9,
+    "group_condition_links": 198,
+    "action_condition_links": 337,
+    "condition_source_links": 308
+  },
+  "user_table_count": 8,
+  "synthetic_user_data_only": true,
+  "test_container_removed": true,
+  "existing_containers_preserved": true,
+  "limitations": [
+    "Isolated SQL validation; application and Flyway integration pending.",
+    "Authentication and regional references are test fixtures.",
+    "Representative user-input mappings; eligibility remains not_evaluated."
+  ],
+  "file_sha256": {
+    "action_links.json": "fcb539a045e8477bd7e5ebaeaf82173b82480e8abbefa48f6d4054bf2cce3342",
+    "catalog.py": "1ba28eeb992ccd9f5e581a36163d2e58619bdfb09576cf4644b75ca3e1519af7",
+    "detail-storage.sql": "4498b3233887227035b1f2d748b234a0aedc10e80aed6c3ca961ad653d64bf4b",
+    "detail_mapping.py": "a877162a9d731bdfd9b2d55ef5a1e5b9aa0337a9bd65d42cf2ee69b96263f498",
+    "fixtures/README.json": "94fd82b09ec4d366889974817db6caa9cbc415b89a368613a01b03dcf0aded51",
+    "fixtures/catalog/districts.json": "fce591d445130b2d4fab750a7f47f0b78d291e471dab699b858297451fc5e184",
+    "fixtures/catalog/schemes.json": "d2349e3592867a02d4f11c9a9bdb96b7b73d0c6eaeefd62b30e9dd9d0e060d5f",
+    "lookup-schema.sql": "1a9f6d2f77d77de80e15544a1823298325b3f4eeb7d22158f2dcd364d40f6d00",
+    "run_lookup.py": "a33df55d61310c3500b8dd9a6ba1c6679cde4c3f3e9b5d24c2e5cd09c6395bd7",
+    "test_detail_storage.py": "6ccdfe383e44f9f3e1cded97350701ed600b8446e078b8f9f28ab13e92dd7e7f",
+    "test_user_storage.py": "6e76118e3d6d39f2184a4e63e858e00b5e5661d3cfcab9c1313f8502dd8ace41",
+    "user-input-schema.json": "864a1283d15c90f0c39ab28db01a4280e87d3651ae9192f5850cebf4cbf9896b",
+    "user-storage.sql": "eba484b33376eea2f73b8162ae56d49e28de4b3f7a18c170782554569ae60f32"
+  }
+}

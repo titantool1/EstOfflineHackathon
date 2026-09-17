@@ -1,0 +1,3443 @@
+{
+  "programs": [
+    {
+      "program_id": "G002",
+      "title": "기후행동1.5℃ 실천기록·게임·스쿨챌린지",
+      "target": "전국 이용자; 스쿨챌린지는 해당 회차 공고의 학생·학교 대상",
+      "eligibility_logic": "A01은 사이트/앱 가입 뒤 실천기록·퀴즈·게임을 이용하는 안내형 행동이다. A02는 별도 스쿨챌린지 공고의 대상·절차를 모두 충족할 때만 참여한다.",
+      "benefit": "A01의 현금·경품은 공식 본문에서 확인하지 못했다. A02의 상·상품은 회차 공고별로 달라 현재 확정하지 않는다.",
+      "application_period": "A01 상시 이용 안내; A02 회차별 공고 확인 필요",
+      "usage_period": "A01 사이트·앱 운영 기간; A02 회차별",
+      "documents": "A01 공식 본문에서 별도 서류 미확인; A02 회차 공고 확인 필요",
+      "application_method": "공식 사이트 또는 앱에서 회원가입 후 메뉴 이용; 스쿨챌린지는 해당 공고 경로 이용",
+      "status": "운영 안내 확인",
+      "caveat": "공식 첫 화면은 2026-09-17에 실천기록·퀴즈·게임·스쿨챌린지 메뉴와 참여 가능 이벤트를 표시한다. 현재 스쿨챌린지의 모집·선정·시상 조건은 본문으로 확인하지 못했다.",
+      "action_ids": [
+        "G002-A01",
+        "G002-A02"
+      ],
+      "sources": [
+        {
+          "id": "G002-S01",
+          "url": "https://c-action.kr/web/index.html",
+          "title": "기후행동1.5℃ 공식 사이트",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-17 화면",
+          "checked_at": "2026-09-17",
+          "supports": "A01 메뉴·회원가입·기록/퀴즈/게임 안내, A02 스쿨챌린지 메뉴·현재 이벤트 표시"
+        },
+        {
+          "id": "G002-S02",
+          "url": "https://www.cpoint.or.kr/netzero/site/cntnts/CNTNTS_003.do",
+          "title": "탄소중립포인트 녹색생활실천 참여방법",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "미래세대실천행동은 기후행동1.5℃를 통해 참가한다는 연결 안내"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G002-C01",
+          "group": "실천기록·게임",
+          "group_logic": "안내",
+          "requirement": "회원가입 후 실천기록·퀴즈·게임 메뉴 이용",
+          "detail": "현금·경품 지급은 확인되지 않음",
+          "applies_to": "G002-A01 이용자",
+          "relation": "A02와 독립",
+          "source_ids": [
+            "G002-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G002-C02",
+          "group": "스쿨챌린지",
+          "group_logic": "행동별 분기",
+          "requirement": "해당 회차의 대상·모집 절차 충족",
+          "detail": "학생·학교 대상이라는 기존 설명은 있으나 2026 회차 상세 원문 미확인",
+          "applies_to": "G002-A02",
+          "relation": "A01 이용만으로 충족되지 않음",
+          "source_ids": [
+            "G002-S01",
+            "G002-S02"
+          ],
+          "verification": "공식 메뉴·연결 본문 확인; 상세 조건 미확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G002-S01",
+        "G002-S02"
+      ]
+    },
+    {
+      "program_id": "G003",
+      "title": "K-패스·모두의 카드 환급 기준 확인",
+      "target": "K-패스 참여 지자체에 주민등록된 만 19세 이상 이용자",
+      "eligibility_logic": "기존 K-패스 정률 환급은 만 19세 이상 AND 참여 지자체 주민등록 AND 월 15회 이상 대중교통 이용을 충족한다. 적용 횟수·유형별 비율과 2026 정액패스(모두의 카드)의 관계는 공식 K-패스 본문 접속 실패로 하나의 계산식으로 합치지 않는다.",
+      "benefit": "국회예산정책처가 인용한 국토교통부 자료: 기존 정률 환급은 월 최대 60회(일 2회) 20~53% 등 유형별 비율; 2026 정액패스는 유형·수단별 초과 이용금액 환급 구조. 정확한 현재 개인 적용액은 공식 K-패스에서 재확인 필요.",
+      "application_period": "상시 여부 공식 K-패스 본문 미확인",
+      "usage_period": "월별 이용 실적 기준",
+      "documents": "카드 발급·회원가입·주소 검증의 현재 서류는 공식 본문 미확인",
+      "application_method": "K-패스 지원 카드 발급 및 홈페이지/앱 회원가입·카드 등록으로 알려졌으나 2026 공식 본문 접근 실패",
+      "status": "공식 K-패스 사이트 접근 실패; 공공기관 자료로 기존·정액 방식 확인",
+      "caveat": "korea-pass.kr은 2026-09-17 웹 조회에서 502로 열리지 않았다. 정부·공공기관 이외 출처의 수치로 보완하지 않았다.",
+      "action_ids": [
+        "G003-A01"
+      ],
+      "sources": [
+        {
+          "id": "G003-S01",
+          "url": "https://korea-pass.kr/",
+          "title": "K-패스 공식 홈페이지",
+          "status": "접근 실패",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "최신 신청·카드·정액패스 적용관계는 확인 불가"
+        },
+        {
+          "id": "G003-S02",
+          "url": "https://nabo.go.kr/board/file/bulkDown.do?bid=19&idx=8961",
+          "title": "국회예산정책처 K-패스 사업 개요(국토교통부 자료 인용)",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "만19세·참여지자체·월15회, 기존 정률 및 2026 정액패스 구분"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G003-C01",
+          "group": "기본 자격",
+          "group_logic": "모두 충족",
+          "requirement": "만 19세 이상",
+          "detail": "어린이·청소년은 해당하지 않는다고 공공기관 자료에 기재",
+          "applies_to": "G003-A01 이용자",
+          "relation": "월 이용 조건과 AND",
+          "source_ids": [
+            "G003-S02"
+          ],
+          "verification": "공식 공공기관 본문 확인"
+        },
+        {
+          "id": "G003-C02",
+          "group": "기존 정률 환급 이용",
+          "group_logic": "모두 충족",
+          "requirement": "월 15회 이상 대중교통 이용",
+          "detail": "월 최대 60회·일 최대 2회 및 유형별 비율은 기존 정률 방식 설명에 한정",
+          "applies_to": "G003-A01",
+          "relation": "정액패스에 자동 확대하지 않음",
+          "source_ids": [
+            "G003-S02"
+          ],
+          "verification": "공식 공공기관 본문 확인"
+        },
+        {
+          "id": "G003-C03",
+          "group": "2026 정액패스",
+          "group_logic": "안내",
+          "requirement": "이용수단·이용유형별 별도 기준",
+          "detail": "초과 이용금액 환급 방식으로 소개되나 공식 K-패스 세부 본문 접근 실패",
+          "applies_to": "G003-A01",
+          "relation": "C02와 계산식 합산 금지",
+          "source_ids": [
+            "G003-S01",
+            "G003-S02"
+          ],
+          "verification": "공식 공공기관 요약 확인; 공식 운영 본문 미확인"
+        },
+        {
+          "id": "G003-C04",
+          "group": "거주 지역",
+          "group_logic": "모두 충족",
+          "requirement": "K-패스 참여 지자체에 주민등록",
+          "detail": "주소 확인 기준; 현재 운영사이트 세부는 미확인",
+          "applies_to": "G003-A01 이용자",
+          "relation": "월 이용 조건과 AND",
+          "source_ids": [
+            "G003-S02"
+          ],
+          "verification": "공식 공공기관 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G003-S01",
+        "G003-S02"
+      ]
+    },
+    {
+      "program_id": "G004",
+      "title": "그린카드 에코머니 녹색소비 적립",
+      "target": "그린카드로 제휴유통사의 적립대상 친환경제품을 결제하는 이용자",
+      "eligibility_logic": "제휴유통사 방문 AND 적립대상제품 확인 AND 그린카드 결제가 필요하다. 인증표지만으로는 적립이 보장되지 않으며 제품 성격·인증 유효기간·제휴처·카드사별 서비스가 분기한다.",
+      "benefit": "에코머니 포인트 적립(1포인트=1원); 녹색소비 적립률은 구매금액의 일정 비율, 최대 25%로 공식 안내되며 제휴처마다 다르다.",
+      "application_period": "제품·제휴처·카드상품별 운영",
+      "usage_period": "2026년 9월 적립대상제품 목록이 공식 사이트에 게시됨",
+      "documents": "별도 제출서류 미확인",
+      "application_method": "그린카드 발급·이용 조건을 카드사에서 확인하고 제휴유통사에서 적립대상제품을 그린카드로 결제",
+      "status": "운영 안내 및 2026년 9월 대상제품 목록 확인",
+      "caveat": "기존 입력의 최대 15%는 공식 일반 안내(최대 25%)와 다르므로 15%를 공통값으로 사용하지 않는다.",
+      "action_ids": [
+        "G004-A01"
+      ],
+      "sources": [
+        {
+          "id": "G004-S01",
+          "url": "https://www.green-card.co.kr/app/greenservice/greenShopListPage.do",
+          "title": "그린카드 녹색소비",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "적립대상 정의, 인증표시 제외 가능성, 결제 절차, 최대 25%"
+        },
+        {
+          "id": "G004-S02",
+          "url": "https://www.green-card.co.kr/app/ecomoney/ecoMoneyAccumulationGuidePage.do",
+          "title": "에코머니 포인트 적립 안내",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "제휴처·카드사별 차이와 1포인트=1원"
+        },
+        {
+          "id": "G004-S03",
+          "url": "https://www.green-card.co.kr/app/greenservice/ecoProductListPage.do",
+          "title": "친환경제품 적립대상제품",
+          "status": "공식 본문 확인",
+          "as_of": "2026년 9월",
+          "checked_at": "2026-09-17",
+          "supports": "현재 월별 적립대상제품 목록"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G004-C01",
+          "group": "결제·제품",
+          "group_logic": "모두 충족",
+          "requirement": "그린카드 적립대상 제품 구매",
+          "detail": "결제전표에서 적립 포인트를 확인하는 절차",
+          "applies_to": "G004-A01 구매 건",
+          "relation": "카드상품 조건과 AND",
+          "source_ids": [
+            "G004-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G004-C02",
+          "group": "적립 제외·변동",
+          "group_logic": "제외",
+          "requirement": "인증표시만으로 적립 확정 불가",
+          "detail": "제품 성격·인증 유효기간에 따라 제외 가능; 제휴처·카드사별 적립률·서비스 상이",
+          "applies_to": "G004-A01 구매 건",
+          "relation": "C01 충족 여부를 월별 목록·카드 약관으로 확인",
+          "source_ids": [
+            "G004-S01",
+            "G004-S02",
+            "G004-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G004-C03",
+          "group": "참여 판매처",
+          "group_logic": "모두 충족",
+          "requirement": "그린카드 제휴유통사에서 구매",
+          "detail": "참여 업체·매장을 공식 목록에서 확인",
+          "applies_to": "G004-A01 구매 건",
+          "relation": "카드상품 조건과 AND",
+          "source_ids": [
+            "G004-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G004-C04",
+          "group": "결제 수단",
+          "group_logic": "모두 충족",
+          "requirement": "그린카드로 결제",
+          "detail": "사용 카드의 해당 서비스 조건 적용",
+          "applies_to": "G004-A01 구매 건",
+          "relation": "카드상품 조건과 AND",
+          "source_ids": [
+            "G004-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G004-S01",
+        "G004-S02",
+        "G004-S03"
+      ]
+    },
+    {
+      "program_id": "G007",
+      "title": "자전거 안전교육 자료 이용",
+      "target": "공개 안전교육 자료를 이용하려는 사람",
+      "eligibility_logic": "별도 열람 자격은 공식 교육자료 페이지에서 확인되지 않았다. 자료 유형은 이용자 집단별로 나뉘지만 이용 제한은 아니다.",
+      "benefit": "초등학생·중고등학생·성인용 ‘안전한 자전거 타기’ 자료와 연령대별 안전교육 자료 열람·다운로드 안내.",
+      "application_period": "상시 공개 자료",
+      "usage_period": "해당 없음",
+      "documents": "없음",
+      "application_method": "자전거행복나눔의 자전거 안전교육 > 교육자료에서 자료 유형을 선택한다.",
+      "status": "공식 본문 확인",
+      "caveat": "국토종주 인증·대면교육·공모전 조건은 자료 이용 조건이 아니다.",
+      "action_ids": [
+        "G007-A01"
+      ],
+      "sources": [
+        {
+          "id": "G007-S01",
+          "url": "https://www.bike.go.kr/content.do?key=2008148326130",
+          "title": "자전거행복나눔 교육자료",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "자료 유형과 공개 교육자료 이용 안내"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G007-C01",
+          "group": "이용 안내",
+          "group_logic": "안내",
+          "requirement": "초등학생·중고등학생·성인용 자료 중 해당 자료 선택",
+          "detail": "자료의 대상별 구분이며 별도 열람 자격으로 확인되지 않음",
+          "applies_to": "자료 이용 행동",
+          "relation": "인증·대면교육과 독립",
+          "source_ids": [
+            "G007-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G007-S01"
+      ]
+    },
+    {
+      "program_id": "G008",
+      "title": "서울 따릉이 자전거 대여",
+      "target": "만 13세 이상 서울 공공자전거 이용권을 구매하여 대여하려는 이용자",
+      "eligibility_logic": "만 13세 이상 AND 이용권·결제 조건 충족. 만 13세 회원은 법정대리인의 개인정보 처리 동의와 휴대폰 인증이 필요하다고 공식 FAQ·약관 개정자료가 안내한다. 과거 ‘만 14세 미만’ 동의 문구도 공식 약관 자료에 남아 있어, 14세 연령 전체에 현재 같은 절차가 적용된다고 확정하지 않는다.",
+      "benefit": "서울 공공자전거 이용권 구매 및 대여 서비스.",
+      "application_period": "상시 서비스로 안내되나 대여소·자전거·이용권별 이용 가능 상태는 별도 확인",
+      "usage_period": "이용권 조건 및 대여·반납 시점에 따름",
+      "documents": "만 13세 가입은 법정대리인 휴대폰 인증·동의 안내; 그 밖의 별도 서류 확인 안 됨",
+      "application_method": "따릉이 앱 또는 안내된 공식 이용권·결제 안내에서 가입, 연령별 동의, 이용권 및 결제 방법을 확인한다.",
+      "status": "공식 본문 확인",
+      "caveat": "현재 공식 페이지는 만 13세 이상 이용 가능과 만 13세 법정대리인 동의를 확인한다. 이전 만 14세 미만 문구는 구·개정 대비 자료이므로 현재 일반 조건으로 쓰지 않는다.",
+      "action_ids": [
+        "G008-A01"
+      ],
+      "sources": [
+        {
+          "id": "G008-S01",
+          "url": "https://www.sisul.or.kr/open_content/main/bbs/bbsMsgDetail.do?bcd=faq&msg_seq=503",
+          "title": "서울시설공단 따릉이 요금 및 결제수단 FAQ",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "결제수단과 앱 내 이용권·추가요금 안내 경로"
+        },
+        {
+          "id": "G008-S02",
+          "url": "https://sisul.or.kr/open_content/traffic/bikeseoul.jsp",
+          "title": "서울시설공단 공공자전거 안내",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "만 13세 이상 이용 가능 및 앱 설치·이용권 구매 안내"
+        },
+        {
+          "id": "G008-S03",
+          "url": "https://www.sisul.or.kr/open_content/childrenpark/bbs/bbsMsgList.do?bcd=faq&pgno=4",
+          "title": "서울시설공단 따릉이 연령 FAQ",
+          "status": "공식 검색결과만 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "만 13세 회원의 법정대리인 휴대폰 인증"
+        },
+        {
+          "id": "G008-S04",
+          "url": "https://www.bikeseoul.com/upload/TermsofUse/Comparisontable%284.23.~%29.pdf",
+          "title": "서울공공자전거 이용약관 신·구조문 대비표",
+          "status": "공식 본문 확인",
+          "as_of": "최근 개정안, 정확한 시행일 미표시",
+          "checked_at": "2026-09-17",
+          "supports": "만 13세 법정대리인 개인정보 처리 동의와 과거 만 14세 미만 문구의 구분"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G008-C01",
+          "group": "최저 연령",
+          "group_logic": "모두 충족",
+          "requirement": "만 13세 이상",
+          "detail": "서울시설공단 공공자전거 안내의 현재 이용 가능 연령",
+          "applies_to": "이용자·G008-A01",
+          "relation": "이용권·결제 및 만 13세 동의 조건과 함께 적용",
+          "source_ids": [
+            "G008-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G008-C02",
+          "group": "만 13세 법정대리인 동의",
+          "group_logic": "조건부 모두 충족",
+          "requirement": "만 13세 회원가입 시 법정대리인의 개인정보 처리 동의 및 휴대폰 인증",
+          "detail": "이전 ‘만 14세 미만’ 동의 문구는 구·개정 대비 자료에 있어 현재 14세 전체 조건으로 확정하지 않음",
+          "applies_to": "만 13세 가입자",
+          "relation": "최저 연령과 이용권 조건에 추가",
+          "source_ids": [
+            "G008-S03",
+            "G008-S04"
+          ],
+          "verification": "공식 검색결과 및 공식 본문 확인"
+        },
+        {
+          "id": "G008-C03",
+          "group": "이용권·결제 안내",
+          "group_logic": "안내",
+          "requirement": "이용권과 결제수단을 공식 안내에서 확인",
+          "detail": "휴대폰 소액결제·카드·간편결제 등이 FAQ에 열거됨",
+          "applies_to": "이용권 구매·대여 행동",
+          "relation": "대여소 재고·운영 여부와 별도",
+          "source_ids": [
+            "G008-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G008-S01",
+        "G008-S02",
+        "G008-S03",
+        "G008-S04"
+      ]
+    },
+    {
+      "program_id": "G021",
+      "title": "한전 주택용 에너지캐시백",
+      "target": "신청 주소에 주민등록된 주택용 전기사용 고객 구성원",
+      "eligibility_logic": "주택용 고객·주소지 주민등록 요건을 모두 충족하고, 한전이 비교 가능한 과거 사용량과 실제 절감 실적을 확인해야 한다.",
+      "benefit": "2026년 7~12월 검침분은 직전 2개년 동월 평균 대비 1% 이상 절감 시 캐시백을 전기요금에서 차감; 최대 120원/kWh.",
+      "application_period": "상시 신청 여부는 현재 안내에서 확인하지 못함.",
+      "usage_period": "2026년 7~12월 검침분 특별 지급기준.",
+      "documents": "주소지·전기사용 고객정보는 신청 화면 또는 지사에서 확인.",
+      "application_method": "에너지캐시백 누리집 또는 한전 지사.",
+      "status": "2026 특별 지급기준 공식 확인",
+      "caveat": "기본 단가 구간과 과거사용량 산정·제외 세부 규칙은 2026 공식 운영 화면을 읽지 못해 미확인.",
+      "action_ids": [
+        "G021-A01"
+      ],
+      "sources": [
+        {
+          "id": "G021-S01",
+          "url": "https://www.kepco.co.kr/KEPCO_FILE/html/2026_06/news.html",
+          "title": "한국전력 2026년 6월 소식",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "7~12월 1% 절감, 최대 120원/kWh 특별기준"
+        },
+        {
+          "id": "G021-S02",
+          "url": "https://www.kepco.co.kr/KEPCO_FILE/html/2025_05/story02.html",
+          "title": "주택용 에너지캐시백 안내",
+          "status": "기존 자료만",
+          "as_of": "2025",
+          "checked_at": "2026-09-17",
+          "supports": "대상·신청경로의 과거 안내"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G021-C01",
+          "group": "전기사용·신청자",
+          "group_logic": "모두 충족",
+          "requirement": "주택용 전기사용 고객",
+          "detail": "한전의 과거 사용량 비교가 가능한지 확인 필요",
+          "applies_to": "신청자·신청주소 전기사용 계약",
+          "relation": "절감실적 조건과 모두 충족",
+          "source_ids": [
+            "G021-S02"
+          ],
+          "verification": "기존 자료만"
+        },
+        {
+          "id": "G021-C02",
+          "group": "절감실적",
+          "group_logic": "모두 충족",
+          "requirement": "2026년 7~12월 검침분 1% 이상 절감",
+          "detail": "특별기준 기간에만 최대 120원/kWh",
+          "applies_to": "G021-A01",
+          "relation": "가입·비교사용량 확인 후 적용",
+          "source_ids": [
+            "G021-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G021-C03",
+          "group": "신청자·주소",
+          "group_logic": "모두 충족",
+          "requirement": "신청 주소에 주민등록된 구성원",
+          "detail": "신청 주소와 주민등록 관계 확인; 2025 안내 기준, 최신 대상 상세 미확인",
+          "applies_to": "신청자·신청주소 전기사용 계약",
+          "relation": "절감실적 조건과 모두 충족",
+          "source_ids": [
+            "G021-S02"
+          ],
+          "verification": "기존 자료만"
+        }
+      ],
+      "overview_source_ids": [
+        "G021-S01",
+        "G021-S02"
+      ]
+    },
+    {
+      "program_id": "G022",
+      "title": "한전 복지할인가구 고효율가전 구매비용 지원",
+      "target": "한전 전기요금 복지할인 가구",
+      "eligibility_logic": "복지할인 유형, 2026년 구매, 대상품목·효율등급 라벨, 가구 누적 한도를 모두 충족한다.",
+      "benefit": "기존 자료: 가족유형 15%, 그 외 해당 복지유형 30%, 가구 누적30만원. 2026 검색결과로 한도 비갱신은 확인했으나 유형별 비율 본문은 미확인.",
+      "application_period": "2026-02-09부터; 종료일·예산소진 규칙은 공식 본문 미확인.",
+      "usage_period": "2026-01-01 이후 구매분 소급 적용 안내.",
+      "documents": "구매증빙·계좌 등은 사이트의 신청 단계에서 확인.",
+      "application_method": "한전 고효율가전 지원사업 사이트에서 대상자 확인 후 신청.",
+      "status": "2026 공식 검색결과 확인(본문 미열람)",
+      "caveat": "품목별 효율등급·2026 접수 종료일과 유형별 비율은 상세 원문 연결이 시간초과되어 입력 기존 자료를 재확인하지 못함.",
+      "action_ids": [
+        "G022-A01"
+      ],
+      "sources": [
+        {
+          "id": "G022-S01",
+          "url": "https://en-ter.co.kr/support/main/main.do?menuCd=FN04120201",
+          "title": "2026년 한전 고효율가전 지원사업 안내",
+          "status": "공식 검색결과만 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "복지할인가구 대상, 2월 9일 시행, 1월 1일 이후 구매, 한도 비갱신·제외 품목"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G022-C01",
+          "group": "복지할인 자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "다자녀 가구 복지할인 유형",
+          "detail": "기존 자료상 15% 유형이나 2026 본문 미열람",
+          "applies_to": "가구",
+          "relation": "복지할인 유형 C01,C04~C09 중 하나; 구매·제품·잔여한도 요건과 AND",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "G022-C02",
+          "group": "구매·제품",
+          "group_logic": "모두 충족",
+          "requirement": "대상 가전 품목·효율등급 라벨 기준",
+          "detail": "시스템에어컨 등 제외 품목 공지; 대상품목은 사이트 확인",
+          "applies_to": "구매 건",
+          "relation": "복지자격·가구 한도와 모두 충족",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "G022-C03",
+          "group": "가구 누적한도",
+          "group_logic": "제한",
+          "requirement": "지원 한도는 매년 갱신되지 않음",
+          "detail": "과거 지원을 포함한 잔여 한도 확인",
+          "applies_to": "가구",
+          "relation": "자격 충족해도 잔여한도 내 지원",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "G022-C04",
+          "group": "복지할인 자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "중증장애인 복지할인 유형",
+          "detail": "기존 자료상 30% 유형; 2026 본문 미열람",
+          "applies_to": "가구",
+          "relation": "복지할인 유형 C01,C04~C09 중 하나; 구매·제품·잔여한도 요건과 AND",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인; 유형은 기존 자료"
+        },
+        {
+          "id": "G022-C05",
+          "group": "복지할인 자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "유공자 복지할인 유형",
+          "detail": "기존 자료상 30% 유형; 2026 본문 미열람",
+          "applies_to": "가구",
+          "relation": "복지할인 유형 C01,C04~C09 중 하나; 구매·제품·잔여한도 요건과 AND",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인; 유형은 기존 자료"
+        },
+        {
+          "id": "G022-C06",
+          "group": "복지할인 자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "기초수급 또는 차상위 복지할인 유형",
+          "detail": "기존 자료상 30% 유형; 각 유형·비율 2026 본문 미열람",
+          "applies_to": "가구",
+          "relation": "복지할인 유형 C01,C04~C09 중 하나; 구매·제품·잔여한도 요건과 AND",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인; 유형은 기존 자료"
+        },
+        {
+          "id": "G022-C07",
+          "group": "복지할인 자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "생명유지장치 복지할인 유형",
+          "detail": "기존 자료상 30% 유형; 2026 본문 미열람",
+          "applies_to": "가구",
+          "relation": "복지할인 유형 C01,C04~C09 중 하나; 구매·제품·잔여한도 요건과 AND",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인; 유형은 기존 자료"
+        },
+        {
+          "id": "G022-C08",
+          "group": "복지할인 자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "대가족 복지할인 유형",
+          "detail": "기존 자료상 15% 유형이나 2026 본문 미열람",
+          "applies_to": "가구",
+          "relation": "복지할인 유형 C01,C04~C09 중 하나; 구매·제품·잔여한도 요건과 AND",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "G022-C09",
+          "group": "복지할인 자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "출산가구 복지할인 유형",
+          "detail": "기존 자료상 15% 유형이나 2026 본문 미열람",
+          "applies_to": "가구",
+          "relation": "복지할인 유형 C01,C04~C09 중 하나; 구매·제품·잔여한도 요건과 AND",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "G022-C10",
+          "group": "구매 시점",
+          "group_logic": "모두 충족",
+          "requirement": "2026-01-01 이후 구매",
+          "detail": "현재 사업 검색결과의 구매 인정 시작일",
+          "applies_to": "구매 건",
+          "relation": "복지자격·가구 한도와 모두 충족",
+          "source_ids": [
+            "G022-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G022-S01"
+      ]
+    },
+    {
+      "program_id": "G024",
+      "title": "효율등급·고효율 인증제품 조회",
+      "target": "제품의 효율등급·고효율 인증 정보를 확인하려는 사람",
+      "eligibility_logic": "공개 제품검색 서비스 이용 안내이며 개인의 자격 요건이나 금전 지원은 확인되지 않았다. 제조·수입업자의 신고·인증신청은 조회 이용 조건이 아니다.",
+      "benefit": "효율등급제도·고효율인증제도·대기전력저감 프로그램의 제품검색 정보.",
+      "application_period": "상시 웹 조회",
+      "usage_period": "해당 없음",
+      "documents": "없음",
+      "application_method": "효율관리제도에서 제도별 제품검색을 선택해 제품 정보를 확인한다.",
+      "status": "공식 본문 확인",
+      "caveat": "검색 결과는 구매지원 또는 보조금 자격을 뜻하지 않는다.",
+      "action_ids": [
+        "G024-A01"
+      ],
+      "sources": [
+        {
+          "id": "G024-S01",
+          "url": "https://eep.energy.or.kr/main/main.aspx",
+          "title": "한국에너지공단 효율관리제도",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "세 제도와 각각의 제품검색 메뉴"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G024-C01",
+          "group": "이용 안내",
+          "group_logic": "안내",
+          "requirement": "제도별 제품검색에서 제품 정보를 조회",
+          "detail": "별도 개인 자격·서류·신청기간 확인 안 됨",
+          "applies_to": "제품 정보 조회 행동",
+          "relation": "사업자 신고·인증신청과 분리",
+          "source_ids": [
+            "G024-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G024-S01"
+      ]
+    },
+    {
+      "program_id": "G027",
+      "title": "민간건축물 그린리모델링 이자지원",
+      "target": "2016-01-01 이전 사용승인된 기존 민간건축물의 에너지 성능개선 민간사업",
+      "eligibility_logic": "기존건축물·미완료 공사·필수 기술요소·건물용도별 성능개선 기준을 모두 충족하고 센터 심사와 금융기관 대출심사를 통과해야 한다.",
+      "benefit": "공사비 대출약정에 4.5~5.5%p 이자 지원; 실제 적용률은 성능·우대자격·대출방식에 따라 다름.",
+      "application_period": "2026년 공고일부터 이자지원 예산 소진 시까지 선착순.",
+      "usage_period": "대출 약정·상환기간에 따라 이자지원.",
+      "documents": "사업신청 서식, 성능평가/창호 등 기준증빙, 등기·건축물대장·계약서 등; 해당 기준별 상이.",
+      "application_method": "건축주 동의를 받은 그린리모델링 사업자가 사업관리시스템에 신청하고, 사업확인 후 건축주가 금융기관 대출 조회·실행.",
+      "status": "2026 공식 본문 확인",
+      "caveat": "대출 한도·상환은 건물용도·은행·카드에 따라 달라 개별 확인 필요.",
+      "action_ids": [
+        "G027-A01"
+      ],
+      "sources": [
+        {
+          "id": "G027-S01",
+          "url": "https://www.greenremodeling.or.kr/n1/support/sup1000.asp",
+          "title": "2026년 민간건축물 그린리모델링 이자지원 사업 공고문",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "대상, 성능기준, 지원율, 제외·우대, 접수·서류·절차"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G027-C01",
+          "group": "건축물·공사",
+          "group_logic": "모두 충족",
+          "requirement": "2016-01-01 이전 사용승인 기존 민간건축물의 미완료 에너지 성능개선 공사",
+          "detail": "정부·지자체 지원을 받은 경우 해당 지원금 외 공사비만 가능",
+          "applies_to": "건축물·공사",
+          "relation": "성능기준·심사와 모두 충족",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G027-C02",
+          "group": "성능개선 기준",
+          "group_logic": "건물유형별 하나 충족",
+          "requirement": "주거·비주거의 20% 이상 성능개선 또는 단독주택 간이평가, 공동주택 2등급 이상 창호 등",
+          "detail": "필수 기술요소 1개 이상 포함; 용도별 기준과 증빙 상이",
+          "applies_to": "공사",
+          "relation": "C01 후 사업심사 대상",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G027-C03",
+          "group": "우대 이자지원",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "기초생활수급자·차상위계층",
+          "detail": "신청일 기준 해당; 5.5%p 우대",
+          "applies_to": "건축주·공사",
+          "relation": "기본 대상·심사 충족 후 C03,C05~C09 중 하나이면 우대율 적용; 금융심사 C04는 대체 조건이 아님",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G027-C04",
+          "group": "심사·금융",
+          "group_logic": "모두 충족",
+          "requirement": "센터 사업확인과 금융기관 대출 가능 여부",
+          "detail": "제출 미비 또는 신용·압류 등으로 거부 가능",
+          "applies_to": "사업자·건축주",
+          "relation": "자격 충족해도 승인·대출은 별도",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G027-C05",
+          "group": "우대 이자지원",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "신혼부부",
+          "detail": "현재 혼인 중이며 혼인 7년 이내; 5.5%p",
+          "applies_to": "건축주",
+          "relation": "기본 대상·심사 충족 후 C03,C05~C09 중 하나이면 우대율 적용; 금융심사 C04는 대체 조건이 아님",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G027-C06",
+          "group": "우대 이자지원",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "다자녀",
+          "detail": "만 18세 이하 자녀 2명 이상; 5.5%p",
+          "applies_to": "건축주",
+          "relation": "기본 대상·심사 충족 후 C03,C05~C09 중 하나이면 우대율 적용; 금융심사 C04는 대체 조건이 아님",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G027-C07",
+          "group": "우대 이자지원",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "고령자(65세 이상)",
+          "detail": "신청일 기준 65세 이상; 5.5%p 우대",
+          "applies_to": "건축주",
+          "relation": "기본 대상·심사 충족 후 C03,C05~C09 중 하나이면 우대율 적용; 금융심사 C04는 대체 조건이 아님",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G027-C09",
+          "group": "우대 이자지원",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "국가유공자·해당 유족·가족",
+          "detail": "법정 국가유공 자격; 5.5%p 우대",
+          "applies_to": "건축주",
+          "relation": "기본 대상·심사 충족 후 C03,C05~C09 중 하나이면 우대율 적용; 금융심사 C04는 대체 조건이 아님",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G027-C08",
+          "group": "우대 이자지원",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "공사 전 대비 에너지 성능개선 비율 30% 이상",
+          "detail": "우대 인적자격이 없어도 성능 기준으로 5.5%p 적용",
+          "applies_to": "건축물·공사",
+          "relation": "기본 대상·심사 충족 후 C03,C05~C09 중 하나이면 우대율 적용; 금융심사 C04는 대체 조건이 아님",
+          "source_ids": [
+            "G027-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G027-S01"
+      ]
+    },
+    {
+      "program_id": "G031",
+      "title": "2026 에너지바우처",
+      "target": "일반 바우처(A01): 수급자격과 세대원 특성 충족 세대. 연탄전환(A02): 2026년 이후 보일러 전환 및 취약계층 기준 충족 세대.",
+      "eligibility_logic": "A01: 수급자격 AND 세대원 특성 8유형 중 하나. A02: 연탄보일러 전환 AND 취약계층 6유형 중 하나. 각각의 시설·중복 제한을 적용하며 두 분기의 소득·세대원 요건을 합치지 않음.",
+      "benefit": "A01 연간 총액: 1/2/3/4인 이상 각각 295,200/407,500/532,700/701,300원. 다른 동절기 지원 선택 시 하절기만 각각 40,700/58,800/75,800/102,000원. A02 세대당 576,000원; 실물 국민행복카드로 전기·도시가스·등유·LPG 결제.",
+      "application_period": "A01: 2026-06-15~12-31. A02: 2026-08-03~12-31(재신청은 2027-05-31까지).",
+      "usage_period": "A01: 2026-07-01~2027-05-31; 하절기 요금차감, 동절기 요금차감10/1·실물카드10/3 시작. A02: 2026-10-03~2027-05-31.",
+      "documents": "공통: 에너지이용권 신청서; 대리 신청은 위임장·대리인 신분증. A01 요금차감은 최근 고지서. A02 보일러 설치·시공 확인 및 전환 경로별 지원결정 증빙(지자체 내부 확인 시 일부 생략).",
+      "application_method": "주소지 행정복지센터 또는 복지로. 동의하에 공무원 직권 신청 가능.",
+      "status": "A01·A02 2026 공식 본문 확인",
+      "caveat": "A02 본인부담 등 기타 전환 경로에는 2025년 이후 연탄쿠폰 수급 이력이 추가됨. 일반 바우처 동절기 중복 제한은 하절기까지 일괄 제외하는 조건이 아님.",
+      "action_ids": [
+        "G031-A01",
+        "G031-A02"
+      ],
+      "sources": [
+        {
+          "id": "G031-S01",
+          "url": "https://www.energyv.or.kr/info/support_info.do",
+          "title": "에너지바우처 지원기준·기간",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "A01 대상, 제외·중복, 금액, 사용기간"
+        },
+        {
+          "id": "G031-S02",
+          "url": "https://www.energyv.or.kr/info/apl_info.do",
+          "title": "에너지바우처 신청안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "A01 신청인·방법·기간·서류"
+        },
+        {
+          "id": "G031-S03",
+          "url": "https://www.energyv.or.kr/info/coal_support_info.do",
+          "title": "연탄전환 에너지바우처 지원기준",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "A02 대상·제외·금액·사용기간"
+        },
+        {
+          "id": "G031-S04",
+          "url": "https://www.energyv.or.kr/info/coal_apl_info.do",
+          "title": "연탄전환 에너지바우처 신청안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "A02 신청·재신청·서류·실물카드"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G031-C01",
+          "group": "소득·수급 자격",
+          "group_logic": "모두 충족",
+          "requirement": "생계·의료·주거·교육급여 수급",
+          "detail": "신청일 기준 수급 자격 확인",
+          "applies_to": "A01 수급자",
+          "relation": "세대원 특성 묶음(C02,C05~C11) 중 하나와 모두 충족",
+          "source_ids": [
+            "G031-S01",
+            "G031-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C02",
+          "group": "세대원 특성",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "노인",
+          "detail": "주민등록기준 1961-12-31 이전 출생자",
+          "applies_to": "A01 본인 또는 등본상 세대원",
+          "relation": "C01과 모두 충족; 세대원 특성 C05~C11과 대체 가능",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C03",
+          "group": "제외·중복",
+          "group_logic": "제외",
+          "requirement": "세대원 모두 보장시설에서 급여 수급",
+          "detail": "전원 해당 시 제외",
+          "applies_to": "A01 세대",
+          "relation": "C01 및 세대원 특성을 충족해도 적용",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C04",
+          "group": "동절기 중복",
+          "group_logic": "제외",
+          "requirement": "긴급복지 동절기 연료비·2026 연탄쿠폰·2026 연탄전환 바우처 수혜 세대",
+          "detail": "일반 A01 동절기 지원과 중복 불가",
+          "applies_to": "G031-A01 세대",
+          "relation": "C01 및 세대원 특성을 충족해도 적용",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C05",
+          "group": "세대원 특성",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "영유아",
+          "detail": "2019-01-01 이후 출생한 7세 이하 취학 전 아동",
+          "applies_to": "A01 본인 또는 등본상 세대원",
+          "relation": "C01과 모두 충족",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C06",
+          "group": "세대원 특성",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "등록 장애인",
+          "detail": "장애인복지법에 따라 등록",
+          "applies_to": "A01 본인 또는 등본상 세대원",
+          "relation": "C01과 모두 충족",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C07",
+          "group": "세대원 특성",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "임산부",
+          "detail": "임신 중 또는 분만 후 6개월 미만",
+          "applies_to": "A01 본인 또는 등본상 세대원",
+          "relation": "C01과 모두 충족",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C08",
+          "group": "세대원 특성",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "중증·희귀·중증난치질환자",
+          "detail": "본인일부부담금 산정특례 기준의 해당 질환 보유",
+          "applies_to": "A01 본인 또는 등본상 세대원",
+          "relation": "C01과 모두 충족",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C09",
+          "group": "세대원 특성",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "한부모가족",
+          "detail": "한부모가족지원법 제5조·제5조의2 지원대상",
+          "applies_to": "A01 본인 또는 등본상 세대원",
+          "relation": "C01과 모두 충족",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C10",
+          "group": "세대원 특성",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "소년소녀가정",
+          "detail": "가정위탁보호 아동 포함",
+          "applies_to": "A01 본인 또는 등본상 세대원",
+          "relation": "C01과 모두 충족",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C11",
+          "group": "세대원 특성",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "다자녀세대",
+          "detail": "부 또는 모와 그 19세 미만 자녀 2명 이상; 등본상 가정위탁보호아동 포함",
+          "applies_to": "A01 세대",
+          "relation": "C01과 모두 충족",
+          "source_ids": [
+            "G031-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C12",
+          "group": "연탄전환 설비",
+          "group_logic": "모두 충족",
+          "requirement": "2026년 1월 이후 연탄보일러를 비연탄보일러로 교체",
+          "detail": "교체 이력·설치시공 확인 필요",
+          "applies_to": "A02 세대",
+          "relation": "A02 취약계층 유형 C13~C18 중 하나와 모두 충족",
+          "source_ids": [
+            "G031-S03",
+            "G031-S04"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C13",
+          "group": "연탄전환 취약계층",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "기초생활수급자",
+          "detail": "생계·의료·주거·교육급여 수급 세대",
+          "applies_to": "A02 세대",
+          "relation": "C12와 모두 충족",
+          "source_ids": [
+            "G031-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C14",
+          "group": "연탄전환 취약계층",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "차상위계층",
+          "detail": "수급자가 아니면서 소득인정액 기준 중위소득 50% 이하 세대",
+          "applies_to": "A02 세대",
+          "relation": "C12와 모두 충족",
+          "source_ids": [
+            "G031-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C15",
+          "group": "연탄전환 취약계층",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "노인",
+          "detail": "1961-12-31 이전 출생자",
+          "applies_to": "A02 세대",
+          "relation": "C12와 모두 충족",
+          "source_ids": [
+            "G031-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C16",
+          "group": "연탄전환 취약계층",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "등록 장애인",
+          "detail": "장애인복지법 등록",
+          "applies_to": "A02 세대",
+          "relation": "C12와 모두 충족",
+          "source_ids": [
+            "G031-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C17",
+          "group": "연탄전환 취약계층",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "한부모가족",
+          "detail": "한부모가족지원법 지원대상",
+          "applies_to": "A02 세대",
+          "relation": "C12와 모두 충족",
+          "source_ids": [
+            "G031-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C18",
+          "group": "연탄전환 취약계층",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "소년소녀가정",
+          "detail": "가정위탁보호 아동 포함",
+          "applies_to": "A02 세대",
+          "relation": "C12와 모두 충족",
+          "source_ids": [
+            "G031-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C19",
+          "group": "연탄전환 제외",
+          "group_logic": "제외",
+          "requirement": "동절기 연료비·2026 연탄쿠폰·2026 동절기 에너지바우처 수혜, 보장시설 전원수급, 교정·치료감호시설 전원수용",
+          "detail": "A02 대상에서 제외",
+          "applies_to": "A02 세대",
+          "relation": "C12 및 C13~C18 충족해도 적용",
+          "source_ids": [
+            "G031-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G031-C20",
+          "group": "연탄전환 경로별 증빙",
+          "group_logic": "행동별 분기",
+          "requirement": "본인부담 등 기타 전환은 2025년 이후 연탄쿠폰 수급 이력",
+          "detail": "2026년 1월 이후 설치·시공 완료 확인서 제출. 재단·지자체 지원 경로는 해당 지원결정 증빙 적용.",
+          "applies_to": "G031-A02 중 본인부담 등 기타 전환 세대",
+          "relation": "C12 및 취약계층 묶음과 함께, 선택한 전환 경로에 적용",
+          "source_ids": [
+            "G031-S04"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G031-S01",
+        "G031-S02",
+        "G031-S03",
+        "G031-S04"
+      ]
+    },
+    {
+      "program_id": "G034",
+      "title": "농축산물 할인지원 행사",
+      "target": "선정 유통업체·점포에서 국산 신선 농축산물을 구매하는 소비자",
+      "eligibility_logic": "국산 신선 농축산물 AND 해당 행사 회차의 참여업체·지점 AND 지정 품목 AND 해당 회차 한도·쿠폰 또는 결제 조건. 일반 사업 안내의 할인율·한도와 개별 주간 행사 조건은 구분한다.",
+      "benefit": "국산 농축산물 구매 할인 지원. 일반 사업 소개는 20~30%, 1인 주 1만 원(전통시장 2만 원)으로 안내하나 회차별 조건은 별도 확인.",
+      "application_period": "공식 사업소개는 2026년 1~12월 추진계획을 안내; 개별 행사 기간은 품목·공지에서 확인",
+      "usage_period": "개별 행사 기간·참여업체 조건에 따름",
+      "documents": "일반 소비자 구매 할인에 별도 서류 확인 안 됨",
+      "application_method": "공식 사이트의 할인품목·참여업체·공지에서 이용 날짜의 회차와 점포 조건을 확인 후 구매한다.",
+      "status": "공식 본문 확인",
+      "caveat": "확인 가능한 주간 품목 화면은 2026년 1~6월 회차여서 2026-09-17 현재 품목·점포·할인율·한도는 확정하지 않음.",
+      "action_ids": [
+        "G034-A01"
+      ],
+      "sources": [
+        {
+          "id": "G034-S01",
+          "url": "https://sale.foodnuri.go.kr/ft/info/list.do",
+          "title": "농축산물 할인지원 사업소개",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "대상품목, 일반 할인·한도, 선정 유통업체, 연간 추진계획"
+        },
+        {
+          "id": "G034-S02",
+          "url": "https://sale.foodnuri.go.kr/ft/ftSale/list.do",
+          "title": "농축산물 할인지원 할인품목",
+          "status": "공식 본문 확인",
+          "as_of": "2026-01~06 확인",
+          "checked_at": "2026-09-17",
+          "supports": "회차·업체별 품목 및 할인점 차이, 현재 회차 미확정 주의"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G034-C01",
+          "group": "대상품목",
+          "group_logic": "모두 충족",
+          "requirement": "국산 신선 농축산물의 해당 회차 지정 품목 구매",
+          "detail": "전체 국산 농축산물이 자동 대상은 아님",
+          "applies_to": "구매 건·G034-A01",
+          "relation": "참여업체·회차 조건과 AND",
+          "source_ids": [
+            "G034-S01",
+            "G034-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G034-C02",
+          "group": "참여 경로·한도",
+          "group_logic": "모두 충족",
+          "requirement": "선정 유통업체·지점의 해당 회차 할인 조건 충족",
+          "detail": "일반 안내 한도와 쿠폰·결제·점포별 조건을 같은 값으로 확정하지 않음",
+          "applies_to": "구매 건·G034-A01",
+          "relation": "대상품목·기간과 AND",
+          "source_ids": [
+            "G034-S01",
+            "G034-S02"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G034-S01",
+        "G034-S02"
+      ]
+    },
+    {
+      "program_id": "G035",
+      "title": "환경표지 인증제품 정보 조회",
+      "target": "환경표지 제도와 인증제품 정보를 조회하려는 사람",
+      "eligibility_logic": "공식 환경인증제도 안내를 통한 정보 조회이며, 개인 소비자 조회에 별도 자격·지급·구매 의무를 확인하지 않았다.",
+      "benefit": "환경표지 등 환경인증제도 정보 및 인증제품 확인 안내.",
+      "application_period": "상시 정보 조회",
+      "usage_period": "해당 없음",
+      "documents": "없음",
+      "application_method": "한국환경산업기술원 환경인증제도 안내 및 연결된 인증 정보에서 제품·인증 정보를 확인한다.",
+      "status": "공식 본문 확인",
+      "caveat": "제조·서비스 사업자의 인증 신청·심사 요건은 개인 제품조회 요건으로 전환하지 않음.",
+      "action_ids": [
+        "G035-A01"
+      ],
+      "sources": [
+        {
+          "id": "G035-S01",
+          "url": "https://www.keiti.re.kr/site/keiti/02/10203010000002018092810.jsp",
+          "title": "한국환경산업기술원 환경인증제도",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "환경인증제도 안내와 제품 정보 조회 범위"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G035-C01",
+          "group": "이용 안내",
+          "group_logic": "안내",
+          "requirement": "환경표지 인증제품 정보 조회",
+          "detail": "개인 조회 자체의 별도 자격·서류·기간 미확인",
+          "applies_to": "제품 정보 조회 행동",
+          "relation": "사업자 인증 절차와 분리",
+          "source_ids": [
+            "G035-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G035-S01"
+      ]
+    },
+    {
+      "program_id": "G038",
+      "title": "폐가전 무상방문수거 예약",
+      "target": "전국 방문수거 대상 폐가전을 배출하려는 주민",
+      "eligibility_logic": "단일수거 대상 대형·중대형 품목은 1개부터, 다량 배출 대상 중소형 품목은 5개 이상부터 가능하다. 추가 초소형 품목은 단일·다량 대상품목과 함께만 가능하다. 품목·수량 분기 AND 수거불가·현장 안전 조건을 충족해야 한다.",
+      "benefit": "폐가전 방문수거 서비스.",
+      "application_period": "상시 예약 안내",
+      "usage_period": "지역별 수거 가능 요일에 따름",
+      "documents": "공식 안내에서 일반 예약 서류 확인 안 됨",
+      "application_method": "1599-0903 웹 또는 콜센터로 수거 품목과 배출 장소를 예약한다.",
+      "status": "공식 본문 확인",
+      "caveat": "가구류 등 비대상 품목, 광물·가스·기름 혼용 제품, 원형 훼손 제품은 수거 불가로 안내된다. 지역별 수거일은 확인 필요.",
+      "action_ids": [
+        "G038-A01"
+      ],
+      "sources": [
+        {
+          "id": "G038-S01",
+          "url": "https://www.15990903.or.kr/portal/cnts/userGuide.do",
+          "title": "폐가전 무상 방문수거 이용안내",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "전국 예약, 단일·다량·추가 품목 수량 분기, 운영일, 배출 유의사항"
+        },
+        {
+          "id": "G038-S02",
+          "url": "https://www.15990903.or.kr/portal/cnts/selectContents.do?cntnts_id=A1000005",
+          "title": "폐가전 무상 방문수거 수거품목 및 기준",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "단일수거, 다량 5개 이상, 수거 불가 품목 및 철거 조건"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G038-C01",
+          "group": "단일 수거",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "단일수거 가능 대형·중대형 품목 1개 이상",
+          "detail": "냉장고·세탁기·에어컨·31인치 이상 디스플레이·태양광 패널 및 규격 기준을 충족하는 기타 전기·전자 제품",
+          "applies_to": "배출 품목·G038-A01",
+          "relation": "다량 수거와 OR; 현장 조건과 AND",
+          "source_ids": [
+            "G038-S01",
+            "G038-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G038-C02",
+          "group": "다량 수거",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "다량 배출 대상 중소형 품목 5개 이상",
+          "detail": "30인치 이하 디스플레이 및 치수합 50~150cm 미만 또는 1~12kg 미만 기타 전기·전자 제품",
+          "applies_to": "배출 품목·G038-A01",
+          "relation": "단일 수거와 OR; 5개 미만 소형가전 단독 요청은 수거 불가",
+          "source_ids": [
+            "G038-S01",
+            "G038-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G038-C03",
+          "group": "추가 품목",
+          "group_logic": "조건부",
+          "requirement": "초소형 제품은 단일 또는 다량 수거 대상품목과 함께 배출",
+          "detail": "무선이어폰·전자담배·전동칫솔·전기면도기 등, 치수합 50cm 미만 또는 1kg 미만",
+          "applies_to": "추가 배출 품목",
+          "relation": "단독 수거 조건이 아님",
+          "source_ids": [
+            "G038-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G038-C04",
+          "group": "제외·현장 조건",
+          "group_logic": "제외",
+          "requirement": "혼용·원형 훼손·비대상 품목에 해당하지 않고 고정 설치 제품은 사전 철거",
+          "detail": "인력 수거 불가 제품은 수거 가능한 상태로 조치; 수거 후 반환 불가",
+          "applies_to": "배출 장소·품목",
+          "relation": "단일 또는 다량 수거 조건과 AND",
+          "source_ids": [
+            "G038-S01",
+            "G038-S02"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G038-S01",
+        "G038-S02"
+      ]
+    },
+    {
+      "program_id": "G039",
+      "title": "서울새활용플라자 토요일 개인 투어·체험",
+      "target": "서울새활용플라자 탐방 또는 체험 프로그램에 참여하려는 개인",
+      "eligibility_logic": "프로그램별 접수 상태 AND 해당 회차·인원·연령 또는 프로그램 고지 조건 AND 사전예약이 필요한 경우 예약 완료. 일반 새활용 탐방 안내에서는 개인이 7세 이상부터 참여 가능하고 정기 탐방은 탐방일 3일 전까지 예약 가능하다고 안내한다.",
+      "benefit": "새활용 탐방 및 회차별 투어·체험교육 참여.",
+      "application_period": "프로그램·회차별 상이; 공식 프로그램 목록에서 접수 상태 확인",
+      "usage_period": "예약한 회차에 한함",
+      "documents": "일반 개인 탐방은 별도 서류 확인 안 됨; 30명 이상 단체는 신청서·이메일 접수 안내",
+      "application_method": "서울새활용플라자 프로그램의 해당 투어·체험교육 또는 새활용 탐방에서 회차·접수 상태를 확인하여 예약한다.",
+      "status": "공식 본문 확인",
+      "caveat": "토·일 정기 탐방 시간·무료 여부는 일반 탐방 페이지에 있으나 2026-09-17 특정 토요일 체험의 실제 잔여석·연령·비용은 프로그램별로 다시 확인해야 함.",
+      "action_ids": [
+        "G039-A01"
+      ],
+      "sources": [
+        {
+          "id": "G039-S01",
+          "url": "https://www.seoulup.or.kr/program.do?type=Learning",
+          "title": "서울새활용플라자 새활용 탐방",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "개인 7세 이상, 예약 마감·인원, 요일·회차, 단체 신청"
+        },
+        {
+          "id": "G039-S02",
+          "url": "https://www.seoulup.or.kr/program.do?type=Education",
+          "title": "서울새활용플라자 투어·체험교육 프로그램",
+          "status": "공식 본문 확인",
+          "as_of": "2026 프로그램 목록",
+          "checked_at": "2026-09-17",
+          "supports": "프로그램별 접수 상태·일정·참여비가 다름"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G039-C01",
+          "group": "개인 탐방 대상",
+          "group_logic": "모두 충족",
+          "requirement": "개인 탐방은 7세 이상",
+          "detail": "일반 새활용 탐방 안내의 개인 참여 기준",
+          "applies_to": "개인·G039-A01",
+          "relation": "회차 예약 조건과 AND",
+          "source_ids": [
+            "G039-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G039-C02",
+          "group": "회차·예약",
+          "group_logic": "모두 충족",
+          "requirement": "해당 프로그램의 접수 상태·회차·인원 조건 충족",
+          "detail": "정기 탐방은 3일 전까지 예약 안내; 5인 미만 취소 또는 30명 이상 마감 가능",
+          "applies_to": "예약 건·G039-A01",
+          "relation": "대상 기준과 AND",
+          "source_ids": [
+            "G039-S01",
+            "G039-S02"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G039-S01",
+        "G039-S02"
+      ]
+    },
+    {
+      "program_id": "G042",
+      "title": "빈병 보증금 반환",
+      "target": "보증금이 포함된 재사용 빈용기를 반환하는 소비자",
+      "eligibility_logic": "보증금 대상 빈용기 AND 재사용 표시 또는 보증금 포함 여부 확인 AND 반환 가능한 상태. 1일 반환 수량 제한과 용기 상태 거부 사유는 별도 적용한다.",
+      "benefit": "반환한 빈용기의 규격별 보증금 환급.",
+      "application_period": "상시 반환",
+      "usage_period": "영업시간 내 반환 안내",
+      "documents": "일반 반환에 서류 없음",
+      "application_method": "반환지원서비스에서 반환처를 찾거나 보증금 대상 제품을 취급하는 소매점에 빈용기를 반환한다.",
+      "status": "공식 본문 확인",
+      "caveat": "일반 유리병의 분리배출 표시와 보증금 대상 빈용기의 재사용 표시를 구분해야 한다. 1회용 컵 보증금은 이 행동과 분리.",
+      "action_ids": [
+        "G042-A01"
+      ],
+      "sources": [
+        {
+          "id": "G042-S01",
+          "url": "https://www.cosmo.or.kr/menu.es?mid=a10201000000",
+          "title": "자원순환보증금관리센터 빈용기 제도안내",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "대상 용기·규격별 보증금·재사용 표시"
+        },
+        {
+          "id": "G042-S02",
+          "url": "https://singo.cosmo.or.kr/menu.es?mid=a30101000000",
+          "title": "빈용기 반환 신고센터 안내",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "소매점 반환 의무, 1일 30병 수량 예외, 훼손·오염·표시 확인 불가 예외"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G042-C01",
+          "group": "대상 빈용기",
+          "group_logic": "모두 충족",
+          "requirement": "보증금 부과 대상 제품의 재사용 빈용기",
+          "detail": "소주·맥주·청량음료 등 대상이며 규격별 보증금 차등",
+          "applies_to": "반환 용기·G042-A01",
+          "relation": "수량·용기 상태 조건과 AND",
+          "source_ids": [
+            "G042-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G042-C02",
+          "group": "1일 반환 수량",
+          "group_logic": "제외",
+          "requirement": "동일인이 1일 30병을 초과하여 반환하는 부분은 소매점이 거부 가능",
+          "detail": "해당 소매점에서 구입한 것으로 확인되면 30병 초과분도 거부할 수 없음",
+          "applies_to": "반환자·반환 건",
+          "relation": "대상 용기 및 용기 상태 조건과 함께 적용",
+          "source_ids": [
+            "G042-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G042-C03",
+          "group": "용기 상태",
+          "group_logic": "제외",
+          "requirement": "훼손·파손·오염되어 재사용이 어렵거나 보증금 포함 여부를 확인할 수 없는 용기는 반환 거부 가능",
+          "detail": "재사용 표시·보증금 포함 여부 확인이 필요",
+          "applies_to": "반환 용기",
+          "relation": "수량 제한과 별개의 거부 사유",
+          "source_ids": [
+            "G042-S01",
+            "G042-S02"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G042-S01",
+        "G042-S02"
+      ]
+    },
+    {
+      "program_id": "G047",
+      "title": "서울 노원구 베란다형 미니태양광 설치비 지원",
+      "target": "노원구 베란다형 미니태양광 설치 희망자",
+      "eligibility_logic": "노원구 공고의 설치·보급업체·예산 요건을 충족해야 하나, 공고 전문은 확보하지 못했다.",
+      "benefit": "공공 에너지정책 포털은 최대 160만원으로 표시하나, 설비·자부담·물량별 금액 원문은 미확인.",
+      "application_period": "2026-04-27~11-30으로 공공 포털 표시; 노원구 검색결과에는 4월 6일 예산 소진 마감 공고가 확인됨.",
+      "usage_period": "설치 사업; 별도 사용기간 없음.",
+      "documents": "공고 전문 미확인.",
+      "application_method": "참여 보급업체·노원구 탄소중립도시과에 확인 후 신청.",
+      "status": "2026 공식 검색결과·공공 포털 확인, 공고 전문 미확인",
+      "caveat": "검색 결과의 예산 소진 마감과 포털의 11월 30일 표기가 충돌하므로, 신규 신청 가능 여부와 금액을 확정하지 않는다.",
+      "action_ids": [
+        "G047-A01"
+      ],
+      "sources": [
+        {
+          "id": "G047-S01",
+          "url": "https://www.nowon.kr/health/index.do",
+          "title": "노원구청 검색결과",
+          "status": "공식 검색결과만 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "2026 공고 및 예산 소진 마감 표시"
+        },
+        {
+          "id": "G047-S02",
+          "url": "https://www.e-policy.or.kr/web/index.do",
+          "title": "에너지정책소통센터",
+          "status": "공식 검색결과만 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "지원혜택 최대 160만원·신청기간 표시"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G047-C01",
+          "group": "지역·설치",
+          "group_logic": "모두 충족",
+          "requirement": "노원구 베란다형 미니태양광 설치사업 대상",
+          "detail": "거주·설치장소·공동주택 동의 등은 공고 전문 재확인 필요",
+          "applies_to": "신청자·설치 장소",
+          "relation": "예산·업체 조건과 모두 충족",
+          "source_ids": [
+            "G047-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "G047-C02",
+          "group": "예산 상태",
+          "group_logic": "제한",
+          "requirement": "예산 범위",
+          "detail": "구청 검색 결과가 예산 소진 마감을 표시",
+          "applies_to": "G047-A01",
+          "relation": "자격과 별도로 신규 접수 제한 가능",
+          "source_ids": [
+            "G047-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G047-S01",
+        "G047-S02"
+      ]
+    },
+    {
+      "program_id": "G048",
+      "title": "2026 서울 동작형 긴급 에너지 지원",
+      "target": "동작구 기초생활수급자·차상위계층 중 냉난방비 급등 가구",
+      "eligibility_logic": "수급/차상위 자격 AND 전년 동월 대비 냉난방비 30% 초과 조건을 충족한다.",
+      "benefit": "2026년 4~10월 고지분 중 최대 6개월, 전년 동월 대비 30% 초과분을 월 5만원 한도로 지원.",
+      "application_period": "2026-04-09~11-30.",
+      "usage_period": "2026년 4~10월 고지분, 최대 6개월.",
+      "documents": "신청서, 신분증, 통장사본, 전년·당해연도 냉난방비 고지서.",
+      "application_method": "동 주민센터 방문.",
+      "status": "2026 공공 포털 검색결과 확인(동작구 원문 미열람)",
+      "caveat": "공식 동작구 블로그 원문은 robots 차단으로 읽지 못했으며, 포털의 등록 원문 기준으로만 정리.",
+      "action_ids": [
+        "G048-A01"
+      ],
+      "sources": [
+        {
+          "id": "G048-S01",
+          "url": "https://www.e-policy.or.kr/web/lay1/program/S1T9C14/curation/view.do?condition=&cpage=&cr_seq=149&keyword=&rows=",
+          "title": "에너지정책소통센터 맞춤형 정책정보",
+          "status": "공식 검색결과만 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "대상, 30% 기준, 월 5만원, 기간, 서류·동주민센터 신청"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G048-C01",
+          "group": "수급 자격",
+          "group_logic": "모두 충족",
+          "requirement": "기초생활수급자 또는 차상위계층",
+          "detail": "기초생활수급 또는 차상위 자격",
+          "applies_to": "가구",
+          "relation": "냉난방비 급등 C02와 모두 충족",
+          "source_ids": [
+            "G048-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "G048-C02",
+          "group": "냉난방비 급등",
+          "group_logic": "모두 충족",
+          "requirement": "전년 같은 달 대비 30% 초과",
+          "detail": "전년·당해 고지서로 비교",
+          "applies_to": "고지분·가구",
+          "relation": "C01과 모두 충족; 월 한도 적용",
+          "source_ids": [
+            "G048-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "G048-C03",
+          "group": "거주 지역",
+          "group_logic": "모두 충족",
+          "requirement": "동작구 거주 가구",
+          "detail": "공공 포털 검색결과의 적용 지역; 구청 원문 미열람",
+          "applies_to": "가구",
+          "relation": "냉난방비 급등 C02와 모두 충족",
+          "source_ids": [
+            "G048-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G048-S01"
+      ]
+    },
+    {
+      "program_id": "G070",
+      "title": "한국지역난방공사 에너지복지요금",
+      "target": "한국지역난방공사 실제 공급 공동주택 등의 복지자격 세대",
+      "eligibility_logic": "공사 공급 여부와 수급·차상위·장애·유공·다자녀 등 해당 자격을 충족해야 한다는 기존 자료만 있다.",
+      "benefit": "기존 자료의 월 지원액·계좌지급 방식은 2026 공식 본문을 읽지 못해 미확인.",
+      "application_period": "기존 자료는 연중 신청이라 하나 현재 유효 미확인.",
+      "usage_period": "미확인.",
+      "documents": "미확인.",
+      "application_method": "공사·관리사무소·주민센터에 공급·자동감면 여부 확인 필요.",
+      "status": "현재 공식 원문 접근 실패",
+      "caveat": "원문 URL이 웹 도구에서 열리지 않아, 이전 기록을 2026 조건으로 확정하지 않는다.",
+      "action_ids": [
+        "G070-A01"
+      ],
+      "sources": [
+        {
+          "id": "G070-S01",
+          "url": "https://www.kdhc.co.kr/cyb/heat/cont/contentsView.do?menuCode=M020120",
+          "title": "한국지역난방공사 에너지복지요금",
+          "status": "접근 실패",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "현재 원문 확인 시도"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G070-C02",
+          "group": "공급 범위",
+          "group_logic": "모두 충족(기존 자료)",
+          "requirement": "한국지역난방공사 실제 공급건물 거주",
+          "detail": "타 공급사 건물은 제외라는 기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "복지자격과 모두 충족",
+          "source_ids": [
+            "G070-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G070-C03",
+          "group": "복지자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "수급 또는 차상위 유형",
+          "detail": "세부 기준·중복 상위자격 적용은 2026 미확인",
+          "applies_to": "대상자 또는 세대",
+          "relation": "복지자격 C03~C06 중 하나 AND 공급 조건 C02; 유형별 최신 기준 미확인",
+          "source_ids": [
+            "G070-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G070-C04",
+          "group": "복지자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "장애 유형",
+          "detail": "세부 기준·중복 상위자격 적용은 2026 미확인",
+          "applies_to": "대상자 또는 세대",
+          "relation": "복지자격 C03~C06 중 하나 AND 공급 조건 C02; 유형별 최신 기준 미확인",
+          "source_ids": [
+            "G070-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G070-C05",
+          "group": "복지자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "유공 유형",
+          "detail": "세부 기준·중복 상위자격 적용은 2026 미확인",
+          "applies_to": "대상자 또는 세대",
+          "relation": "복지자격 C03~C06 중 하나 AND 공급 조건 C02; 유형별 최신 기준 미확인",
+          "source_ids": [
+            "G070-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G070-C06",
+          "group": "복지자격",
+          "group_logic": "묶음 안 하나 충족(기존 자료)",
+          "requirement": "다자녀 유형",
+          "detail": "세부 기준·중복 상위자격 적용은 2026 미확인",
+          "applies_to": "대상자 또는 세대",
+          "relation": "복지자격 C03~C06 중 하나 AND 공급 조건 C02; 유형별 최신 기준 미확인",
+          "source_ids": [
+            "G070-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        }
+      ],
+      "overview_source_ids": [
+        "G070-S01"
+      ]
+    },
+    {
+      "program_id": "G075",
+      "title": "서울 성동구 미혼모·미혼부 냉난방비 지원",
+      "target": "기존 자료상 성동구 거주 저소득 미혼모·미혼부 한부모가족",
+      "eligibility_logic": "기존 자료는 6개월 이상 거주, 당해 한부모 복지급여 기준, 기초생활수급자 월동대책비 대상 제외를 제시하나 2026 원문 미확인.",
+      "benefit": "기존 자료는 연 2회 각 5만원이나 2026 유효 미확인.",
+      "application_period": "기존 자료상 상시; 현재 미확인.",
+      "usage_period": "미확인.",
+      "documents": "미확인.",
+      "application_method": "기존 자료상 자동제공 또는 동주민센터 확인; 현재 미확인.",
+      "status": "현재 공식 원문 접근 실패",
+      "caveat": "정부24 원문을 열지 못해 모든 자격·금액·운영 상태는 기존 자료이며 2026 확정 아님.",
+      "action_ids": [
+        "G075-A01"
+      ],
+      "sources": [
+        {
+          "id": "G075-S01",
+          "url": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/303000000307",
+          "title": "성동구 미혼모·미혼부 냉난방비 지원",
+          "status": "접근 실패",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "현재 원문 확인 시도"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G075-C02",
+          "group": "지역",
+          "group_logic": "모두 충족(기존 자료)",
+          "requirement": "성동구 거주",
+          "detail": "기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "거주기간과 모두 충족",
+          "source_ids": [
+            "G075-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G075-C03",
+          "group": "거주기간",
+          "group_logic": "모두 충족(기존 자료)",
+          "requirement": "6개월 이상 거주",
+          "detail": "기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "한부모·소득 조건과 모두 충족",
+          "source_ids": [
+            "G075-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G075-C04",
+          "group": "가구",
+          "group_logic": "모두 충족(기존 자료)",
+          "requirement": "미혼모 또는 미혼부 한부모가족",
+          "detail": "기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "소득 조건과 모두 충족",
+          "source_ids": [
+            "G075-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G075-C05",
+          "group": "소득",
+          "group_logic": "모두 충족(기존 자료)",
+          "requirement": "당해 한부모가족 복지급여 기준",
+          "detail": "기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "월동대책비 제외 적용",
+          "source_ids": [
+            "G075-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G075-C06",
+          "group": "중복",
+          "group_logic": "제외(기존 자료)",
+          "requirement": "기초생활수급자 월동대책비 지원대상 제외",
+          "detail": "기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "앞 조건을 충족해도 제외",
+          "source_ids": [
+            "G075-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        }
+      ],
+      "overview_source_ids": [
+        "G075-S01"
+      ]
+    },
+    {
+      "program_id": "G080",
+      "title": "서울 종로구 저소득 어르신 냉난방물품 지원",
+      "target": "기존 자료상 종로구 만 65세 이상 법정·사각지대 저소득 어르신",
+      "eligibility_logic": "기존 자료는 연령 AND 저소득, 타 부서 지원 중복 제외, 동주민센터 선정이라고 하나 2026 원문 미확인.",
+      "benefit": "기존 자료상 폭염·한파 대응 냉난방물품; 물품·시기 미확인.",
+      "application_period": "비정기 선정으로 기존 자료에만 있음.",
+      "usage_period": "해당 없음.",
+      "documents": "미확인.",
+      "application_method": "관할 동주민센터에 선정시기·대상·중복 여부 문의.",
+      "status": "현재 공식 원문 접근 실패",
+      "caveat": "정부24 원문을 열지 못해 2026 운영 여부, 선정기준, 지원물품을 확정하지 않는다.",
+      "action_ids": [
+        "G080-A01"
+      ],
+      "sources": [
+        {
+          "id": "G080-S01",
+          "url": "https://www.gov.kr/portal/rcvfvrSvc/dtlEx/300000000174",
+          "title": "종로구 저소득 어르신 냉난방물품 지원",
+          "status": "접근 실패",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "현재 원문 확인 시도"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G080-C02",
+          "group": "연령",
+          "group_logic": "모두 충족(기존 자료)",
+          "requirement": "만 65세 이상",
+          "detail": "기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "저소득 조건과 모두 충족",
+          "source_ids": [
+            "G080-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G080-C03",
+          "group": "저소득",
+          "group_logic": "모두 충족(기존 자료)",
+          "requirement": "법정 저소득 또는 사각지대 저소득",
+          "detail": "기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "동주민센터 선정 대상",
+          "source_ids": [
+            "G080-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G080-C04",
+          "group": "선정",
+          "group_logic": "모두 충족(기존 자료)",
+          "requirement": "동주민센터가 대상자 선정",
+          "detail": "일반 공모 신청 여부 미확인",
+          "applies_to": "대상자 또는 세대",
+          "relation": "연령·저소득 조건 후 적용",
+          "source_ids": [
+            "G080-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        },
+        {
+          "id": "G080-C05",
+          "group": "중복",
+          "group_logic": "제외(기존 자료)",
+          "requirement": "타 부서 소관 지원사업 중복 제외",
+          "detail": "기존 자료",
+          "applies_to": "대상자 또는 세대",
+          "relation": "앞 조건을 충족해도 제외",
+          "source_ids": [
+            "G080-S01"
+          ],
+          "verification": "접근 실패; 기존 자료만"
+        }
+      ],
+      "overview_source_ids": [
+        "G080-S01"
+      ]
+    },
+    {
+      "program_id": "G101",
+      "title": "신재생에너지 설비 고장접수·A/S 연결",
+      "target": "고장 또는 불편이 있는 신재생에너지 설비의 A/S를 요청하려는 신청자·설비 소유자",
+      "eligibility_logic": "신재생에너지 설비 A/S 또는 불만 신고를 위한 접수 서비스다. 필수 개인정보 수집 동의 AND 신청자 연락처가 필요하며, 접수 양식은 설비소유자·설치장소·설비정보·고장 상태를 받는다. 접수 뒤 상담원 확인전화가 안내된다.",
+      "benefit": "신재생에너지 설비 A/S 및 불만 신고 접수·상담 연결.",
+      "application_period": "상시 접수 화면 확인",
+      "usage_period": "접수 후 상담·A/S 처리 절차에 따름",
+      "documents": "접수 양식에 설비 정보·설치업체 정보 등을 입력; 별도 첨부 서류 요건은 확인하지 못함",
+      "application_method": "고장접수 지원센터의 개인정보 동의 후 고장신고서를 작성·등록하거나, 설치 참여기업 또는 통합 콜센터에 A/S를 요청한다.",
+      "status": "공식 본문 확인",
+      "caveat": "신규 설치 보조사업의 소유·설치 기준, 참여기업 선정 조건은 고장접수 이용 자격으로 혼합하지 않음.",
+      "action_ids": [
+        "G101-A01"
+      ],
+      "sources": [
+        {
+          "id": "G101-S01",
+          "url": "https://nr.energy.or.kr/frsc/BR/FR/AcceptTerms.do",
+          "title": "신재생에너지 설비 고장접수 지원센터 개인정보 동의",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "필수 동의와 A/S 접수 서비스 이용 제한 안내"
+        },
+        {
+          "id": "G101-S02",
+          "url": "https://nr.energy.or.kr/frsc/BR/FR/BRFRList.do",
+          "title": "신재생 에너지 설비 A/S 및 불만 신고서",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "접수 양식 항목과 접수 후 확인전화"
+        },
+        {
+          "id": "G101-S03",
+          "url": "https://nr.energy.or.kr/A0/GN_03/GN_03_00_020.do",
+          "title": "한국에너지공단 그린홈 A/S 안내",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "설치 참여기업 또는 고장접수지원센터 요청 안내"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G101-C01",
+          "group": "접수 동의·연락",
+          "group_logic": "모두 충족",
+          "requirement": "필수 개인정보 수집·이용 동의와 신청자 연락처",
+          "detail": "필수 동의 거부 시 고장접수 지원 서비스 이용 제한 안내",
+          "applies_to": "신청자·G101-A01",
+          "relation": "설비·고장 정보와 AND",
+          "source_ids": [
+            "G101-S01",
+            "G101-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "G101-C02",
+          "group": "설비·고장 정보",
+          "group_logic": "모두 충족",
+          "requirement": "설비소유자·설치장소·설비구분 및 고장 상태 입력",
+          "detail": "설비관리번호·설치년도·설치업체 정보는 양식에 제시되며 일부는 보조 입력으로 보임",
+          "applies_to": "설비·접수 건",
+          "relation": "접수 동의·연락 조건과 AND",
+          "source_ids": [
+            "G101-S02"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "G101-S01",
+        "G101-S02",
+        "G101-S03"
+      ]
+    },
+    {
+      "program_id": "G117",
+      "title": "UN CC:Learn 온라인 기후교육",
+      "target": "Net Zero 101 온라인 강좌를 수강하려는 사람",
+      "eligibility_logic": "현재 강좌 카탈로그는 자가학습·영어·무료 인증서·약 1.5시간을 안내한다. 2024 syllabus는 선수요건 없음, 3개 모듈 및 모듈별 퀴즈 성공 완료 후 디지털 인증서를 안내한다. 기존 자료의 ‘각 퀴즈 75%’ 수치는 현재 공식 강좌 화면에서 재확인하지 못했으므로 현재 조건으로 확정하지 않는다.",
+      "benefit": "Net Zero 101 자가학습과 무료 디지털 인증서 안내.",
+      "application_period": "자가학습 과정; 별도 마감일 확인 안 됨",
+      "usage_period": "자가학습 진행",
+      "documents": "공식 카탈로그·syllabus에서 서류 요건 확인 안 됨",
+      "application_method": "UN CC:Learn에서 계정 등록 또는 로그인 후 해당 강좌에 등록해 수강한다.",
+      "status": "공식 본문 확인 및 구연도 자료 병기",
+      "caveat": "무료 인증서는 Net Zero 101에 한정하며, 다른 강좌의 비용·언어·인증 조건으로 일반화하지 않는다. 75% 점수 기준은 2024 이전 자료로 현재 유효성 미확인.",
+      "action_ids": [
+        "G117-A01"
+      ],
+      "sources": [
+        {
+          "id": "G117-S01",
+          "url": "https://unccelearn.org/course/view.php?id=185&page=overview",
+          "title": "Net Zero 101: What, Why and How",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "강좌 존재 및 과정 페이지"
+        },
+        {
+          "id": "G117-S02",
+          "url": "https://unccelearn.org/courses/?lang=en&language=en",
+          "title": "UN CC:Learn Courses Catalog",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-17 화면",
+          "checked_at": "2026-09-17",
+          "supports": "자가학습·영어·무료 인증서·약 1.5시간"
+        },
+        {
+          "id": "G117-S03",
+          "url": "https://unccelearn.org/pluginfile.php/929251/format_unccelearn/syllabus/0/Net%20Zero%20101%20Syllabus.pdf",
+          "title": "Net Zero 101 syllabus",
+          "status": "기존 자료만",
+          "as_of": "2024-04-19",
+          "checked_at": "2026-09-17",
+          "supports": "선수요건 없음, 3개 모듈, 퀴즈 완료와 인증서 안내"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "G117-C01",
+          "group": "수강",
+          "group_logic": "안내",
+          "requirement": "선수요건 없음; 영어 자가학습 강좌",
+          "detail": "2024 syllabus의 선수요건 없음은 현재 세부 화면에서 재확인하지 못함",
+          "applies_to": "수강 행동·G117-A01",
+          "relation": "수료증 조건과 분리",
+          "source_ids": [
+            "G117-S02",
+            "G117-S03"
+          ],
+          "verification": "공식 본문 확인 및 기존 자료만"
+        },
+        {
+          "id": "G117-C02",
+          "group": "수료증",
+          "group_logic": "모두 충족",
+          "requirement": "3개 모듈 및 각 모듈 퀴즈의 성공 완료 후 디지털 인증서",
+          "detail": "75% 수치 기준은 기존 입력 자료와 달리 현재 공식 본문에서 확인하지 못해 미확정",
+          "applies_to": "수료증·G117-A01",
+          "relation": "수강 시작 자격이 아니라 수료 결과 조건",
+          "source_ids": [
+            "G117-S03"
+          ],
+          "verification": "기존 자료만"
+        }
+      ],
+      "overview_source_ids": [
+        "G117-S01",
+        "G117-S02",
+        "G117-S03"
+      ]
+    },
+    {
+      "program_id": "KR-CNP-GREEN-2026",
+      "title": "탄소중립포인트 녹색생활실천",
+      "target": "일상생활 속 친환경 활동을 실천하는 국민",
+      "eligibility_logic": "회원가입 AND 선택한 실천항목의 참여채널·참여기업 조건 충족 AND 참여실적 연계가 필요하다. 17개 입력 행동은 항목별로 독립되어 참여기업·지역·설정이 다를 수 있다.",
+      "benefit": "현금·민간기업 포인트·기부 중 선택 가능, 1인당 연 최대 70,000원. 항목별 단가·예산은 변동 가능하고 실천 후 익월 말일부터 지급 안내.",
+      "application_period": "상시 회원가입 안내",
+      "usage_period": "항목·참여기업별 운영 및 예산 상황에 따름",
+      "documents": "회원가입 시 신원·연락·지급수단 등 정보 처리 안내; 개별 실천은 별도 증빙 제출이 원칙적으로 불필요하나 참여기업 연계 필요",
+      "application_method": "누리집 회원가입 → 항목별 참여방법/참여기업 설정 → 실천 → 포인트 적립 → 지급수단 수령",
+      "status": "공식 17개 항목·참여방법·2026 FAQ 확인",
+      "caveat": "입력의 17개 행동은 공식 17개 항목과 ID·제목을 대조했다. 참여기업 수·단가·예산 및 개별 지역 이용 가능성은 수시 변동한다.",
+      "action_ids": [
+        "KR-CNP-GREEN-2026-A01",
+        "KR-CNP-GREEN-2026-A02",
+        "KR-CNP-GREEN-2026-A03",
+        "KR-CNP-GREEN-2026-A04",
+        "KR-CNP-GREEN-2026-A05",
+        "KR-CNP-GREEN-2026-A06",
+        "KR-CNP-GREEN-2026-A07",
+        "KR-CNP-GREEN-2026-A08",
+        "KR-CNP-GREEN-2026-A09",
+        "KR-CNP-GREEN-2026-A10",
+        "KR-CNP-GREEN-2026-A11",
+        "KR-CNP-GREEN-2026-A12",
+        "KR-CNP-GREEN-2026-A13",
+        "KR-CNP-GREEN-2026-A14",
+        "KR-CNP-GREEN-2026-A15",
+        "KR-CNP-GREEN-2026-A16",
+        "KR-CNP-GREEN-2026-A17"
+      ],
+      "sources": [
+        {
+          "id": "KR-CNP-GREEN-2026-S01",
+          "url": "https://www.cpoint.or.kr/netzero/site/cntnts/CNTNTS_001.do",
+          "title": "제도소개",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "대상·회원가입·17항목·혜택과 연 최대 한도"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-S02",
+          "url": "https://www.cpoint.or.kr/netzero/site/cntnts/CNTNTS_002.do",
+          "title": "인센티브 안내",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "항목별 단가·참여채널·예산 변동"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-S03",
+          "url": "https://www.cpoint.or.kr/netzero/site/cntnts/CNTNTS_003.do",
+          "title": "참여방법",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "회원가입부터 수령까지의 절차 및 행동별 방식"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-S04",
+          "url": "https://www.cpoint.or.kr/netzero/faq/nv_faqList.do",
+          "title": "FAQ",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "자동 실적연계·지급수단·2026 누락실적 범위"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "KR-CNP-GREEN-2026-C01",
+          "group": "공통 가입·연계",
+          "group_logic": "모두 충족",
+          "requirement": "탄소중립포인트 회원가입",
+          "detail": "실적은 참여기업으로부터 자동연계 또는 별도 데이터 제공; 통상 별도 증빙 제출 불필요",
+          "applies_to": "모든 입력 행동",
+          "relation": "각 행동별 C02~C17과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S01",
+            "KR-CNP-GREEN-2026-S03",
+            "KR-CNP-GREEN-2026-S04"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C02",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "전자영수증 발급",
+          "detail": "참여기업 앱에서 스마트 영수증 등 전자영수증 발급 설정; 10원/건",
+          "applies_to": "KR-CNP-GREEN-2026-A01",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C03",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "텀블러·다회용컵 이용",
+          "detail": "참여 커피전문점 등에서 일회용컵 대신 이용; 300원/개",
+          "applies_to": "KR-CNP-GREEN-2026-A02",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C04",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "일회용컵 반환",
+          "detail": "일회용컵 보증금 참여 매장에서 대상 컵 반납; 100원/개",
+          "applies_to": "KR-CNP-GREEN-2026-A03",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C05",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "리필스테이션 이용",
+          "detail": "빈 용기로 참여 리필스테이션에서 세제·화장품 등을 리필; 500원/회",
+          "applies_to": "KR-CNP-GREEN-2026-A04",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C06",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "다회용기 이용",
+          "detail": "참여 배달서비스에서 다회용기 선택, 일부 지역만 해당; 500원/회",
+          "applies_to": "KR-CNP-GREEN-2026-A05",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C07",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "무공해차 대여",
+          "detail": "참여 차량공유업체 앱에서 전기·수소 등 무공해차 대여; 100원/km",
+          "applies_to": "KR-CNP-GREEN-2026-A06",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C08",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "친환경제품 구매",
+          "detail": "실물 그린카드로 에코머니 100P 이상·2,000원 이상 결제, 또는 참여기업에서 친환경제품 2,000원 이상 구매; 500원/건",
+          "applies_to": "KR-CNP-GREEN-2026-A07",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C09",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "고품질 재활용품 배출",
+          "detail": "참여 지자체 수거점에 고품질 재활용품을 분류 배출; 300원/kg",
+          "applies_to": "KR-CNP-GREEN-2026-A08",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C10",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "폐휴대폰 반납",
+          "detail": "사용하지 않는 휴대폰을 참여 기부·재활용 기업에 반납; 1,000원/개",
+          "applies_to": "KR-CNP-GREEN-2026-A09",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C11",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "미래세대실천행동",
+          "detail": "기후행동1.5℃ 앱 가입 후 지정 활동 참여; 운영계획에 따름",
+          "applies_to": "KR-CNP-GREEN-2026-A10",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C12",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "공유자전거 이용",
+          "detail": "지자체 또는 민간 참여서비스의 공유자전거 이용; 100원/km",
+          "applies_to": "KR-CNP-GREEN-2026-A11",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C13",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "잔반제로 실천",
+          "detail": "참여 단체급식소 이용 시 잔반 최소화; 100원/회",
+          "applies_to": "KR-CNP-GREEN-2026-A12",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C14",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "나무심기",
+          "detail": "공공기관·민간기업·단체 참여 캠페인 나무심기; 3,000원/회",
+          "applies_to": "KR-CNP-GREEN-2026-A13",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C15",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "가정용 베란다 태양광 설치",
+          "detail": "일반 가정 베란다 대상 미니태양광 발전설비 설치; 10,000원/회",
+          "applies_to": "KR-CNP-GREEN-2026-A14",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C16",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "재생원료 사용제품 구매",
+          "detail": "재생원료 사용비율 표시제 승인 제품을 참여채널에서 구매; 100원/건",
+          "applies_to": "KR-CNP-GREEN-2026-A15",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C17",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "장바구니 이용",
+          "detail": "오프라인 참여 매장에서 일회용 봉투 대신 다회용 장바구니 사용; 50원/회",
+          "applies_to": "KR-CNP-GREEN-2026-A16",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인; 입력 행동 매핑 일부 미확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C18",
+          "group": "행동별 분기",
+          "group_logic": "행동별 분기",
+          "requirement": "개인용기 식품 포장",
+          "detail": "오프라인 참여 매장에서 식품 구매·포장 시 개인 소유 다회용기 사용; 500원/회",
+          "applies_to": "KR-CNP-GREEN-2026-A17",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S02",
+            "KR-CNP-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "KR-CNP-GREEN-2026-C19",
+          "group": "참여 경로",
+          "group_logic": "모두 충족",
+          "requirement": "선택한 실천 항목의 참여기업·참여채널 요건",
+          "detail": "참여 항목/기업별 매뉴얼을 따른다. 전체기업 공통 설정 완료 boolean이 아님.",
+          "applies_to": "모든 입력 행동",
+          "relation": "각 행동별 C02~C17과 AND",
+          "source_ids": [
+            "KR-CNP-GREEN-2026-S01",
+            "KR-CNP-GREEN-2026-S03",
+            "KR-CNP-GREEN-2026-S04"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "KR-CNP-GREEN-2026-S01",
+        "KR-CNP-GREEN-2026-S02",
+        "KR-CNP-GREEN-2026-S03",
+        "KR-CNP-GREEN-2026-S04"
+      ]
+    },
+    {
+      "program_id": "SDG-FOOD-REDUCER-H2-2026",
+      "title": "성동구 하반기 가정용 음식물류폐기물 소형감량기 구매 지원",
+      "target": "2026-08-20 현재 성동구 거주 주민으로 가정용 소형감량기를 구매·설치한 세대",
+      "eligibility_logic": "기준일 성동구 거주 AND 같은 주소지 1대 AND 공고의 인증·제품·구매·증빙 조건 충족 AND 예산 범위 선정이 필요하다. 렌탈·주방용 오물분쇄기·타 사업 중복 및 자체감량기 설치시설은 제외된다.",
+      "benefit": "구매비의 30%, 최대 210,000원; 약 100대, 예산 범위 내 선착순",
+      "application_period": "당초 공고 2026-09-01~09-11; 공식 신속예약 목록은 지원신청을 2026-08-24~09-30 운영으로 표시",
+      "usage_period": "증빙 제출 2026-09-01~11-30, 실적 제출 2026-08-24~12-31로 공식 예약 목록 표시",
+      "documents": "주민등록등본 1부 및 공고 첨부 신청서·구매증빙·사용전후 실적 서식",
+      "application_method": "동주민센터 방문 또는 성동구 신속예약 신청 후 공고의 증빙·실적 제출",
+      "status": "공식 공고 및 신속예약 목록 확인",
+      "caveat": "당초 공고 기간과 현재 신속예약 목록의 신청 종료일이 다르다. 2026-09-17 현재 접수 가능 여부·정원은 예약 상세에서 재확인해야 한다.",
+      "action_ids": [
+        "SDG-FOOD-REDUCER-H2-2026-A01"
+      ],
+      "sources": [
+        {
+          "id": "SDG-FOOD-REDUCER-H2-2026-S01",
+          "url": "https://bogunso.sd.go.kr/main/selectBbsNttView.do?bbsNo=184&key=3781&nttNo=360685&nttShowPd=60&pageIndex=2&pageUnit=10",
+          "title": "성동구 2026년 하반기 소형감량기 구매 지원 공고",
+          "status": "공식 본문 확인",
+          "as_of": "2026-08-20 공고",
+          "checked_at": "2026-09-17",
+          "supports": "대상·금액·선착순·당초 신청기간·서류"
+        },
+        {
+          "id": "SDG-FOOD-REDUCER-H2-2026-S02",
+          "url": "https://www.sd.go.kr/booking/webPubRveManagerList.do?key=5154",
+          "title": "성동구 신속예약 생활서비스 목록",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-17 화면",
+          "checked_at": "2026-09-17",
+          "supports": "현재 표시된 신청·증빙·실적 제출 기간"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "SDG-FOOD-REDUCER-H2-2026-C01",
+          "group": "거주·세대",
+          "group_logic": "모두 충족",
+          "requirement": "2026-08-20 현재 성동구 거주, 같은 주소지 1대",
+          "detail": "보조금 지급 시까지 주소 유지 조건은 입력의 기존 자료이며 이번 공고 검색결과 본문에서 재확인하지 못함",
+          "applies_to": "A01 신청 세대",
+          "relation": "제품 조건과 AND",
+          "source_ids": [
+            "SDG-FOOD-REDUCER-H2-2026-S01"
+          ],
+          "verification": "공식 본문 확인; 주소유지 세부는 미확인"
+        },
+        {
+          "id": "SDG-FOOD-REDUCER-H2-2026-C02",
+          "group": "제품·제외",
+          "group_logic": "모두 충족 및 제외",
+          "requirement": "가정용 소형감량기 구매·설치 및 공고 첨부 인증제품 기준 충족",
+          "detail": "렌탈·주방용 오물분쇄기·타 사업 중복지원·자체감량기 설치시설 제외는 기존 공식 공고 자료로 제시되나 검색 노출 본문에서 전문 미확인",
+          "applies_to": "A01 구매 건",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SDG-FOOD-REDUCER-H2-2026-S01"
+          ],
+          "verification": "공식 공고 첨부 존재 확인; 전문 세부 미확인"
+        },
+        {
+          "id": "SDG-FOOD-REDUCER-H2-2026-C03",
+          "group": "선정·예산",
+          "group_logic": "모두 충족",
+          "requirement": "예산 범위 내 선착순 지원",
+          "detail": "약 100대",
+          "applies_to": "A01 신청 건",
+          "relation": "C01·C02를 충족해도 예산 소진 시 지원 불가",
+          "source_ids": [
+            "SDG-FOOD-REDUCER-H2-2026-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "SDG-FOOD-REDUCER-H2-2026-S01",
+        "SDG-FOOD-REDUCER-H2-2026-S02"
+      ]
+    },
+    {
+      "program_id": "SDG-ZEV-2026",
+      "title": "성동구 친환경자동차 구매보조금",
+      "target": "2026-01-01 이후 지원대상 친환경차를 구매한 성동구민",
+      "eligibility_logic": "지원대상 차량 구매 AND 서울시 보조금 지급대상 모델 AND 성동구 신청·서류 제출 AND 예산 잔액이 필요하다. 전기차·수소차·전기이륜차는 차종·모델·금액이 각각 분기한다.",
+      "benefit": "전기차 최대 500,000원 차등, 수소차 1,000,000원 일괄, 전기이륜차 최대 400,000원 차등; 차종별 대수는 전기차 60·수소차 2·이륜차 50이며 조정 가능",
+      "application_period": "2026-02-23부터 예산 소진 시 마감; 공고 종료일 2026-12-31",
+      "usage_period": "공고 사업기간 내",
+      "documents": "공고 첨부 지원신청서·개인정보 수집이용 동의서 및 차량별 제출서류",
+      "application_method": "차량 구매 후 성동구청 기후에너지과에 방문·우편 또는 신속예약으로 접수",
+      "status": "공식 공고·신속예약 확인",
+      "caveat": "공고는 예산 소진 시 마감이고 차종별 물량 조정 가능이다. 2026-09-17의 잔여 예산·개별 모델 적격은 확인하지 못했다.",
+      "action_ids": [
+        "SDG-ZEV-2026-A01",
+        "SDG-ZEV-2026-A02",
+        "SDG-ZEV-2026-A03"
+      ],
+      "sources": [
+        {
+          "id": "SDG-ZEV-2026-S01",
+          "url": "https://www.sd.go.kr/main/selectBbsNttView.do?bbsNo=184&key=3659&nttNo=356464&nttShowPd=60&pageIndex=16&pageUnit=10",
+          "title": "성동구 2026년 친환경자동차 구매보조금 공고",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "사업기간·예산·차종별 대수/금액·신청방법"
+        },
+        {
+          "id": "SDG-ZEV-2026-S02",
+          "url": "https://bogunso.sd.go.kr/booking/viewTnOnlineRceptU1.do?key=4871&progrmNo=681&sc3=202603",
+          "title": "성동구 전기차 구매 보조금 신속예약",
+          "status": "공식 본문 확인",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "2026-01-01 이후 구매·서울시 지급대상 모델·신청 안내"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "SDG-ZEV-2026-C01",
+          "group": "거주·구매",
+          "group_logic": "모두 충족",
+          "requirement": "2026-01-01 이후 친환경차 구매한 성동구민",
+          "detail": "차량별 구매·등록 추가 요건은 공고 첨부 전문 확인 필요",
+          "applies_to": "A01 전기차, A02 수소차, A03 전기이륜차",
+          "relation": "모델·예산 조건과 AND",
+          "source_ids": [
+            "SDG-ZEV-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SDG-ZEV-2026-C02",
+          "group": "차종·모델",
+          "group_logic": "행동별 분기",
+          "requirement": "서울시 보조금 지급대상 모델",
+          "detail": "전기차(승용·승합·화물), 수소차(승용), 전기이륜차(경형~대형)로 분기",
+          "applies_to": "A01/A02/A03",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SDG-ZEV-2026-S01",
+            "SDG-ZEV-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SDG-ZEV-2026-C03",
+          "group": "예산·물량",
+          "group_logic": "제한",
+          "requirement": "예산 잔액과 차종별 물량 내",
+          "detail": "예산 소진 시 종료, 차종별 물량 조정 가능",
+          "applies_to": "A01/A02/A03",
+          "relation": "자격 충족과 별도 제한",
+          "source_ids": [
+            "SDG-ZEV-2026-S01",
+            "SDG-ZEV-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "SDG-ZEV-2026-S01",
+        "SDG-ZEV-2026-S02"
+      ]
+    },
+    {
+      "program_id": "SEOUL-EM-BLDG-2026",
+      "title": "서울시 에코마일리지 - 건물",
+      "target": "서울시 에코마일리지 개인·단체회원; 개인은 가구 대표 1인 기준",
+      "eligibility_logic": "회원가입 AND 에너지 고객번호 등록 AND 평가기간 참여 신청 AND 기준 대비 에너지 절감이 필요하다. 개인회원과 단체회원은 대상·보상·평가 분기이며, 기존 입력의 고객번호 2개 이상 세부는 이번 공식 본문에서 재확인하지 못했다.",
+      "benefit": "개인회원은 6개월 절감률·연속 절감 조건에 따라 10,000~50,000마일리지; 서울시 2026 안내는 건물 에너지 절약 연 최대 100,000마일리지라고 소개한다.",
+      "application_period": "2026-01-05부터 참여신청제 시행; 반기별 평가·모집 일정은 누리집 확인 필요",
+      "usage_period": "가입 다음 달부터 6개월 단위 평가라는 기존 2026 서울시 안내",
+      "documents": "온라인 고객번호 등록 또는 동주민센터 가입; 별도 서류는 공식 안내에서 미확인",
+      "application_method": "에코마일리지 누리집 가입·에너지 고객번호 등록 후 평가기간 참여 신청",
+      "status": "2026 서울시 공식 안내 확인",
+      "caveat": "50,000과 100,000은 개인 6개월 구간 보상과 건물 연 최대 소개의 서로 다른 범위일 수 있어 합산하지 않았다.",
+      "action_ids": [
+        "SEOUL-EM-BLDG-2026-A01",
+        "SEOUL-EM-BLDG-2026-A02",
+        "SEOUL-EM-BLDG-2026-A03",
+        "SEOUL-EM-BLDG-2026-A04",
+        "SEOUL-EM-BLDG-2026-A05"
+      ],
+      "sources": [
+        {
+          "id": "SEOUL-EM-BLDG-2026-S01",
+          "url": "https://news.seoul.go.kr/env/archives/566790",
+          "title": "에코마일리지제 개편·참여신청제 도입",
+          "status": "공식 본문 확인",
+          "as_of": "2026-01-06",
+          "checked_at": "2026-09-17",
+          "supports": "2026-01-05부터 건물 참여신청제"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-S02",
+          "url": "https://news.seoul.go.kr/env/archives/568914",
+          "title": "에코마일리지 건물편",
+          "status": "공식 본문 확인",
+          "as_of": "2026-04-27",
+          "checked_at": "2026-09-17",
+          "supports": "에너지 절감·구간별 개인 보상 안내"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-S03",
+          "url": "https://news.seoul.go.kr/env/archives/570488",
+          "title": "서울시민 환경 혜택 안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026-08-26",
+          "checked_at": "2026-09-17",
+          "supports": "건물 부문 5% 이상 절감·연 최대 10만 마일리지 소개"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "SEOUL-EM-BLDG-2026-C01",
+          "group": "회원·지역",
+          "group_logic": "모두 충족",
+          "requirement": "서울 에코마일리지 가입; 개인·단체 유형 분리",
+          "detail": "개인 가구 대표와 단체 회원의 지급기준은 별도",
+          "applies_to": "A01~A05",
+          "relation": "C02·C03과 AND",
+          "source_ids": [
+            "SEOUL-EM-BLDG-2026-S01",
+            "SEOUL-EM-BLDG-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-C02",
+          "group": "에너지 정보·신청",
+          "group_logic": "모두 충족",
+          "requirement": "에너지 고객번호 등록 및 평가기간 참여 신청",
+          "detail": "기존 자료상 전기 필수·총2개 이상. 이번 본문에서 수량 기준 미확인; 개인/단체별 적용범위 재확인 필요.",
+          "applies_to": "A01~A05",
+          "relation": "C01·C03과 AND",
+          "source_ids": [
+            "SEOUL-EM-BLDG-2026-S01"
+          ],
+          "verification": "공식 본문 확인; 세부 고객번호 수 미확인"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-C03",
+          "group": "절감 평가",
+          "group_logic": "모두 충족",
+          "requirement": "전기·수도·도시가스 등 에너지 사용량 절감",
+          "detail": "6개월 절감률·연속 절감에 따른 구간 보상; 5% 이상 절감은 서울시 종합안내에 기재",
+          "applies_to": "A01~A05",
+          "relation": "참여 신청 후 평가",
+          "source_ids": [
+            "SEOUL-EM-BLDG-2026-S02",
+            "SEOUL-EM-BLDG-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-C04",
+          "group": "개인회원 절감 구간",
+          "group_logic": "행동별 분기",
+          "requirement": "과거 평균 대비 5% 이상~10% 미만 절감",
+          "detail": "10,000마일리지/6개월 평가",
+          "applies_to": "SEOUL-EM-BLDG-2026-A01",
+          "relation": "C01~C03과 AND",
+          "source_ids": [
+            "SEOUL-EM-BLDG-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-C05",
+          "group": "개인회원 절감 구간",
+          "group_logic": "행동별 분기",
+          "requirement": "과거 평균 대비 10% 이상~15% 미만 절감",
+          "detail": "30,000마일리지/6개월 평가",
+          "applies_to": "SEOUL-EM-BLDG-2026-A02",
+          "relation": "C01~C03과 AND",
+          "source_ids": [
+            "SEOUL-EM-BLDG-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-C06",
+          "group": "개인회원 절감 구간",
+          "group_logic": "행동별 분기",
+          "requirement": "과거 평균 대비 15% 이상 절감",
+          "detail": "50,000마일리지/6개월 평가",
+          "applies_to": "SEOUL-EM-BLDG-2026-A03",
+          "relation": "C01~C03과 AND",
+          "source_ids": [
+            "SEOUL-EM-BLDG-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-C07",
+          "group": "개인회원 지속 절감",
+          "group_logic": "행동별 분기",
+          "requirement": "직전 2회 연속 절감 후 0% 초과~5% 미만 절감 유지",
+          "detail": "10,000마일리지",
+          "applies_to": "SEOUL-EM-BLDG-2026-A04",
+          "relation": "C01~C03과 AND",
+          "source_ids": [
+            "SEOUL-EM-BLDG-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-BLDG-2026-C08",
+          "group": "단체회원 절감",
+          "group_logic": "행동별 분기",
+          "requirement": "서울 소재 개인사업자 등 소상공인 단체회원, 10% 이상 절감",
+          "detail": "50,000마일리지/평가",
+          "applies_to": "SEOUL-EM-BLDG-2026-A05",
+          "relation": "C01~C03과 AND",
+          "source_ids": [
+            "SEOUL-EM-BLDG-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "SEOUL-EM-BLDG-2026-S01",
+        "SEOUL-EM-BLDG-2026-S02",
+        "SEOUL-EM-BLDG-2026-S03"
+      ]
+    },
+    {
+      "program_id": "SEOUL-EM-CAR-2026",
+      "title": "서울시 에코마일리지 - 승용차",
+      "target": "서울시 등록 12인승 이하 비사업용 승용·승합차 소유자",
+      "eligibility_logic": "서울시 등록 AND 12인승 이하 비사업용 AND 내연기관 차량 AND 1인 1대(공동소유는 대표) AND 해당 평가기간 시작·종료 주행거리와 사진 등록이 필요하다. 전기·수소·하이브리드는 제외된다.",
+      "benefit": "기준 주행거리 대비 감축률 또는 감축량에 따라 최대 50,000마일리지",
+      "application_period": "2026 신규 모집은 2월 2~27일(공식 3월 안내 기준)으로 종료; 기존 참여자는 10월 최종 주행거리 등록 안내",
+      "usage_period": "2026년 참여 평가기간·10월 최종 등록",
+      "documents": "차량번호판과 계기판 사진, 시작·종료 주행거리",
+      "application_method": "에코마일리지 누리집 가입 → 참여 신청·시작 주행거리 등록 → 감축 운행 → 종료 주행거리 등록",
+      "status": "2026 모집은 마감된 과거 공고로 확인",
+      "caveat": "공식 2026-04-06~06-03 특별 이벤트는 별도 30일 이벤트이며 정규 2026 참여 조건·혜택으로 합치지 않았다.",
+      "action_ids": [
+        "SEOUL-EM-CAR-2026-A01",
+        "SEOUL-EM-CAR-2026-A02",
+        "SEOUL-EM-CAR-2026-A03",
+        "SEOUL-EM-CAR-2026-A04",
+        "SEOUL-EM-CAR-2026-A05"
+      ],
+      "sources": [
+        {
+          "id": "SEOUL-EM-CAR-2026-S01",
+          "url": "https://news.seoul.go.kr/env/archives/567468?listPage=1",
+          "title": "2026 승용차 마일리지 2월 신청",
+          "status": "공식 본문 확인",
+          "as_of": "2026-03-26",
+          "checked_at": "2026-09-17",
+          "supports": "대상·내연기관 제외·모집·최대 5만 마일리지"
+        },
+        {
+          "id": "SEOUL-EM-CAR-2026-S02",
+          "url": "https://news.seoul.go.kr/env/archives/568558",
+          "title": "승용차 에코마일리지 특별 이벤트",
+          "status": "공식 본문 확인",
+          "as_of": "2026-04-10",
+          "checked_at": "2026-09-17",
+          "supports": "특별 이벤트의 사진 등록·기간·별도 기준"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "SEOUL-EM-CAR-2026-C01",
+          "group": "차량·소유",
+          "group_logic": "모두 충족 및 제외",
+          "requirement": "서울시 등록 12인승 이하 비사업용 승용·승합차, 내연기관, 1인 1대",
+          "detail": "전기·수소·하이브리드 제외; 공동소유 대표 소유자 등 세부는 기존 자료이며 이번 본문에서 전부 재확인하지 못함",
+          "applies_to": "승용차 참여",
+          "relation": "C02와 AND",
+          "source_ids": [
+            "SEOUL-EM-CAR-2026-S01"
+          ],
+          "verification": "공식 본문 확인; 일부 세부 미확인"
+        },
+        {
+          "id": "SEOUL-EM-CAR-2026-C02",
+          "group": "참여·평가",
+          "group_logic": "모두 충족",
+          "requirement": "참여 신청 및 시작·종료 주행거리 등록",
+          "detail": "특별 이벤트는 차량번호판·계기판 사진을 요구하며 정규 과정의 현재 화면은 미확인",
+          "applies_to": "승용차 참여",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SEOUL-EM-CAR-2026-S01",
+            "SEOUL-EM-CAR-2026-S02"
+          ],
+          "verification": "공식 본문 확인; 정규 사진요건 미확인"
+        },
+        {
+          "id": "SEOUL-EM-CAR-2026-C03",
+          "group": "주행거리 감축 구간",
+          "group_logic": "모두 충족",
+          "requirement": "주행거리 감축 10% 미만 또는 1,000km 미만",
+          "detail": "기존 카탈로그의 구간별 안내: 10,000마일리지 현재 공고의 구간별 전체표는 이번 조사 미확인.",
+          "applies_to": "SEOUL-EM-CAR-2026-A01",
+          "relation": "차량·참여 조건과 모두 충족; 구간 간 적용은 원래 비율 또는 감축량 기준 확인",
+          "source_ids": [
+            "SEOUL-EM-CAR-2026-S01",
+            "SEOUL-EM-CAR-2026-S02"
+          ],
+          "verification": "기존 자료 기준; 구간별 최신 원문 미확인"
+        },
+        {
+          "id": "SEOUL-EM-CAR-2026-C04",
+          "group": "주행거리 감축 구간",
+          "group_logic": "모두 충족",
+          "requirement": "주행거리 감축 10% 이상~20% 미만 또는 1,000~2,000km 미만",
+          "detail": "기존 카탈로그의 구간별 안내: 20,000마일리지 현재 공고의 구간별 전체표는 이번 조사 미확인.",
+          "applies_to": "SEOUL-EM-CAR-2026-A02",
+          "relation": "차량·참여 조건과 모두 충족; 구간 간 적용은 원래 비율 또는 감축량 기준 확인",
+          "source_ids": [
+            "SEOUL-EM-CAR-2026-S01",
+            "SEOUL-EM-CAR-2026-S02"
+          ],
+          "verification": "기존 자료 기준; 구간별 최신 원문 미확인"
+        },
+        {
+          "id": "SEOUL-EM-CAR-2026-C05",
+          "group": "주행거리 감축 구간",
+          "group_logic": "모두 충족",
+          "requirement": "주행거리 감축 20% 이상~30% 미만 또는 2,000~3,000km 미만",
+          "detail": "기존 카탈로그의 구간별 안내: 30,000마일리지 현재 공고의 구간별 전체표는 이번 조사 미확인.",
+          "applies_to": "SEOUL-EM-CAR-2026-A03",
+          "relation": "차량·참여 조건과 모두 충족; 구간 간 적용은 원래 비율 또는 감축량 기준 확인",
+          "source_ids": [
+            "SEOUL-EM-CAR-2026-S01",
+            "SEOUL-EM-CAR-2026-S02"
+          ],
+          "verification": "기존 자료 기준; 구간별 최신 원문 미확인"
+        },
+        {
+          "id": "SEOUL-EM-CAR-2026-C06",
+          "group": "주행거리 감축 구간",
+          "group_logic": "모두 충족",
+          "requirement": "주행거리 감축 30% 이상~40% 미만 또는 3,000~4,000km 미만",
+          "detail": "기존 카탈로그의 구간별 안내: 40,000마일리지 현재 공고의 구간별 전체표는 이번 조사 미확인.",
+          "applies_to": "SEOUL-EM-CAR-2026-A04",
+          "relation": "차량·참여 조건과 모두 충족; 구간 간 적용은 원래 비율 또는 감축량 기준 확인",
+          "source_ids": [
+            "SEOUL-EM-CAR-2026-S01",
+            "SEOUL-EM-CAR-2026-S02"
+          ],
+          "verification": "기존 자료 기준; 구간별 최신 원문 미확인"
+        },
+        {
+          "id": "SEOUL-EM-CAR-2026-C07",
+          "group": "주행거리 감축 구간",
+          "group_logic": "모두 충족",
+          "requirement": "주행거리 감축 40% 이상 또는 4,000km 이상",
+          "detail": "기존 카탈로그의 구간별 안내: 50,000마일리지 현재 공고의 구간별 전체표는 이번 조사 미확인.",
+          "applies_to": "SEOUL-EM-CAR-2026-A05",
+          "relation": "차량·참여 조건과 모두 충족; 구간 간 적용은 원래 비율 또는 감축량 기준 확인",
+          "source_ids": [
+            "SEOUL-EM-CAR-2026-S01",
+            "SEOUL-EM-CAR-2026-S02"
+          ],
+          "verification": "기존 자료 기준; 구간별 최신 원문 미확인"
+        }
+      ],
+      "overview_source_ids": [
+        "SEOUL-EM-CAR-2026-S01",
+        "SEOUL-EM-CAR-2026-S02"
+      ]
+    },
+    {
+      "program_id": "SEOUL-EM-GREEN-2026",
+      "title": "서울시 에코마일리지 - 녹색실천",
+      "target": "에코마일리지 회원; 모집형 세부 항목은 별도 대상·지역·정원 적용",
+      "eligibility_logic": "에코마일리지 회원가입 AND 선택한 항목의 신청·인증·기간을 충족한다. 음식물 감량은 RFID 종량기 사용 세대 AND 주택·RFID 정보 등록 AND 회차 모집·관리자 확인이 추가된다. 환경교육은 만14세 이상 서울시민이며 기관별 지역 기준과 연간 한도가 추가된다. 퀴즈·이벤트·행사·운전은 회차별 공고 기준으로 분기한다.",
+      "benefit": "온라인 퀴즈·이벤트 100~1,000, 현장 행사·교육 1,000, 운전·음식물 감량 2,000~5,000마일리지. 녹색실천 전체 최대 수급 한도 50,000P 안내가 확인됨.",
+      "application_period": "2026-01-05 신설; 음식물 감량·교육·행사는 회차별 모집 및 예산/정원 조건",
+      "usage_period": "항목별; 환경교육은 2026년 7~12월 공고",
+      "documents": "음식물 감량은 주소·RFID 종량기 정보, 교육은 QR 인증 등 항목별",
+      "application_method": "회원 로그인 → 녹색실천 항목 선택 → 항목별 정보 등록·신청·인증",
+      "status": "2026 서울시 공식 제도·음식물·교육 공고 확인",
+      "caveat": "입력의 A01~A10 제목·ID·금액을 대조했다. 모집형 항목의 현재 정원·기간·예산은 각 회차 공고에서 재확인한다.",
+      "action_ids": [
+        "SEOUL-EM-GREEN-2026-A01",
+        "SEOUL-EM-GREEN-2026-A02",
+        "SEOUL-EM-GREEN-2026-A03",
+        "SEOUL-EM-GREEN-2026-A04",
+        "SEOUL-EM-GREEN-2026-A05",
+        "SEOUL-EM-GREEN-2026-A06",
+        "SEOUL-EM-GREEN-2026-A07",
+        "SEOUL-EM-GREEN-2026-A08",
+        "SEOUL-EM-GREEN-2026-A09",
+        "SEOUL-EM-GREEN-2026-A10"
+      ],
+      "sources": [
+        {
+          "id": "SEOUL-EM-GREEN-2026-S01",
+          "url": "https://news.seoul.go.kr/env/archives/566790",
+          "title": "에코마일리지제 개편·녹색실천 신설",
+          "status": "공식 본문 확인",
+          "as_of": "2026-01-06",
+          "checked_at": "2026-09-17",
+          "supports": "녹색실천 항목군·기본 단가 범위·참여신청제"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-S02",
+          "url": "https://news.seoul.go.kr/env/archives/566705",
+          "title": "음식물쓰레기 감량 포인트제",
+          "status": "공식 본문 확인",
+          "as_of": "2025-12-18 공지, 2026 운영",
+          "checked_at": "2026-09-17",
+          "supports": "RFID 세대·주소/RFID 등록·관리자 확인·감량 기준"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-S03",
+          "url": "https://news.seoul.go.kr/env/archives/569743",
+          "title": "2026 환경교육포인트제",
+          "status": "공식 본문 확인",
+          "as_of": "2026-08-04",
+          "checked_at": "2026-09-17",
+          "supports": "만14세·서울시민·에코마일리지 회원·지역기준·연간 한도"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "SEOUL-EM-GREEN-2026-C01",
+          "group": "공통 회원·항목 신청",
+          "group_logic": "모두 충족",
+          "requirement": "에코마일리지 회원으로서 녹색실천 항목별 신청·인증",
+          "detail": "퀴즈·온라인/현장 이벤트는 해당 회차 공고와 예산·정원 적용",
+          "applies_to": "A01~A10",
+          "relation": "항목별 C02~C04와 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C02",
+          "group": "음식물 감량",
+          "group_logic": "모두 충족",
+          "requirement": "RFID 종량기 사용 세대, 회원가입, 주소·RFID 정보 등록, 회차 모집·확인",
+          "detail": "전년 동기간 대비 감량 성과 기준; 회차별 선착순·기간 적용",
+          "applies_to": "SEOUL-EM-GREEN-2026-A01~A04",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01",
+            "SEOUL-EM-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C03",
+          "group": "환경교육",
+          "group_logic": "모두 충족",
+          "requirement": "환경교육 포인트는 만 14세 이상",
+          "detail": "광역센터는 서울시민, 기초센터는 해당 지역주민에게 포인트; 동일 프로그램 중복은 1회만 인정",
+          "applies_to": "SEOUL-EM-GREEN-2026-A10",
+          "relation": "C01과 AND; 연 5,000P 및 녹색실천 50,000P 한도 내",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C04",
+          "group": "운전·퀴즈·이벤트",
+          "group_logic": "행동별 분기",
+          "requirement": "운전은 연계 시스템 점수, 퀴즈·행사는 각 회차 참여 조건",
+          "detail": "운전은 현대·기아 커넥티드카 안전운전 점수 85점 이상 안내; 퀴즈 1회·5회 추가 보상 등은 2026 소개 기준",
+          "applies_to": "SEOUL-EM-GREEN-2026-A05~A09",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C05",
+          "group": "음식물 감량 행동별 보상",
+          "group_logic": "행동별 분기",
+          "requirement": "RFID 세대 참여 확정",
+          "detail": "특별 1,000마일리지",
+          "applies_to": "SEOUL-EM-GREEN-2026-A01",
+          "relation": "C01·C02와 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01",
+            "SEOUL-EM-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C06",
+          "group": "음식물 감량 행동별 보상",
+          "group_logic": "행동별 분기",
+          "requirement": "전년 동기간 대비 10% 이상~20% 미만 감량",
+          "detail": "2,000마일리지",
+          "applies_to": "SEOUL-EM-GREEN-2026-A02",
+          "relation": "C01·C02와 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C07",
+          "group": "음식물 감량 행동별 보상",
+          "group_logic": "행동별 분기",
+          "requirement": "전년 동기간 대비 20% 이상~30% 미만 감량",
+          "detail": "3,000마일리지",
+          "applies_to": "SEOUL-EM-GREEN-2026-A03",
+          "relation": "C01·C02와 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C08",
+          "group": "음식물 감량 행동별 보상",
+          "group_logic": "행동별 분기",
+          "requirement": "전년 동기간 대비 30% 이상 감량",
+          "detail": "5,000마일리지",
+          "applies_to": "SEOUL-EM-GREEN-2026-A04",
+          "relation": "C01·C02와 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S02"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C09",
+          "group": "안전운전 행동별 보상",
+          "group_logic": "행동별 분기",
+          "requirement": "현대·기아 커넥티드카 연계, 평가 직전 3개월 500km 이상, 점수 85~95점 미만",
+          "detail": "3,000마일리지",
+          "applies_to": "SEOUL-EM-GREEN-2026-A05",
+          "relation": "C01·C04와 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C10",
+          "group": "안전운전 행동별 보상",
+          "group_logic": "행동별 분기",
+          "requirement": "현대·기아 커넥티드카 연계, 평가 직전 3개월 500km 이상, 점수 95점 이상",
+          "detail": "5,000마일리지",
+          "applies_to": "SEOUL-EM-GREEN-2026-A06",
+          "relation": "C01·C04와 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C11",
+          "group": "퀴즈",
+          "group_logic": "행동별 분기",
+          "requirement": "누리집 환경 관련 퀴즈 참여",
+          "detail": "100마일리지/회, 5회 성공 시 추가 500",
+          "applies_to": "SEOUL-EM-GREEN-2026-A07",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C12",
+          "group": "온라인 인식 이벤트",
+          "group_logic": "행동별 분기",
+          "requirement": "서울시 지정 온라인 이벤트의 조건 충족",
+          "detail": "100~500마일리지/회",
+          "applies_to": "SEOUL-EM-GREEN-2026-A08",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C13",
+          "group": "온라인 행동 이벤트",
+          "group_logic": "행동별 분기",
+          "requirement": "서울시 지정 행동실천형 이벤트 참여·인증",
+          "detail": "1,000마일리지/회",
+          "applies_to": "SEOUL-EM-GREEN-2026-A09",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C14",
+          "group": "현장 환경행사·교육",
+          "group_logic": "행동별 분기",
+          "requirement": "서울시 주관 또는 지정 현장 행사·교육 참여",
+          "detail": "1,000마일리지/회",
+          "applies_to": "SEOUL-EM-GREEN-2026-A10",
+          "relation": "C01과 AND",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S01",
+            "SEOUL-EM-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "SEOUL-EM-GREEN-2026-C15",
+          "group": "거주 지역",
+          "group_logic": "모두 충족",
+          "requirement": "서울시민 및 교육기관별 거주지역 기준",
+          "detail": "광역센터: 서울시민; 기초센터: 해당 지역주민. 참여 가능성과 포인트 지급자격을 구분.",
+          "applies_to": "SEOUL-EM-GREEN-2026-A10",
+          "relation": "C01과 AND; 연 5,000P 및 녹색실천 50,000P 한도 내",
+          "source_ids": [
+            "SEOUL-EM-GREEN-2026-S03"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "SEOUL-EM-GREEN-2026-S01",
+        "SEOUL-EM-GREEN-2026-S02",
+        "SEOUL-EM-GREEN-2026-S03"
+      ]
+    }
+  ],
+  "common_groups": [
+    {
+      "id": "COMMON-01",
+      "category": "소득·수급",
+      "name": "기초생활수급·차상위 자격",
+      "meaning": "법정 수급/차상위 자격을 갖는지",
+      "shared_part": "급여 유형과 차상위 자격의 명칭",
+      "retain_per_program": "인정 급여 종류, 한전 복지할인 연계, 자격 기준일, 대상자/세대, 필수 자격인지 우대인지",
+      "condition_ids": [
+        "G022-C06",
+        "G027-C03",
+        "G031-C01",
+        "G031-C13",
+        "G031-C14",
+        "G048-C01",
+        "G070-C03"
+      ]
+    },
+    {
+      "id": "COMMON-02",
+      "category": "소득·수급",
+      "name": "소득 판정 기준",
+      "meaning": "제도에서 적용하는 소득·저소득 판정 기준",
+      "shared_part": "어떤 기준에 의해 대상인지 표현하는 틀",
+      "retain_per_program": "소득인정액/급여 지급기준/사각지대 선정은 다름. 중위소득 비율·연도·가구 규모·재산 반영 및 미확인은 제도별 유지. 단일 소득 값으로 합치지 않음.",
+      "condition_ids": [
+        "G031-C14",
+        "G075-C05",
+        "G080-C03"
+      ]
+    },
+    {
+      "id": "COMMON-03",
+      "category": "개인·세대원 특성",
+      "name": "연령·생년 기준",
+      "meaning": "본인 또는 해당 세대원의 나이가 기준에 맞는지",
+      "shared_part": "생년 또는 연령, 판단 대상",
+      "retain_per_program": "본인/세대원, 만 나이/출생일, 기준일, 취학 전 요건을 각각 유지. 고령 조건과 이용 최저연령의 목적도 구분.",
+      "condition_ids": [
+        "G003-C01",
+        "G008-C01",
+        "G027-C07",
+        "G031-C02",
+        "G031-C05",
+        "G031-C15",
+        "G039-C01",
+        "G080-C02",
+        "SEOUL-EM-GREEN-2026-C03"
+      ]
+    },
+    {
+      "id": "COMMON-04",
+      "category": "세대 구성",
+      "name": "다자녀 기준",
+      "meaning": "해당 자녀 수와 나이·가족관계 기준",
+      "shared_part": "자녀 수, 자녀별 나이, 부모·자녀 관계",
+      "retain_per_program": "인정 자녀 수·연령, 등본 동거, 위탁아동 인정, 판정일과 수급/우대 여부. 다자녀 boolean 하나로 공유하지 않음.",
+      "condition_ids": [
+        "G022-C01",
+        "G027-C06",
+        "G031-C11",
+        "G070-C06"
+      ]
+    },
+    {
+      "id": "COMMON-05",
+      "category": "개인·세대원 특성",
+      "name": "임신·출산 관련 상태",
+      "meaning": "임신 중이거나 출산 후 일정 기간인지",
+      "shared_part": "임신/출산 사실과 시점의 구분",
+      "retain_per_program": "임산부와 출산가구는 서로 다른 조건. 분만 후 개월 수·대상자·자녀 출생 기준 및 복지할인 인정은 제도별 유지.",
+      "condition_ids": [
+        "G022-C09",
+        "G031-C07"
+      ]
+    },
+    {
+      "id": "COMMON-06",
+      "category": "개인·세대원 특성",
+      "name": "장애 등록·정도",
+      "meaning": "법정 장애 등록과 필요한 장애 정도",
+      "shared_part": "등록 여부·정도의 의미",
+      "retain_per_program": "등록 장애인 전체와 중증 요건 구분, 본인/세대원, 복지할인 유형과 기준일",
+      "condition_ids": [
+        "G022-C04",
+        "G031-C06",
+        "G031-C16",
+        "G070-C04"
+      ]
+    },
+    {
+      "id": "COMMON-07",
+      "category": "개인·세대원 특성",
+      "name": "국가유공 자격",
+      "meaning": "해당 보훈·국가유공 대상인지",
+      "shared_part": "유공 대상 유형",
+      "retain_per_program": "본인/유족/가족 범위, 상이등급·법정 유형, 할인/우대 적용 범위",
+      "condition_ids": [
+        "G022-C05",
+        "G027-C09",
+        "G070-C05"
+      ]
+    },
+    {
+      "id": "COMMON-08",
+      "category": "세대 구성",
+      "name": "한부모가족 관련 자격",
+      "meaning": "한부모 관계와 해당 제도의 지원대상인지",
+      "shared_part": "가족관계와 한부모 지원자격을 구분",
+      "retain_per_program": "법정 한부모 지원대상과 미혼모·미혼부는 동일하지 않음. 소득·거주기간·대상자 조건은 따로 유지.",
+      "condition_ids": [
+        "G031-C09",
+        "G031-C17",
+        "G075-C04"
+      ]
+    },
+    {
+      "id": "COMMON-09",
+      "category": "지역·거주",
+      "name": "주민등록·거주 지역",
+      "meaning": "신청자 또는 세대가 요구 지역에 속하는지",
+      "shared_part": "주소의 시도/시군구 등 지역 범위",
+      "retain_per_program": "주민등록/실거주 구분, 신청·공고 기준일, 거주 유지, 기관별 포인트 지역. 차량 등록지역·설치 장소는 별도 사실.",
+      "condition_ids": [
+        "G021-C03",
+        "G003-C04",
+        "G048-C03",
+        "G075-C02",
+        "SDG-FOOD-REDUCER-H2-2026-C01",
+        "SDG-ZEV-2026-C01",
+        "SEOUL-EM-GREEN-2026-C15"
+      ]
+    },
+    {
+      "id": "COMMON-10",
+      "category": "에너지 계약",
+      "name": "에너지 사용계약·고객 정보",
+      "meaning": "어느 공급계약/계량계정으로 사용하는지",
+      "shared_part": "에너지원·공급자·고객번호를 식별하는 틀",
+      "retain_per_program": "주택용 계약, 특정 공급사 건물, 고객번호 등록 개수·필수 에너지원은 서로 다른 기준. 사용계약 사실과 서비스 등록완료를 합치지 않음.",
+      "condition_ids": [
+        "G021-C01",
+        "G070-C02",
+        "SEOUL-EM-BLDG-2026-C02"
+      ]
+    },
+    {
+      "id": "COMMON-11",
+      "category": "가입·참여",
+      "name": "제도별 회원가입",
+      "meaning": "해당 제도/서비스의 회원인지",
+      "shared_part": "가입 대상 서비스와 가입 상태",
+      "retain_per_program": "탄소중립포인트·기후행동·에코마일리지 가입은 별도. 같은 에코마일리지 회원정보 재사용 가능성은 검토하되 항목별 참여신청과 분리.",
+      "condition_ids": [
+        "G002-C01",
+        "KR-CNP-GREEN-2026-C01",
+        "SEOUL-EM-BLDG-2026-C01",
+        "SEOUL-EM-GREEN-2026-C01"
+      ]
+    },
+    {
+      "id": "COMMON-12",
+      "category": "구매·제품",
+      "name": "대상 제품·인증 기준",
+      "meaning": "구매·설치할 제품이 해당 목록과 기준에 맞는지",
+      "shared_part": "제품 식별정보로 제도별 대상 기준과 대조; 인증은 해당 제도가 요구하는 경우만 확인",
+      "retain_per_program": "인증 종류, 제품 목록 적용월, 효율등급, 지원모델·판매경로. 특정 인증만으로 다른 제도 적격을 추정하지 않음.",
+      "condition_ids": [
+        "G022-C02",
+        "G004-C01",
+        "KR-CNP-GREEN-2026-C08",
+        "KR-CNP-GREEN-2026-C16",
+        "SDG-FOOD-REDUCER-H2-2026-C02",
+        "SDG-ZEV-2026-C02"
+      ]
+    },
+    {
+      "id": "COMMON-13",
+      "category": "구매·참여 경로",
+      "name": "참여기업·판매처",
+      "meaning": "해당 제도/행사에 참여하는 업체·지점·채널인지",
+      "shared_part": "기업·지점·채널과 제도의 참여 관계",
+      "retain_per_program": "제도/실천항목/행사회차별 업체목록과 설정. 기업 하나가 모든 실천에 참여한다고 보지 않음.",
+      "condition_ids": [
+        "G004-C03",
+        "G034-C02",
+        "KR-CNP-GREEN-2026-C19"
+      ]
+    },
+    {
+      "id": "COMMON-14",
+      "category": "구매·기간",
+      "name": "구매 인정 시점",
+      "meaning": "구매가 사업의 인정 기간에 포함되는지",
+      "shared_part": "구매일과 인정 기간의 비교",
+      "retain_per_program": "주문/결제/설치/등록 중 어떤 날짜인지, 시작·종료일, 소급 인정, 증빙 및 적용연도",
+      "condition_ids": [
+        "G022-C10",
+        "SDG-ZEV-2026-C01"
+      ]
+    },
+    {
+      "id": "COMMON-15",
+      "category": "지원 제한",
+      "name": "중복 지원 제한",
+      "meaning": "같은 대상·비용·기간에 다른 지원을 받을 수 있는지",
+      "shared_part": "지원사업별 수혜 이력과 겹침 범위",
+      "retain_per_program": "동절기만 제한/공사비 일부만 제한/사업 전체 제외를 구분. 대상 사업 목록, 기간, 세대·구매·비용 범위를 유지.",
+      "condition_ids": [
+        "G027-C01",
+        "G031-C04",
+        "G031-C19",
+        "G075-C06",
+        "G080-C05",
+        "SDG-FOOD-REDUCER-H2-2026-C02"
+      ]
+    },
+    {
+      "id": "COMMON-16",
+      "category": "운영·선정",
+      "name": "예산·물량 상태",
+      "meaning": "사업의 예산/선정 물량이 남아 있는지",
+      "shared_part": "공고 또는 운영기관의 현재 상태",
+      "retain_per_program": "제도·회차·차종별 물량, 공고와 접수화면의 충돌, 확인 시각. 사용자 개인정보가 아님.",
+      "condition_ids": [
+        "G047-C02",
+        "SDG-FOOD-REDUCER-H2-2026-C03",
+        "SDG-ZEV-2026-C03"
+      ]
+    },
+    {
+      "id": "COMMON-17",
+      "category": "실적·평가",
+      "name": "기간 대비 절감 실적",
+      "meaning": "이전 기준량과 평가기간 실적을 비교",
+      "shared_part": "평가 대상·기준기간·실적기간·단위·절감률이라는 구조",
+      "retain_per_program": "전력/에너지/음식물은 다른 양. 평균 산정기간·합산·연속이력·구간을 제도별 유지; 성능 시뮬레이션 개선률과도 구분.",
+      "condition_ids": [
+        "G021-C02",
+        "SEOUL-EM-BLDG-2026-C03",
+        "SEOUL-EM-BLDG-2026-C04",
+        "SEOUL-EM-BLDG-2026-C05",
+        "SEOUL-EM-BLDG-2026-C06",
+        "SEOUL-EM-BLDG-2026-C07",
+        "SEOUL-EM-BLDG-2026-C08",
+        "SEOUL-EM-GREEN-2026-C06",
+        "SEOUL-EM-GREEN-2026-C07",
+        "SEOUL-EM-GREEN-2026-C08"
+      ]
+    }
+  ]
+}

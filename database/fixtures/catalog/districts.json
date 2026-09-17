@@ -1,0 +1,3156 @@
+{
+  "programs": [
+    {
+      "program_id": "S08",
+      "title": "동별 재활용 분리배출 거점 교환",
+      "district": "강남구",
+      "target": "동별 재활용 분리배출 거점 이용자",
+      "eligibility_logic": "거주요건·수량·교환 기준 미확인",
+      "benefit": "종량제봉투 교환 추진 언급",
+      "application_period": "신청 없음",
+      "usage_period": "2026 추진 근거; 개별 거점 일정 미확인",
+      "documents": "미확인",
+      "application_method": "거점별 미확인",
+      "venue": "각 동 재활용 분리배출 거점",
+      "status": "2026 추진 보도자료 확인",
+      "caveat": "투명페트·종이팩·비닐 품목 확대와 봉투교환 언급 외 구체 교환요건은 미확인.",
+      "sources": [
+        {
+          "id": "S08-S01",
+          "url": "https://www.gangnam.go.kr/board/B_000031/1075063/view.do?mid=ID01_0313",
+          "title": "범구민 재활용 활성화 추진단 발대식",
+          "status": "공식 본문 확인",
+          "as_of": "2026-03-31",
+          "checked_at": "2026-09-17",
+          "supports": "동별 거점·품목 확대·봉투 교환 추진"
+        }
+      ],
+      "overview_source_ids": [
+        "S08-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S08-C01",
+          "group": "운영 안내",
+          "group_logic": "안내",
+          "requirement": "동별 거점에서 재활용 품목 확대 및 종량제봉투 교환 추진",
+          "detail": "품목별 최소수량·상태·운영시간·거주요건은 미확인",
+          "applies_to": "제도 전체",
+          "relation": "개인 적격 판정 불가",
+          "source_ids": [
+            "S08-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[강남구] 동별 재활용 분리배출 거점 교환"
+    },
+    {
+      "program_id": "S09",
+      "title": "웰쓰 비일비재 챌린지",
+      "district": "강남구",
+      "target": "폐비닐 분리배출 SNS 캠페인 참여자",
+      "eligibility_logic": "현재 회차의 대상·인증경로 미확인",
+      "benefit": "미확인",
+      "application_period": "미확인",
+      "usage_period": "2026 상반기 운영 실적만 확인",
+      "documents": "미확인",
+      "application_method": "SNS 캠페인으로 안내되나 현 회차 방식 미확인",
+      "venue": "온라인; 구체 채널 미확인",
+      "status": "과거 운영/홍보 근거; 현재 모집으로 추천 불가",
+      "caveat": "현재 포털은 캠페인을 소개하지만 기간·경품·참여 방식은 확인하지 못함.",
+      "sources": [
+        {
+          "id": "S09-S01",
+          "url": "https://clean.gangnam.go.kr/use/index.do",
+          "title": "강남구 자원순환 종합포털",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-17",
+          "checked_at": "2026-09-17",
+          "supports": "비일비재 SNS 캠페인 안내"
+        },
+        {
+          "id": "S09-S02",
+          "url": "https://gangnam.go.kr/board/B_000031/1075315/view.do?mid=ID01_0313",
+          "title": "강남구 웰쓰 6개월 성과",
+          "status": "기존 자료만",
+          "as_of": "2026-08-27",
+          "checked_at": "2026-09-17",
+          "supports": "비일비재 챌린지와 주민 참여; 원래 출처 보존, 이번 본문 재검증 아님"
+        }
+      ],
+      "overview_source_ids": [
+        "S09-S01",
+        "S09-S02"
+      ],
+      "conditions": [
+        {
+          "id": "S09-C01",
+          "group": "운영 안내",
+          "group_logic": "안내",
+          "requirement": "자원순환 실현 SNS 캠페인으로 안내",
+          "detail": "폐비닐 인증의 현재 기간·경로·보상은 미확인",
+          "applies_to": "제도 전체",
+          "relation": "개인자격·혜택 생성 금지",
+          "source_ids": [
+            "S09-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[강남구] 웰쓰 비일비재 챌린지"
+    },
+    {
+      "program_id": "S13",
+      "title": "능골근린공원 에너지마루 환경체험",
+      "district": "강동구",
+      "target": "5세 이상 어린이집·유치원·초·중학생 및 지역 주민",
+      "eligibility_logic": "방문/전화·현장접수; 프로그램별 정원·대상은 운영 상황에 따름",
+      "benefit": "기후변화·신재생에너지 교육 및 현장체험",
+      "application_period": "상시 시설 안내",
+      "usage_period": "1~12월; 야외 상시개방, 교육관·쉼터 평일 10~17시(공휴일 제외)",
+      "documents": "미확인",
+      "application_method": "전화 또는 현장 접수",
+      "venue": "능골근린공원 에너지마루, 강동구 상일동 536 외 1필지",
+      "status": "상시 시설 안내; 개별 교육회차 예약은 미확인",
+      "caveat": "강동구 거주자만의 자격으로 표현하지 않으며 방문·교육관 이용시간을 구분.",
+      "sources": [
+        {
+          "id": "S13-S01",
+          "url": "https://www.gangdong.go.kr/web/newportal/contents/gdp_005_004_009_006",
+          "title": "에너지마루",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "장소·기간·시간·5세 이상 대상·접수"
+        }
+      ],
+      "overview_source_ids": [
+        "S13-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S13-C01",
+          "group": "이용 대상",
+          "group_logic": "안내",
+          "requirement": "5세 이상 어린이집·유치원·초·중학생 및 지역 주민",
+          "detail": "프로그램별 실제 대상·정원은 변동 가능",
+          "applies_to": "교육·체험",
+          "relation": "거주자 한정 자격으로 해석하지 않음",
+          "source_ids": [
+            "S13-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S13-C02",
+          "group": "시설 이용",
+          "group_logic": "회차별",
+          "requirement": "야외체험시설 상시개방 또는 교육관·쉼터 평일 10~17시",
+          "detail": "공휴일 제외",
+          "applies_to": "방문",
+          "relation": "전화·현장접수 C03과 프로그램별 관계",
+          "source_ids": [
+            "S13-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S13-C03",
+          "group": "접수",
+          "group_logic": "안내",
+          "requirement": "전화 또는 현장 접수",
+          "detail": "개별 회차 예약 가능 여부·정원은 미확인",
+          "applies_to": "교육 참여",
+          "relation": "시설 방문 자체와 구분",
+          "source_ids": [
+            "S13-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[강동구] 능골근린공원 에너지마루 환경체험"
+    },
+    {
+      "program_id": "N16",
+      "title": "폐비닐-종량제봉투 교환 시범사업",
+      "district": "강북구",
+      "target": "미확인",
+      "eligibility_logic": "개인 참여자격·거주 요건은 공식 본문에 미기재. 지정 요일·창구에 세척·건조한 연질비닐을 투명봉투로 반입하고 현장계량 기준을 충족한다.",
+      "benefit": "500g 이상 10L 종량제봉투 1장, 1kg 이상 2장",
+      "application_period": "2026-03-19부터 매주 목요일 주 1회",
+      "usage_period": "운영기간 내 거점별 수거·교환",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "세척·건조한 폐비닐을 투명 봉투에 담아 주민센터로 직접 제출",
+      "venue": "삼각산동 주민센터 1번 창구",
+      "status": "2026 시범사업 공식 본문 확인; 종료일 미확인",
+      "caveat": "시범사업 종료일·거주 요건·잔여 봉투 미확인",
+      "sources": [
+        {
+          "id": "N16-S01",
+          "url": "https://child.gangbuk.go.kr/dong/bbs/B0000199/view.do?dongCd=05&menuNo=600016&nttId=180181&pageIndex=",
+          "title": "삼각산동 폐비닐-종량제봉투 교환 시범사업",
+          "status": "공식 본문 확인",
+          "as_of": "2026-03-16",
+          "checked_at": "2026-09-17",
+          "supports": "품목·준비법·장소·요일·교환 기준"
+        }
+      ],
+      "overview_source_ids": [
+        "N16-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N16-C01",
+          "group": "참여 대상",
+          "group_logic": "안내",
+          "requirement": "개인 참여자격 미기재",
+          "detail": "개인 반입·신청 가능 여부 또는 거주 요건은 미확인",
+          "applies_to": "세척·건조한 폐비닐을 투명 봉투에 담아 주민센터로 직접 제출",
+          "relation": "운영기관 사업·공개안내 여부와 구분",
+          "source_ids": [
+            "N16-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N16-C02",
+          "group": "반입 품목",
+          "group_logic": "모두 충족",
+          "requirement": "비닐봉투·과자/라면 포장비닐 등 연질 비닐",
+          "detail": "연질비닐만 해당; 다른 재질 포함 가능 여부는 미확인",
+          "applies_to": "세척·건조한 폐비닐을 투명 봉투에 담아 주민센터로 직접 제출",
+          "relation": "C03 포장·상태, C04 장소·요일, C05 현장계량과 AND",
+          "source_ids": [
+            "N16-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N16-C03",
+          "group": "반입 상태·포장",
+          "group_logic": "모두 충족",
+          "requirement": "세척·건조한 연질비닐을 투명봉투에 담아 반입",
+          "detail": "이물질 제거를 포함한 준비 상태",
+          "applies_to": "세척·건조한 폐비닐을 투명 봉투에 담아 주민센터로 직접 제출",
+          "relation": "C02 품목, C04 장소·요일, C05 현장계량과 AND",
+          "source_ids": [
+            "N16-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N16-C04",
+          "group": "장소·운영일",
+          "group_logic": "모두 충족",
+          "requirement": "2026-03-19부터 매주 목요일 삼각산동주민센터 1번 창구 반입",
+          "detail": "종료일은 공지에 미기재",
+          "applies_to": "반입 건",
+          "relation": "C02·C03과 AND; C05 계량 뒤 봉투 지급",
+          "source_ids": [
+            "N16-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N16-C05",
+          "group": "현장계량·지급 단위",
+          "group_logic": "무게별 지급 구간 · 합산 지급 아님",
+          "requirement": "현장계량 500g 이상이면 10L 종량제봉투 1장, 1kg 이상이면 10L 2장",
+          "detail": "500g 미만 및 1kg 초과 추가 지급 기준은 미기재",
+          "applies_to": "반입 건",
+          "relation": "원문상 500g 이상 1장 / 1kg 이상 2장 지급 안내. 1kg에 두 보상을 중복 합산하지 않음. 자동 판정식은 미확정.",
+          "source_ids": [
+            "N16-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[강북구] 폐비닐-종량제봉투 교환 시범사업"
+    },
+    {
+      "program_id": "W07",
+      "title": "페트병·캔 및 종이팩 무인회수기",
+      "district": "강서구",
+      "target": "품목별 회수기 이용자; 거주 요건 미기재",
+      "eligibility_logic": "PET·캔 기기와 종이팩 기기의 준비·투입 절차를 구분; PET·캔은 합산 일일 한도",
+      "benefit": "순환자원 회수·적립 안내; 현금/포인트 단가는 해당 본문에서 미확인",
+      "application_period": "별도 신청 기간 미기재",
+      "usage_period": "설치 거점·기기별 운영 확인 필요",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "PET·캔 기기에 투입, 종이팩은 바코드 인식 후 투입; 앱으로 기기 상태 확인",
+      "venue": "강서평생학습관 등 PET·캔 거점 및 동주민센터 종이팩 기기; 공식 설치표 참조",
+      "status": "공식 이용 안내 확인; 실시간 가동 미확인",
+      "caveat": "슈퍼빈/오늘의 분리수거 앱의 상태확인 기능을 모든 기기의 가입 필수조건으로 확정하지 않음",
+      "sources": [
+        {
+          "id": "W07-S01",
+          "url": "https://www.gangseo.seoul.kr/env/env010102",
+          "title": "재활용품 무인회수기 운영 안내",
+          "status": "공식 본문 확인",
+          "as_of": "상설 안내 · 게시일 미표시",
+          "checked_at": "2026-09-17",
+          "supports": "장소, 사용법, 한도, 앱, 담당"
+        }
+      ],
+      "overview_source_ids": [
+        "W07-S01"
+      ],
+      "conditions": [
+        {
+          "id": "W07-C01",
+          "group": "대상 품목",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "페트병·캔 또는 종이팩",
+          "detail": "품목별 다른 기기에 투입",
+          "applies_to": "반입 물품",
+          "relation": "기기별 분기",
+          "source_ids": [
+            "W07-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W07-C02",
+          "group": "반입 준비",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "깨끗한 페트병·캔, 페트병 뚜껑·라벨 제거",
+          "detail": "PET·캔 기기 기준",
+          "applies_to": "PET·캔 투입",
+          "relation": "해당 품목일 때 적용",
+          "source_ids": [
+            "W07-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W07-C03",
+          "group": "이용 한도",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "1인 1일 PET·캔 합산 30개",
+          "detail": "종이팩 수량 한도로 확대하지 않음",
+          "applies_to": "PET·캔 회수",
+          "relation": "해당 기기에만 적용",
+          "source_ids": [
+            "W07-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W07-C04",
+          "group": "반입 준비",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "종이팩 세척·펼침 및 바코드 인식",
+          "detail": "일반 종이팩·멸균팩 기기 안내",
+          "applies_to": "종이팩 투입",
+          "relation": "PET·캔 규칙과 분리",
+          "source_ids": [
+            "W07-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W07-C05",
+          "group": "운영 확인",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "품목별 앱에서 기기 상태 확인 가능",
+          "detail": "슈퍼빈 또는 오늘의 분리수거",
+          "applies_to": "방문할 기기",
+          "relation": "이용 안내; 개인 자격 요건 아님",
+          "source_ids": [
+            "W07-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[강서구] 페트병·캔 및 종이팩 무인회수기"
+    },
+    {
+      "program_id": "S05",
+      "title": "하반기 투명페트병·종이팩 유가보상제",
+      "district": "관악구",
+      "target": "21개 동 주민센터에 대상품목을 가져오는 주민",
+      "eligibility_logic": "거주자격 명시 없음; 품목별 일정·수량·교환기준 충족. 세척 등 상태 기준은 해당 공고에 미기재.",
+      "benefit": "투명페트: 일반10L 또는 음식물2L 봉투 1장; 종이팩: 일반10L 1장",
+      "application_period": "신청 없음",
+      "usage_period": "페트 2026-09-03~11-12 매주 목 14~16시; 종이팩 2026-09-03~11-05 매월 첫째 목 14~16시",
+      "documents": "미확인",
+      "application_method": "각 동 주민센터 반입 교환",
+      "venue": "각 동 주민센터 21개소",
+      "status": "2026 하반기 운영; 기간 종료 여부는 기준일 이후 재확인 필요",
+      "caveat": "공식 본문에 거주자 제한은 적혀 있지 않아 동 소재지가 주민자격 근거는 아니다. 원문의 연도 오기 20026은 문서 제목·다른 기간과 맞춰 2026으로 표기했다.",
+      "sources": [
+        {
+          "id": "S05-S01",
+          "url": "https://www.gwanak.go.kr/site/gwanak/ex/bbs/View.do?bcIdx=204552&cbIdx=239",
+          "title": "2026년 하반기 투명페트병·종이팩 유가보상제 운영 일정 안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-02",
+          "checked_at": "2026-09-17",
+          "supports": "일정·21개소·품목별 수량·보상·일일한도"
+        },
+        {
+          "id": "S05-S02",
+          "url": "https://www.gwanak.go.kr/site/gwanak/area/areaMain.do?cateCont=Area04",
+          "title": "경제/환경",
+          "status": "기존 자료만",
+          "as_of": "2026-09-02",
+          "checked_at": "2026-09-17",
+          "supports": "2026 하반기 유가보상제 일정 안내 목록; 원래 출처 보존, 이번 본문 재검증 아님"
+        }
+      ],
+      "overview_source_ids": [
+        "S05-S01",
+        "S05-S02"
+      ],
+      "conditions": [
+        {
+          "id": "S05-C01",
+          "group": "투명페트병",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "투명페트병 25개 또는 2L 10개",
+          "detail": "25개 또는 2L 10개당 일반10L 또는 음식물2L 봉투 1장. 매주 목14~16시; 1일 1인 최대5장.",
+          "applies_to": "투명페트 교환",
+          "relation": "종이팩 C02와 별도 품목·일정",
+          "source_ids": [
+            "S05-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S05-C02",
+          "group": "종이팩",
+          "group_logic": "모두 충족",
+          "requirement": "종이팩 1kg",
+          "detail": "1kg당 일반10L 봉투1장. 매월 첫째 목14~16시.",
+          "applies_to": "종이팩 교환",
+          "relation": "투명페트 C01과 별도 품목·일정",
+          "source_ids": [
+            "S05-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[관악구] 하반기 투명페트병·종이팩 유가보상제"
+    },
+    {
+      "program_id": "S06",
+      "title": "제18기 시민환경대학",
+      "district": "관악구",
+      "target": "관악구민 우선, 타지역 주민도 이후 신청 가능",
+      "eligibility_logic": "모집기간 중 선착순; 구민 우선 후 타지역 접수",
+      "benefit": "12회 환경교육",
+      "application_period": "2026-07-14~선착순 마감(8/28 전); 현재 접수마감",
+      "usage_period": "2026-09-02~11-25 매주 수 19~21시(9/23 휴강)",
+      "documents": "수강신청서·개인정보 수집이용제공동의서·기타 동의서(이메일/FAX 신청 시)",
+      "application_method": "홈페이지, 이메일/FAX, 신분증 지참 방문 중 택1",
+      "venue": "서울대 환경대학원 82동 글로컬홀 306호",
+      "status": "모집 마감·교육 진행 회차",
+      "caveat": "수강료 입금 시 접수 완료, 예비인원은 취소자 발생 시 우선 접수.",
+      "sources": [
+        {
+          "id": "S06-S01",
+          "url": "https://www.gwanak.go.kr/site/gwanak/ex/bbs/View.do?bcIdx=201947&cbIdx=239",
+          "title": "제18기 시민환경대학 수강생 모집",
+          "status": "공식 본문 확인",
+          "as_of": "2026-07-07",
+          "checked_at": "2026-09-17",
+          "supports": "대상·우선순위·기간·수강료·방법·서류·장소"
+        }
+      ],
+      "overview_source_ids": [
+        "S06-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S06-C01",
+          "group": "모집 대상·순서",
+          "group_logic": "회차별",
+          "requirement": "관악구민 우선, 7/17부터 타지역 주민 신청 가능",
+          "detail": "70명, 예비 10명; 선착순",
+          "applies_to": "수강 신청",
+          "relation": "정원·수강료 C02와 AND",
+          "source_ids": [
+            "S06-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S06-C02",
+          "group": "접수 완료",
+          "group_logic": "모두 충족",
+          "requirement": "수강료 6만원 입금",
+          "detail": "미입금 취소분은 예비인원 우선 접수",
+          "applies_to": "신청자",
+          "relation": "신청방법 C03과 AND",
+          "source_ids": [
+            "S06-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S06-C03",
+          "group": "신청 경로",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "홈페이지·이메일/FAX·신분증 지참 방문 신청",
+          "detail": "이메일/FAX는 신청서·동의서 제출 및 유선확인",
+          "applies_to": "신청자",
+          "relation": "서류는 경로별로 다름",
+          "source_ids": [
+            "S06-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[관악구] 제18기 시민환경대학"
+    },
+    {
+      "program_id": "S11",
+      "title": "녹색생활 실천 인증 이벤트 3차",
+      "district": "관악구",
+      "target": "관악구민 또는 관악구가 생활권인 누구나",
+      "eligibility_logic": "QR로 두 실천경로 중 하나 이상 참여; 예산 내 선착순 및 적격 심사",
+      "benefit": "네이버페이 5천원",
+      "application_period": "2026-09-07~09-27",
+      "usage_period": "한시 이벤트",
+      "documents": "친환경 교통 사진 또는 에코마일리지 신규가입·에너지정보 등록",
+      "application_method": "QR 접속",
+      "venue": "온라인",
+      "status": "한시 이벤트; 메인 안내상 친환경 교통 인증은 조기마감, 에코마일리지 신규가입 경로의 현 상태는 접수화면 확인 필요",
+      "caveat": "거주 또는 생활권 중 하나. 에코마일리지 경로는 신규가입 AND 에너지정보 등록. 교통 인증 경로의 조기마감은 별도 상태 안내 참조.",
+      "sources": [
+        {
+          "id": "S11-S01",
+          "url": "https://www.gwanak.go.kr/site/gwanak/ex/bbs/View.do?bcIdx=204603&cbIdx=239",
+          "title": "탄소중립 녹색생활 실천 이벤트 3차 안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-04",
+          "checked_at": "2026-09-17",
+          "supports": "대상·기간·2개 참여경로·상품·심사"
+        },
+        {
+          "id": "S11-S02",
+          "url": "https://www.gwanak.go.kr/site/gwanak/main.do",
+          "title": "관악구청 새소식 · 3차 이벤트 변경 안내",
+          "status": "공식 검색결과만 확인",
+          "as_of": "2026년 3차 · 마감 안내 변경일 미표시",
+          "checked_at": "2026-09-17",
+          "supports": "친환경 교통 인증 조기마감, 에코마일리지 신규가입 경로 신청 가능 안내; 상세 공고 캐시와 차이 있어 접수 직전 확인 필요"
+        }
+      ],
+      "overview_source_ids": [
+        "S11-S01",
+        "S11-S02"
+      ],
+      "conditions": [
+        {
+          "id": "S11-C01",
+          "group": "참여 대상·기간",
+          "group_logic": "모두 충족",
+          "requirement": "관악구민 또는 관악구 생활권자, 9/7~9/27",
+          "detail": "예산 내 선착순",
+          "applies_to": "이벤트 응모",
+          "relation": "실천 경로 C02 중 하나와 AND",
+          "source_ids": [
+            "S11-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S11-C02",
+          "group": "실천 경로",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "걷기·대중교통·자전거 사진 인증 또는 에코마일리지 신규가입",
+          "detail": "신규가입 경로는 에너지정보 등록 필수. 교통 인증은 조기마감 안내가 있어 현재 응모 가능 경로로 확정하지 않음.",
+          "applies_to": "응모 건",
+          "relation": "적격 심사 후 지급",
+          "source_ids": [
+            "S11-S01",
+            "S11-S02"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[관악구] 녹색생활 실천 인증 이벤트 3차"
+    },
+    {
+      "program_id": "N08",
+      "title": "재활용품 교환사업",
+      "district": "광진구",
+      "target": "미확인",
+      "eligibility_logic": "종이팩 1.5kg 또는 투명페트병 30개 또는 폐건전지 20개 / 각 동주민센터, 매주 목요일 09:00~16:00 / 일일 상한 있음; 상세 행의 관계 참조.",
+      "benefit": "종량제봉투 및 종이팩은 휴지 추가",
+      "application_period": "2026년 연중, 매주 목요일 09:00~16:00",
+      "usage_period": "운영기간 내 거점별 수거·교환",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "종이팩·투명페트병·폐건전지를 동주민센터에 제출",
+      "venue": "각 동 주민센터",
+      "status": "2026 공식 본문 확인",
+      "caveat": "공식 페이지는 직접 열었으나 이번 추출 범위에서 상한 수치·거주요건을 확보하지 못함",
+      "sources": [
+        {
+          "id": "N08-S01",
+          "url": "https://www.gwangjin.go.kr/portal/main/contents.do?menuNo=201571",
+          "title": "광진구 재활용품 교환사업",
+          "status": "공식 본문 확인",
+          "as_of": "2026-03-17",
+          "checked_at": "2026-09-17",
+          "supports": "품목·교환 보상·요일·동주민센터"
+        },
+        {
+          "id": "N08-S02",
+          "url": "https://www.gwangjin.go.kr/dong/bbs/B0000127/view.do?dongCd=08&menuNo=600809&nttId=6563971&pageIndex=",
+          "title": "구의3동 2026 교환사업 안내",
+          "status": "기존 자료만",
+          "as_of": "2026-03-17",
+          "checked_at": "2026-09-17",
+          "supports": "2026년 연중·구의3동 장소·상한·품목별 세부조건"
+        }
+      ],
+      "overview_source_ids": [
+        "N08-S01",
+        "N08-S02"
+      ],
+      "conditions": [
+        {
+          "id": "N08-C01",
+          "group": "대상 품목",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "종이팩 1.5kg 또는 투명페트병 30개 또는 폐건전지 20개",
+          "detail": "품목별 보상 세부·동별 일일상한은 공식 본문 추가 확인 필요",
+          "applies_to": "종이팩·투명페트병·폐건전지를 동주민센터에 제출",
+          "relation": "동주민센터 운영·상한과 함께 적용",
+          "source_ids": [
+            "N08-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N08-C02",
+          "group": "거점·시간",
+          "group_logic": "모두 충족",
+          "requirement": "각 동주민센터, 매주 목요일 09:00~16:00",
+          "detail": "입력 확보 2026 안내 기준; 동별 마감시간 차이는 미확인",
+          "applies_to": "종이팩·투명페트병·폐건전지를 동주민센터에 제출",
+          "relation": "품목 기준과 모두 충족",
+          "source_ids": [
+            "N08-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N08-C03",
+          "group": "일일 상한",
+          "group_logic": "제한",
+          "requirement": "일일 상한 있음",
+          "detail": "수치·동별 적용 범위는 현재 확보한 본문에서 미확인",
+          "applies_to": "종이팩·투명페트병·폐건전지를 동주민센터에 제출",
+          "relation": "앞 조건 충족해도 적용",
+          "source_ids": [
+            "N08-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[광진구] 재활용품 교환사업"
+    },
+    {
+      "program_id": "N09",
+      "title": "2026 기후환경학교",
+      "district": "광진구",
+      "target": "광진구 거주 초등학교 3~6학년 자녀를 둔 가족",
+      "eligibility_logic": "광진구 거주 초등학교 3~6학년 자녀를 둔 가족; 회차별 교육 내용 상이.",
+      "benefit": "무료 체험 교육",
+      "application_period": "2026년 4~7월 총 4회",
+      "usage_period": "회차별 운영; 현재 이용기간 미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "재활용·분리배출·비건 식생활 등 체험형 환경교육 참여",
+      "venue": "광진구청 지하 1층 종합상황실 등",
+      "status": "과거/진행 보도 확인; 신규 접수 미확인",
+      "caveat": "추가 기수 여부; 신청 방식",
+      "sources": [
+        {
+          "id": "N09-S01",
+          "url": "https://www.gwangjin.go.kr/portal/bbs/B0000002/view.do?menuNo=200191&nttId=6573919&pageIndex=1",
+          "title": "광진구 2026 기후환경학교 보도자료",
+          "status": "기존 자료만",
+          "as_of": "2026-04-27",
+          "checked_at": "2026-09-17",
+          "supports": "대상·기간·회차 주제·1회차 장소"
+        }
+      ],
+      "overview_source_ids": [
+        "N09-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N09-C01",
+          "group": "참여 대상",
+          "group_logic": "모두 충족",
+          "requirement": "광진구 거주 초등학교 3~6학년 자녀를 둔 가족",
+          "detail": "입력 후보에 기재된 대상; 지자체 주소만으로 주민자격을 추가 추정하지 않음",
+          "applies_to": "재활용·분리배출·비건 식생활 등 체험형 환경교육 참여",
+          "relation": "아래 품목·수량·회차 조건과 함께 적용",
+          "source_ids": [
+            "N09-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N09-C02",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "회차별 내용 상이",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "재활용·분리배출·비건 식생활 등 체험형 환경교육 참여",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N09-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "display_title": "[광진구] 2026 기후환경학교"
+    },
+    {
+      "program_id": "W08",
+      "title": "종이팩-종량제봉투 교환",
+      "district": "구로구",
+      "target": "종이팩 교환 이용자; 거주 제한 명시 확인 안 됨",
+      "eligibility_logic": "인정 종이팩 AND 세척·건조·종류별 분리 AND 1.5kg 기준 AND 주민센터 반입",
+      "benefit": "우유팩·멸균팩 1.5kg당 10L 종량제봉투 1매",
+      "application_period": "별도 접수 기간 미기재",
+      "usage_period": "2026년 6월 구정소식 안내; 동별 교환 요일·한도 미확인",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "준비한 종이팩을 동주민센터로 반입",
+      "venue": "동주민센터",
+      "status": "공식 구정소식 본문 확인",
+      "caveat": "일반팩·멸균팩 분리배출 기준은 명시; 각 종류별 독립 계량인지 혼합 무게 인정인지는 미확인",
+      "sources": [
+        {
+          "id": "W08-S01",
+          "url": "https://www.guro.go.kr/e-book/access/ecatalogt.jsp?Dir=334&callmode=normal&catimage=&eclang=ko&start=4&um=s",
+          "title": "구로 전자카탈로그 환경의 날 안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026-06 구로포커스 4~5면",
+          "checked_at": "2026-09-17",
+          "supports": "교환 단위·준비 방법·장소·담당"
+        }
+      ],
+      "overview_source_ids": [
+        "W08-S01"
+      ],
+      "conditions": [
+        {
+          "id": "W08-C01",
+          "group": "대상 품목",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "우유팩·멸균팩",
+          "detail": "다른 종이류 제외 여부 등 세부는 현장 안내 확인",
+          "applies_to": "교환 물품",
+          "relation": "두 유형은 분리 수거",
+          "source_ids": [
+            "W08-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W08-C02",
+          "group": "반입 준비",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "세척·건조 후 일반팩·멸균팩을 구분",
+          "detail": "두 종류를 섞어 배출하지 않음",
+          "applies_to": "반입 물품",
+          "relation": "품목·최소 무게와 AND",
+          "source_ids": [
+            "W08-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W08-C03",
+          "group": "교환 기준",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "1.5kg당 10L 종량제봉투 1매",
+          "detail": "일일 상한·동별 일정 미기재",
+          "applies_to": "교환 보상",
+          "relation": "무게 기준 충족 시 적용",
+          "source_ids": [
+            "W08-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[구로구] 종이팩-종량제봉투 교환"
+    },
+    {
+      "program_id": "W09",
+      "title": "지구를 지키는 식생활 교실",
+      "district": "구로구",
+      "target": "초등학교 3~5학년",
+      "eligibility_logic": "대상 학년 AND 신청 기간 내 신청; 모집 10명",
+      "benefit": "교육 무료, 재료비 0원",
+      "application_period": "2026-09-15 09:00~09-28 18:00",
+      "usage_period": "2026-09-30~10-21 수요일 15시",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "공식 상세페이지의 구글폼 신청",
+      "venue": "천왕동 청소년문화의집, 구로구 오리로 1115",
+      "status": "공식 페이지 접수진행 표시; 잔여석 실시간 확인 안 됨",
+      "caveat": "거주지 제한·확정 선발 방식은 명시 확인 안 됨",
+      "sources": [
+        {
+          "id": "W09-S01",
+          "url": "https://www.guro.go.kr/edu/inno/program/programDetail.do?pro_seq=59",
+          "title": "지구를 지키는 식생활 교실",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-15 모집공고",
+          "checked_at": "2026-09-17",
+          "supports": "접수 상태·대상·일정·장소·무료 여부·교육 내용"
+        }
+      ],
+      "overview_source_ids": [
+        "W09-S01"
+      ],
+      "conditions": [
+        {
+          "id": "W09-C01",
+          "group": "학년",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "초등학교 3~5학년",
+          "detail": "해당 교육 회차의 대상",
+          "applies_to": "참여 학생",
+          "relation": "접수 요건과 AND",
+          "source_ids": [
+            "W09-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W09-C02",
+          "group": "모집 정원",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "모집 10명",
+          "detail": "표시 숫자만으로 현재 잔여석 판단하지 않음",
+          "applies_to": "신청/선발",
+          "relation": "자격과 별개 정원",
+          "source_ids": [
+            "W09-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W09-C03",
+          "group": "접수 기간",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "9/15 09:00~9/28 18:00 신청",
+          "detail": "2026년 해당 회차, 공식 링크의 신청폼",
+          "applies_to": "신청자",
+          "relation": "학년 요건과 AND",
+          "source_ids": [
+            "W09-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[구로구] 지구를 지키는 식생활 교실"
+    },
+    {
+      "program_id": "S01",
+      "title": "탄소중립·제로웨이스트 구민 활동 지원",
+      "district": "금천구",
+      "target": "탄소중립 생활실천 추진단체 및 제로웨이스트 상점 관련 지원 대상으로 언급됨",
+      "eligibility_logic": "개인 참여자격 미확인",
+      "benefit": "지원 내용·금액 미확인",
+      "application_period": "2026년 6월 완료 예정 공약",
+      "usage_period": "미확인",
+      "documents": "미확인",
+      "application_method": "미확인",
+      "venue": "미확인",
+      "status": "계획/공약 자료; 개인 참여 제도로 추천 보류",
+      "caveat": "공약의 단체·상점 지원 언급만 확인했으며 개인 신청제도로 해석하지 않음.",
+      "sources": [
+        {
+          "id": "S01-S01",
+          "url": "https://m.geumcheon.go.kr/mayor/selectBbsNttList.do?bbsNo=150703&id=&integrDeptCode=&key=4188&nttNo=254142&pageIndex=1&searchCnd=all&searchCtgry=%ED%83%84%EC%86%8C%EC%A4%91%EB%A6%BD%2C+%EC%A0%9C%EB%A1%9C%EC%9B%8C%EC%9D%B4%EC%8A%A4%ED%8A%B8+%EC%A7%80%EC%9B%90&searchDeptCode=&searchKrwd=",
+          "title": "탄소중립, 제로웨이스트 지원",
+          "status": "공식 검색결과만 확인",
+          "as_of": "2026-01-15",
+          "checked_at": "2026-09-17",
+          "supports": "환경과·단체 및 상점 지원 공약"
+        }
+      ],
+      "overview_source_ids": [
+        "S01-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S01-C01",
+          "group": "지원 대상",
+          "group_logic": "안내",
+          "requirement": "탄소중립 생활실천 추진단체 또는 제로웨이스트 상점 관련 지원",
+          "detail": "개인·단체별 공모요건, 지원금, 신청 창구는 미확인",
+          "applies_to": "공약상 지원대상",
+          "relation": "개인 참여 요건으로 대체하지 않음",
+          "source_ids": [
+            "S01-S01"
+          ],
+          "verification": "검색결과"
+        }
+      ],
+      "display_title": "[금천구] 탄소중립·제로웨이스트 구민 활동 지원"
+    },
+    {
+      "program_id": "W02",
+      "title": "캔·투명페트병 무인회수기",
+      "district": "노원구",
+      "target": "캔·투명페트병 회수기 이용자; 주민 한정 요건 미기재",
+      "eligibility_logic": "(캔 OR 투명페트병) AND (이즐 교통카드 OR 모바일 이즐) AND 투입한도 준수",
+      "benefit": "1개당 10원, 1인 1일 최대 20개",
+      "application_period": "별도 접수 없음으로 안내",
+      "usage_period": "기기별 24시간 또는 07~21시/08~21시",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "카드 또는 휴대폰을 홀더에 놓고 시작 → 가로로 1개씩 투입 → 종료",
+      "venue": "수락 행복발전소(동일로242길77,07~21시), 노원구청(노해로437,24시), 중계근린공원(동일로1243,24시), 노원어린이도서관(한글비석로346,24시), 하계2동주민센터(공릉로55길88,07~21시), 월계보건지소(월계로378,24시), 공릉2동주민센터(노원로1길68,08~21시)",
+      "status": "공식 설치·적립 안내 확인; 실시간 가동 미확인",
+      "caveat": "투입 가능 상태는 현장 기기 안내 확인",
+      "sources": [
+        {
+          "id": "W02-S01",
+          "url": "https://www.nowon.kr/www/info/info5/minwon4_03/minwon4_03_04.jsp",
+          "title": "재활용품 배출안내 및 배출방법",
+          "status": "공식 본문 확인",
+          "as_of": "상설 안내 · 게시일 미표시",
+          "checked_at": "2026-09-17",
+          "supports": "품목 준비, 적립, 한도, 7개 설치 장소·시간, 담당"
+        }
+      ],
+      "overview_source_ids": [
+        "W02-S01"
+      ],
+      "conditions": [
+        {
+          "id": "W02-C01",
+          "group": "대상 품목",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "캔 또는 투명페트병",
+          "detail": "다른 재활용품을 이 보상 기준에 포함하지 않음",
+          "applies_to": "회수기 투입",
+          "relation": "품목 중 하나(OR)",
+          "source_ids": [
+            "W02-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W02-C02",
+          "group": "적립 수단",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "이즐 교통카드 또는 모바일 이즐",
+          "detail": "카드 또는 모바일 앱을 설치한 휴대폰 필요",
+          "applies_to": "적립 이용자",
+          "relation": "두 수단 중 하나(OR)",
+          "source_ids": [
+            "W02-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W02-C03",
+          "group": "이용 한도",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "1인 1일 20개까지",
+          "detail": "캔·페트 회수기 운영 안내의 한도",
+          "applies_to": "회수량",
+          "relation": "품목·수단 요건과 AND",
+          "source_ids": [
+            "W02-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W02-C04",
+          "group": "운영 시간",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "거점별 운영시간 내 이용",
+          "detail": "24시 기기와 07~21시·08~21시 기기 구별",
+          "applies_to": "방문 거점",
+          "relation": "당일 가동 여부는 별도 확인",
+          "source_ids": [
+            "W02-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[노원구] 캔·투명페트병 무인회수기"
+    },
+    {
+      "program_id": "W03",
+      "title": "도시양봉교육 창업과정",
+      "district": "노원구",
+      "target": "노원구민 중 양봉 창업에 관심 있는 수료자 또는 유경험자",
+      "eligibility_logic": "노원구민 AND (도시양봉교육 수료 OR 양봉 1년 이상 경험) AND 창업 관심; 선착순 10명",
+      "benefit": "무료 교육 4회(현장견학 3회·이론 1회)",
+      "application_period": "2026-06-19~07-30 (종료)",
+      "usage_period": "2026-07-09~07-30 목요일 14~16시 (종료)",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "노원구 온라인접수 해당 과정 페이지",
+      "venue": "장로회신학대학교·보라매공원·청계산 양봉장·노원탄소중립지원센터 등 회차별",
+      "status": "종료 교육 회차",
+      "caveat": "접수 표시기간과 수업기간이 겹침. 원문 그대로 기록했으며 현재 신청 가능하지 않음",
+      "sources": [
+        {
+          "id": "W03-S01",
+          "url": "https://www.nowon.kr/www/mlrd/onlineRcept/BD_selectOnlineRcept.do?resveSn=1762",
+          "title": "2026년 도시양봉교육 창업과정 수강생 모집",
+          "status": "공식 본문 확인",
+          "as_of": "2026 여름 회차",
+          "checked_at": "2026-09-17",
+          "supports": "대상, 일정, 장소, 무료 여부, 담당"
+        }
+      ],
+      "overview_source_ids": [
+        "W03-S01"
+      ],
+      "conditions": [
+        {
+          "id": "W03-C01",
+          "group": "거주 요건",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "노원구민",
+          "detail": "대상에 명시",
+          "applies_to": "신청자",
+          "relation": "경험 요건과 AND",
+          "source_ids": [
+            "W03-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W03-C02",
+          "group": "선행 경험",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "도시양봉교육 수료 또는 양봉 1년 이상 경험",
+          "detail": "두 경로 중 하나",
+          "applies_to": "신청자",
+          "relation": "수료 OR 경력",
+          "source_ids": [
+            "W03-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W03-C03",
+          "group": "참여 목적",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "양봉 창업에 관심",
+          "detail": "해당 창업과정의 대상 설명",
+          "applies_to": "신청자",
+          "relation": "거주·경험 요건과 함께 적용",
+          "source_ids": [
+            "W03-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W03-C04",
+          "group": "모집 정원",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "선착순 10명",
+          "detail": "2026년 해당 회차; 현재 접수 종료",
+          "applies_to": "선발",
+          "relation": "자격 충족과 별개로 정원 적용",
+          "source_ids": [
+            "W03-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[노원구] 도시양봉교육 창업과정"
+    },
+    {
+      "program_id": "W01",
+      "title": "탄소공감마일리지",
+      "district": "도봉구",
+      "target": "도봉구민 또는 도봉구 생활권자(직장인·학생·사업자)",
+      "eligibility_logic": "(도봉구민 OR 생활권자) AND 앱 가입 AND 인정 실천 인증; 인센티브 신청은 적립액 기준 별도",
+      "benefit": "1마일리지=1원, 1만 마일리지 단위로 도봉사랑상품권 신청",
+      "application_period": "별도 접수 마감일 미기재",
+      "usage_period": "공식 상설 안내; 실제 지급·실천별 운영은 앱 확인",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "탄소공감마일리지 앱 가입 → 실천 업로드 → 적립 → 상품권 신청",
+      "venue": "앱",
+      "status": "공식 제도 안내 확인; 실천별 지급현황 미확인",
+      "caveat": "실천별 단가·일일 한도·업로드 인정기준을 하나로 통일하지 않음",
+      "sources": [
+        {
+          "id": "W01-S01",
+          "url": "https://www.dobong.go.kr/Contents.asp?code=10010186",
+          "title": "탄소공감마일리지 공식 안내",
+          "status": "공식 본문 확인",
+          "as_of": "페이지 표시 2026-08-11",
+          "checked_at": "2026-09-17",
+          "supports": "대상·절차·조건·혜택 안내"
+        },
+        {
+          "id": "W01-S02",
+          "url": "https://m.dobong.go.kr/majorWork/MajorView.asp?lidx=646",
+          "title": "생활 속 온실가스 감축을 위한 탄소공감마일리지 운영",
+          "status": "기존 자료만",
+          "as_of": "2026-01-28",
+          "checked_at": "2026-09-17",
+          "supports": "대상, 기간, 보상 성격, 담당 부서; 이번 본문 재확인 아님"
+        }
+      ],
+      "overview_source_ids": [
+        "W01-S01",
+        "W01-S02"
+      ],
+      "conditions": [
+        {
+          "id": "W01-C01",
+          "group": "참여 대상",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "도봉구민 또는 도봉구 생활권자",
+          "detail": "도봉구 소재 직장인·학생·사업자 포함",
+          "applies_to": "가입자",
+          "relation": "두 대상 중 하나(OR)",
+          "source_ids": [
+            "W01-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W01-C02",
+          "group": "가입·인증",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "전용 앱 설치·회원가입",
+          "detail": "앱을 통한 서비스 이용",
+          "applies_to": "참여자",
+          "relation": "대상 요건과 AND",
+          "source_ids": [
+            "W01-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W01-C03",
+          "group": "실천 증빙",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "인정 실천을 업로드",
+          "detail": "실천 종류별 인정기준은 앱에서 확인",
+          "applies_to": "마일리지 적립",
+          "relation": "가입 후 해당 실천 기준 충족",
+          "source_ids": [
+            "W01-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W01-C04",
+          "group": "인센티브 신청",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "1만 마일리지 단위로 상품권 신청",
+          "detail": "1마일리지=1원",
+          "applies_to": "도봉사랑상품권 전환",
+          "relation": "참여자격과 별개인 수령 기준",
+          "source_ids": [
+            "W01-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[도봉구] 탄소공감마일리지"
+    },
+    {
+      "program_id": "N10",
+      "title": "우리동네 재활용품 교환 Day",
+      "district": "동대문구",
+      "target": "미확인",
+      "eligibility_logic": "투명페트병·종이팩·폐건전지 / 동주민센터별 월 2회 순회 / 종량제봉투 및 화장지; 상세 행의 관계 참조.",
+      "benefit": "종량제봉투 및 화장지",
+      "application_period": "연간 동주민센터별 월 2회 순회",
+      "usage_period": "운영기간 내 거점별 수거·교환",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "투명페트병·종이팩·폐건전지를 동주민센터 순회 일정에 맞춰 제출",
+      "venue": "동주민센터",
+      "status": "2026 공식 본문 확인",
+      "caveat": "2026-07-31 민원답변 본문은 운영·품목·월2회만 확인; 교환단가 미확인",
+      "sources": [
+        {
+          "id": "N10-S01",
+          "url": "https://www.ddm.go.kr/chief/selectCvplRceptWebView.do?cvplCode=DSTLDR&key=1443&pageIndex=8&pageUnit=10&rceptNo=83751&searchCnd=all&step=3",
+          "title": "동대문구 재활용품 교환 Day 공식 민원 답변",
+          "status": "공식 본문 확인",
+          "as_of": "2026-07-31",
+          "checked_at": "2026-09-17",
+          "supports": "품목·보상·월 2회 순회·청소행정과"
+        }
+      ],
+      "overview_source_ids": [
+        "N10-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N10-C01",
+          "group": "대상 품목",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "투명페트병·종이팩·폐건전지",
+          "detail": "품목별 최소 교환수량은 현재 확인 범위에서 미확인",
+          "applies_to": "투명페트병·종이팩·폐건전지를 동주민센터 순회 일정에 맞춰 제출",
+          "relation": "순회 일정과 함께 적용",
+          "source_ids": [
+            "N10-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N10-C02",
+          "group": "운영 거점·회차",
+          "group_logic": "회차별",
+          "requirement": "동주민센터별 월 2회 순회",
+          "detail": "해당 동의 다음 운영일은 별도 확인",
+          "applies_to": "투명페트병·종이팩·폐건전지를 동주민센터 순회 일정에 맞춰 제출",
+          "relation": "품목 조건과 함께 적용",
+          "source_ids": [
+            "N10-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N10-C03",
+          "group": "교환 보상",
+          "group_logic": "안내",
+          "requirement": "종량제봉투 및 화장지",
+          "detail": "품목별 교환 단가·수량은 미확인",
+          "applies_to": "투명페트병·종이팩·폐건전지를 동주민센터 순회 일정에 맞춰 제출",
+          "relation": "운영 중인 회차에서 적용",
+          "source_ids": [
+            "N10-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[동대문구] 우리동네 재활용품 교환 Day"
+    },
+    {
+      "program_id": "N11",
+      "title": "탄소중립 주민네트워크 협력사업",
+      "district": "동대문구",
+      "target": "지역 활동가·시민단체·지역주민, 10명 내외 그룹",
+      "eligibility_logic": "지역 활동가·시민단체·지역주민, 10명 내외 그룹 / 자원순환·건물·수송 중심 / 선정 후 결산 검토 뒤 후불 지급 / 입력 기준 모집 종료 또는 접수 마감; 관계는 상세 조건 참조.",
+      "benefit": "과제당 최대 200만원, 최대 3건",
+      "application_period": "2026-04-07~09-30 사업기간; 신청은 4월 마감",
+      "usage_period": "미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "탄소중립 현안의 현장조사와 시민 참여·실천 방안을 제안하는 그룹 과제 신청",
+      "venue": "미확인",
+      "status": "2026년 모집 종료, 2027년 재공고 감시 후보",
+      "caveat": "거주지 필수 여부; 다음 연도 재공고; 선정 결과",
+      "sources": [
+        {
+          "id": "N11-S01",
+          "url": "https://www.ddm.go.kr/www/selectBbsNttView.do?bbsNo=38&integrDeptCode=&key=856&nttNo=188731&pageIndex=2&searchCnd=all&searchCtgry=%EC%B2%AD%EC%86%8C%ED%99%98%EA%B2%BD&searchKrwd=",
+          "title": "동대문구 탄소중립 주민네트워크 협력사업 공고",
+          "status": "기존 자료만",
+          "as_of": "2026-04-07",
+          "checked_at": "2026-09-17",
+          "supports": "대상·기간·지원 규모·제안 분야"
+        }
+      ],
+      "overview_source_ids": [
+        "N11-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N11-C01",
+          "group": "참여 대상",
+          "group_logic": "모두 충족",
+          "requirement": "지역 활동가·시민단체·지역주민, 10명 내외 그룹",
+          "detail": "입력 후보에 기재된 대상; 지자체 주소만으로 주민자격을 추가 추정하지 않음",
+          "applies_to": "탄소중립 현안의 현장조사와 시민 참여·실천 방안을 제안하는 그룹 과제 신청",
+          "relation": "아래 품목·수량·회차 조건과 함께 적용",
+          "source_ids": [
+            "N11-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N11-C02",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "자원순환·건물·수송 중심",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "탄소중립 현안의 현장조사와 시민 참여·실천 방안을 제안하는 그룹 과제 신청",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N11-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N11-C03",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "선정 후 결산 검토 뒤 후불 지급",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "탄소중립 현안의 현장조사와 시민 참여·실천 방안을 제안하는 그룹 과제 신청",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N11-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N11-C04",
+          "group": "모집 상태",
+          "group_logic": "안내",
+          "requirement": "입력 기준 모집 종료 또는 접수 마감",
+          "detail": "현재 신규모집으로 안내하지 않음",
+          "applies_to": "탄소중립 현안의 현장조사와 시민 참여·실천 방안을 제안하는 그룹 과제 신청",
+          "relation": "자격 충족과 별도",
+          "source_ids": [
+            "N11-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[동대문구] 탄소중립 주민네트워크 협력사업"
+    },
+    {
+      "program_id": "N12",
+      "title": "그린액션 아동실천단",
+      "district": "동대문구",
+      "target": "동대문구 거주 초등학교 1~2학년",
+      "eligibility_logic": "동대문구 거주 초등학교 1~2학년 / 4회 전부 참여 가능해야 함 / 선착순 / 입력 기준 모집 종료 또는 접수 마감; 관계는 상세 조건 참조.",
+      "benefit": "무료",
+      "application_period": "2026년 6월 4회; 접수 마감",
+      "usage_period": "회차별 운영; 현재 이용기간 미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "탄소중립·자원순환 이론·체험·견학 4주 과정 참여",
+      "venue": "동대문구청 지하2층 사내아카데미 및 견학 장소",
+      "status": "2026 상반기 종료",
+      "caveat": "하반기/다음 기수",
+      "sources": [
+        {
+          "id": "N12-S01",
+          "url": "https://www.ddm.go.kr/reserve/selectUserOnlineReceptionView.do?key=3133&pageIndex=1&pageUnit=15&programKey=832&searchCnd=all",
+          "title": "그린액션 아동실천단 모집",
+          "status": "기존 자료만",
+          "as_of": "2026-05",
+          "checked_at": "2026-09-17",
+          "supports": "대상·장소·기간·4회 참여 조건"
+        }
+      ],
+      "overview_source_ids": [
+        "N12-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N12-C01",
+          "group": "참여 대상",
+          "group_logic": "모두 충족",
+          "requirement": "동대문구 거주 초등학교 1~2학년",
+          "detail": "입력 후보에 기재된 대상; 지자체 주소만으로 주민자격을 추가 추정하지 않음",
+          "applies_to": "탄소중립·자원순환 이론·체험·견학 4주 과정 참여",
+          "relation": "아래 품목·수량·회차 조건과 함께 적용",
+          "source_ids": [
+            "N12-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N12-C02",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "4회 전부 참여 가능해야 함",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "탄소중립·자원순환 이론·체험·견학 4주 과정 참여",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N12-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N12-C03",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "선착순",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "탄소중립·자원순환 이론·체험·견학 4주 과정 참여",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N12-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N12-C04",
+          "group": "모집 상태",
+          "group_logic": "안내",
+          "requirement": "입력 기준 모집 종료 또는 접수 마감",
+          "detail": "현재 신규모집으로 안내하지 않음",
+          "applies_to": "탄소중립·자원순환 이론·체험·견학 4주 과정 참여",
+          "relation": "자격 충족과 별도",
+          "source_ids": [
+            "N12-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[동대문구] 그린액션 아동실천단"
+    },
+    {
+      "program_id": "S03",
+      "title": "재활용가능자원 주민수거보상제",
+      "district": "동작구",
+      "target": "재활용가능자원 반입 주민으로 보이나 세부 대상 미확인",
+      "eligibility_logic": "미확인",
+      "benefit": "미확인",
+      "application_period": "2026 확대 운영 공지 언급",
+      "usage_period": "미확인",
+      "documents": "미확인",
+      "application_method": "미확인",
+      "venue": "동별 장소 미확인",
+      "status": "부서 안내 검색근거만 확인",
+      "caveat": "품목·수량·교환물·거주요건을 추정하지 않음.",
+      "sources": [
+        {
+          "id": "S03-S01",
+          "url": "https://dongjak.go.kr/portal/bbs/B0001244/deptGdc.do?deptId=DP_080600&menuNo=200783",
+          "title": "청소행정과 부서안내",
+          "status": "공식 검색결과만 확인",
+          "as_of": "2026-03-09",
+          "checked_at": "2026-09-17",
+          "supports": "2026 주민수거보상제 확대 운영 언급"
+        }
+      ],
+      "overview_source_ids": [
+        "S03-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S03-C01",
+          "group": "운영 안내",
+          "group_logic": "안내",
+          "requirement": "2026 확대 운영 언급",
+          "detail": "품목·보상·장소·일정·거주요건의 공식 본문 미확인",
+          "applies_to": "제도 전체",
+          "relation": "개인자격 판정 불가",
+          "source_ids": [
+            "S03-S01"
+          ],
+          "verification": "검색결과"
+        }
+      ],
+      "display_title": "[동작구] 재활용가능자원 주민수거보상제"
+    },
+    {
+      "program_id": "S04",
+      "title": "제2차 동작 나눔장터 주민수거보상제",
+      "district": "동작구",
+      "target": "행사 방문자; 판매 셀러는 동작구민",
+      "eligibility_logic": "행사 체험/수거보상 참여자격은 별도 미기재, 셀러는 별도 요건",
+      "benefit": "수거보상제 세부 혜택 미확인",
+      "application_period": "셀러 2026-05-18~05-29 18:00",
+      "usage_period": "2026-06-05 11:00~16:00 종료",
+      "documents": "셀러 물품 사전검증; 기타 미확인",
+      "application_method": "셀러는 통합예약 신청 후 자격충족자 추첨",
+      "venue": "동작구청 신청사 정문 일대, 장승배기로 70",
+      "status": "종료 행사",
+      "caveat": "수거보상제 운영 사실과 셀러 자격을 혼동하지 않음.",
+      "sources": [
+        {
+          "id": "S04-S01",
+          "url": "https://www.dongjak.go.kr/portal/bbs/B0000022/view.do?menuNo=200641&nttId=10751099&pageIndex=1",
+          "title": "2026 제2차 동작 플리마켓 운영 안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026-05-12",
+          "checked_at": "2026-09-17",
+          "supports": "일시·장소·수거보상제·셀러 자격·신청"
+        }
+      ],
+      "overview_source_ids": [
+        "S04-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S04-C01",
+          "group": "행사",
+          "group_logic": "회차별",
+          "requirement": "2026-06-05 행사 회차",
+          "detail": "우천 취소 가능; 종료된 회차",
+          "applies_to": "행사 방문",
+          "relation": "현 모집으로 표현하지 않음",
+          "source_ids": [
+            "S04-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S04-C02",
+          "group": "셀러 자격",
+          "group_logic": "모두 충족",
+          "requirement": "동작구민인 아동(가족) 또는 성인 셀러",
+          "detail": "자격 충족자 중 추첨; 아동존은 아동 현장참여 필요",
+          "applies_to": "판매 셀러",
+          "relation": "방문·수거보상 참여요건과 별도",
+          "source_ids": [
+            "S04-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S04-C03",
+          "group": "행사 운영",
+          "group_logic": "안내",
+          "requirement": "일회용 비닐봉투 미제공",
+          "detail": "장바구니 지참 안내",
+          "applies_to": "행사 이용자",
+          "relation": "자격이 아닌 운영안내",
+          "source_ids": [
+            "S04-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[동작구] 제2차 동작 나눔장터 주민수거보상제"
+    },
+    {
+      "program_id": "W10",
+      "title": "환경지킴이 실천교육",
+      "district": "마포구",
+      "target": "관내 교육기관 대상 교육으로 기존 자료에 설명; 2026 세부 대상 미확인",
+      "eligibility_logic": "예산상 사업 존재와 실제 개인 모집은 별개; 현재 개인 자격 판정 불가",
+      "benefit": "환경교육 사업; 개인 보상·수강료 미확인",
+      "application_period": "2026 모집 일정 미확인",
+      "usage_period": "2026 예산 편성 확인; 세부 회차 미확인",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "기관별 신청 경로 미확인",
+      "venue": "참여 교육기관(기존 회의록 설명)",
+      "status": "2026 예산 사업 확인; 개인 신청 후보로 확정 보류",
+      "caveat": "2026 예산 검토에서 일부 교육사업 미편성·축소 확인. 과거 모든 세부 프로그램이 지속한다고 해석하지 않음",
+      "sources": [
+        {
+          "id": "W10-S01",
+          "url": "https://council.mapo.seoul.kr/attach/record/MAPO/appendix/a09/A0011028.pdf",
+          "title": "마포구의회 2026년도 예산안 검토자료",
+          "status": "공식 본문 확인",
+          "as_of": "2026년도 예산 검토자료",
+          "checked_at": "2026-09-17",
+          "supports": "2026년 환경지킴이 실천교육 예산과 사업 지속"
+        },
+        {
+          "id": "W10-S02",
+          "url": "https://council.mapo.seoul.kr/record/recordView.do?key=0940dd6a6dee58c7b64ec3a5c8d387e5fc53a2a43a3452b1e771a65887aed3ec6a80b04ecb9bd081",
+          "title": "2025-12-12 예산결산특별위원회 회의록",
+          "status": "기존 자료만",
+          "as_of": "2025-12-12",
+          "checked_at": "2026-09-17",
+          "supports": "그린리더 강사의 학교 방문 교육 설명; 이번 본문 재확인 아님"
+        }
+      ],
+      "overview_source_ids": [
+        "W10-S01",
+        "W10-S02"
+      ],
+      "conditions": [
+        {
+          "id": "W10-C01",
+          "group": "사업 범위 안내",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "2026 환경교육 예산은 있으나 세부 모집 미확인",
+          "detail": "예산 근거는 참여자격이나 신청 가능 여부를 확정하지 않음",
+          "applies_to": "기관 사업",
+          "relation": "개인 조건으로 저장할 항목 아님",
+          "source_ids": [
+            "W10-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[마포구] 환경지킴이 실천교육"
+    },
+    {
+      "program_id": "W05",
+      "title": "우리동네 기후연구소 시민연구원",
+      "district": "서대문구",
+      "target": "기후변화에 관심 있는 학생·성인, 개인 또는 최대 3인 팀",
+      "eligibility_logic": "(개인 OR 최대 3인 팀) 신청, 팀 우선; 활동 80% 이상 참여 시 수료증·개인 상품권",
+      "benefit": "참여도 80% 이상: 수료증·1인 1만원 서대문사랑상품권; 실험키트 지원, 최우수 1팀(명) 별도 시상",
+      "application_period": "2026-06-26 마감",
+      "usage_period": "온도측정 7/25~8/22(14시·21시), 7월 발대식·11월 결과공유 예정",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "공고 QR의 네이버폼 신청",
+      "venue": "서대문구 14개 동별 관측·활동",
+      "status": "모집 종료; 연간 활동 안내",
+      "caveat": "공고 당시 충현동 가능 표시는 현재 잔여석 아님. 구민만 가능하다고 추가 해석하지 않음",
+      "sources": [
+        {
+          "id": "W05-S01",
+          "url": "https://www.sdm.go.kr/news/news/notice.do?mode=view&sdmBoardSeq=312140",
+          "title": "우리동네 기후연구소 시민연구원 모집",
+          "status": "공식 본문 확인",
+          "as_of": "2026-06-05 모집공고",
+          "checked_at": "2026-09-17",
+          "supports": "모집 대상·활동·일정·혜택·담당"
+        }
+      ],
+      "overview_source_ids": [
+        "W05-S01"
+      ],
+      "conditions": [
+        {
+          "id": "W05-C01",
+          "group": "참여 단위",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "개인 또는 최대 3명 팀",
+          "detail": "학생·성인 가능, 팀 우선 선정",
+          "applies_to": "신청자/팀",
+          "relation": "개인 OR 팀; 팀이면 인원 상한 적용",
+          "source_ids": [
+            "W05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W05-C02",
+          "group": "모집 정원",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "14개 동별 3팀(명)",
+          "detail": "신청 단위에 따라 팀 또는 개인",
+          "applies_to": "선발",
+          "relation": "대상 요건과 별개로 정원 적용",
+          "source_ids": [
+            "W05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W05-C03",
+          "group": "관측 활동",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "지정 기간 14시·21시 온도 측정",
+          "detail": "7/25~8/22 관측과 탄소중립 실천·아이디어 활동",
+          "applies_to": "시민연구원 활동",
+          "relation": "참여도 산정과 연결",
+          "source_ids": [
+            "W05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W05-C04",
+          "group": "수료·보상",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "참여도 80% 이상",
+          "detail": "수료증과 1인 1만원 상품권 기준",
+          "applies_to": "일반 참여자 보상",
+          "relation": "최우수 시상과 별개",
+          "source_ids": [
+            "W05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W05-C05",
+          "group": "우수자 시상",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "최우수 1팀(명) 선정",
+          "detail": "전체 참여자 공통 보상이 아님",
+          "applies_to": "시상 대상",
+          "relation": "선정 시에만 적용",
+          "source_ids": [
+            "W05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[서대문구] 우리동네 기후연구소 시민연구원"
+    },
+    {
+      "program_id": "W06",
+      "title": "종이팩 무인회수기 포인트",
+      "district": "서대문구",
+      "target": "종이팩 무인회수기 이용자; 거주 요건 미기재",
+      "eligibility_logic": "기존 안내: 종이팩 투입 AND 오늘의 분리수거 앱 이용; 2026 규칙 재확인 필요",
+      "benefit": "2025 자료상 우유팩 1개당 10포인트, 물품·기프티콘 교환 가능",
+      "application_period": "미확인",
+      "usage_period": "2025년 안내; 2026 가동 미확인",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "오늘의 분리수거 앱과 기기 이용(기존 자료)",
+      "venue": "천연동주민센터·연희동자치회관·행복그린센터·육아지원센터·자원되살림센터(기존 5개 장소, 총 6대 안내)",
+      "status": "2025 자료 보존; 이번 PDF 접근 실패",
+      "caveat": "현재 단가·기기 가동·세척·수량 기준 미확인",
+      "sources": [
+        {
+          "id": "W06-S01",
+          "url": "https://www.sdm.go.kr/fileUpload/board/92/20250925_100550291266700698.pdf",
+          "title": "소통 200% 서대문",
+          "status": "접근 실패 · 기존 검색자료 보존",
+          "as_of": "2025-09-25 자료",
+          "checked_at": "2026-09-17",
+          "supports": "6대 운영·포인트 방식·5개 설치 장소·담당; 이번 본문 재확인 아님"
+        }
+      ],
+      "overview_source_ids": [
+        "W06-S01"
+      ],
+      "conditions": [
+        {
+          "id": "W06-C01",
+          "group": "대상 품목",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "종이팩(우유팩) 투입",
+          "detail": "2025 안내상 개당 10포인트; 다른 팩 종류 인정 여부 미확인",
+          "applies_to": "회수기 투입",
+          "relation": "현재 보상으로 확정하지 않음",
+          "source_ids": [
+            "W06-S01"
+          ],
+          "verification": "기존 자료만 · 이번 본문 접근 실패"
+        },
+        {
+          "id": "W06-C02",
+          "group": "가입·인증",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "오늘의 분리수거 앱 이용",
+          "detail": "2025 안내상 포인트 적립·상품 교환 경로",
+          "applies_to": "적립 이용자",
+          "relation": "해당 기기 이용과 연결",
+          "source_ids": [
+            "W06-S01"
+          ],
+          "verification": "기존 자료만 · 이번 본문 접근 실패"
+        }
+      ],
+      "display_title": "[서대문구] 종이팩 무인회수기 포인트"
+    },
+    {
+      "program_id": "S07",
+      "title": "착한 서초코인 환경 실천 적립",
+      "district": "서초구",
+      "target": "서초구민 또는 서초구 소재 사업장 대표·종사자",
+      "eligibility_logic": "앱 회원가입 후 활동별 QR 인증 또는 담당공무원 확인",
+      "benefit": "1코인=100원, 가입 10코인; 연 1인 최대 4,000코인",
+      "application_period": "상시 제도 페이지 기준",
+      "usage_period": "활동·운영시설별",
+      "documents": "휴대전화 본인인증 또는 카카오 간편가입",
+      "application_method": "서초코인 앱 가입 및 활동별 QR 인증",
+      "venue": "탄소제로샵·수거거점·지정 운영시설 등 활동별 상이",
+      "status": "공식 제도 페이지 확인; 활동/거점별 운영여부는 별도 확인",
+      "caveat": "활동별 적립단위와 인증 방식이 다르며 한 활동의 인증으로 다른 활동 적립을 대체하지 않음.",
+      "sources": [
+        {
+          "id": "S07-S01",
+          "url": "https://www.seocho.go.kr/site/seocho/04/10425020000002024091910.jsp",
+          "title": "착한 서초코인",
+          "status": "공식 본문 확인",
+          "as_of": "미표시",
+          "checked_at": "2026-09-17",
+          "supports": "가입대상·가입·적립한도·활동별 QR/확인·단가"
+        }
+      ],
+      "overview_source_ids": [
+        "S07-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S07-C01",
+          "group": "가입 대상",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "서초구민 또는 서초구 소재 사업장 대표·종사자",
+          "detail": "앱 다운로드 후 카카오 또는 휴대전화 본인인증 가입",
+          "applies_to": "회원",
+          "relation": "활동 인증 C02와 AND",
+          "source_ids": [
+            "S07-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S07-C02",
+          "group": "환경 활동 인증",
+          "group_logic": "회차별",
+          "requirement": "활동별 QR 스캔 후 수량입력·사진촬영 또는 QR만 인증",
+          "detail": "재사용품 0.2코인/개, 페트 0.1코인/개, 텀블러 2코인/회, 종이팩 5코인/kg 등 활동별 상이",
+          "applies_to": "각 활동 건",
+          "relation": "활동별 단가·증빙을 합산하지 않음",
+          "source_ids": [
+            "S07-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S07-C03",
+          "group": "적립 한도",
+          "group_logic": "제한",
+          "requirement": "연간 1인 최대 4,000코인",
+          "detail": "1코인 100원",
+          "applies_to": "회원",
+          "relation": "자격이 아닌 지급상한",
+          "source_ids": [
+            "S07-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[서초구] 착한 서초코인 환경 실천 적립"
+    },
+    {
+      "program_id": "N06",
+      "title": "IoT 스마트 종이팩 분리배출함",
+      "district": "성동구",
+      "target": "오늘의 분리수거 앱 또는 이즐 방식 이용 가능자",
+      "eligibility_logic": "반입 준비 AND 방문 기기의 방식(오늘의 분리수거 OR 이즐) AND 거점 운영시간·가동상태. 두 적립방식을 동시에 요구하지 않음.",
+      "benefit": "오늘의 분리수거 방식은 앱 포인트로 앱 내 상품 교환(상품 소진 시까지); 이즐 2개소는 카드·휴대폰 방식으로 보상금액 적립 표시",
+      "application_period": "장소별 운영시간 상이",
+      "usage_period": "운영기간 내 거점별 수거·교환",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "기기 방식에 맞춰 종이팩 바코드를 스캔하고 투입",
+      "venue": "동주민센터 17곳과 다중이용시설 10곳, 총 27개소",
+      "status": "2026 공식 본문 확인",
+      "caveat": "오늘의 분리수거 포인트 단가·이즐 보상 단가는 본문 미표시; 개별 기기 가동상태 미확인",
+      "sources": [
+        {
+          "id": "N06-S01",
+          "url": "https://sd.go.kr/main/contents.do?key=4490",
+          "title": "성동구 IoT 스마트 종이팩 분리배출함",
+          "status": "공식 본문 확인",
+          "as_of": "최종수정 2026-08-31",
+          "checked_at": "2026-09-17",
+          "supports": "담당 부서, 27개소·장소별 운영시간, 세척·건조·압착, 오늘의 분리수거/이즐 방식 구분"
+        }
+      ],
+      "overview_source_ids": [
+        "N06-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N06-C01",
+          "group": "배출 품목 상태",
+          "group_logic": "모두 충족",
+          "requirement": "종이팩 내용물을 비우고 세척·건조·압착",
+          "detail": "우유·두유·주스팩 등; 기기 방식별 바코드 필요",
+          "applies_to": "기기 방식에 맞춰 종이팩 바코드를 스캔하고 투입",
+          "relation": "기기 방식 조건과 모두 충족",
+          "source_ids": [
+            "N06-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N06-C02",
+          "group": "오늘의 분리수거",
+          "group_logic": "모두 충족",
+          "requirement": "전용앱 설치·회원코드 태그·종이팩 바코드 태그",
+          "detail": "투입 후 앱 포인트 적립, 앱 내 상품 교환은 재고 소진 시까지",
+          "applies_to": "기기 방식에 맞춰 종이팩 바코드를 스캔하고 투입",
+          "relation": "이즐 방식과 별도",
+          "source_ids": [
+            "N06-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N06-C03",
+          "group": "이즐 거점·방식",
+          "group_logic": "모두 충족",
+          "requirement": "성동아이사랑복합문화센터 또는 서울숲복합문화체육센터의 이즐 기기",
+          "detail": "이즐 카드/휴대폰과 바코드 스캔 후 투입; 화면상 보상금액 확인",
+          "applies_to": "기기 방식에 맞춰 종이팩 바코드를 스캔하고 투입",
+          "relation": "오늘의 분리수거와 별도",
+          "source_ids": [
+            "N06-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N06-C04",
+          "group": "운영 상태",
+          "group_logic": "제한",
+          "requirement": "27개 설치거점의 운영시간 확인",
+          "detail": "기기 점검 중 또는 수거함 Full이면 사용 불가",
+          "applies_to": "기기 방식에 맞춰 종이팩 바코드를 스캔하고 투입",
+          "relation": "앞 조건 충족해도 적용",
+          "source_ids": [
+            "N06-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[성동구] IoT 스마트 종이팩 분리배출함"
+    },
+    {
+      "program_id": "N07",
+      "title": "성동형 탄소중립포인트제 고효율 에너지기기 구매 지원",
+      "district": "성동구",
+      "target": "소상공인",
+      "eligibility_logic": "소상공인 / 한국전력 사업과 중복 신청 가능이라고 공고에 표시; 관계는 상세 조건 참조.",
+      "benefit": "구매 지원",
+      "application_period": "2026년 공고",
+      "usage_period": "미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "고효율 에너지기기 구매 지원 신청",
+      "venue": "미확인",
+      "status": "접수중으로 색인된 공고; 상세 요건 미열람",
+      "caveat": "지원금·접수기한·주소 요건",
+      "sources": [
+        {
+          "id": "N07-S01",
+          "url": "https://bogunso.sd.go.kr/booking/bookingOnlineRcepDetail.do?key=4871&progrmNo=693",
+          "title": "2026년 성동형 탄소중립포인트제",
+          "status": "기존 자료만",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "소상공인·고효율 기기 구매 지원, 중복 신청 표기"
+        }
+      ],
+      "overview_source_ids": [
+        "N07-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N07-C01",
+          "group": "참여 대상",
+          "group_logic": "모두 충족",
+          "requirement": "소상공인",
+          "detail": "입력 후보에 기재된 대상; 지자체 주소만으로 주민자격을 추가 추정하지 않음",
+          "applies_to": "고효율 에너지기기 구매 지원 신청",
+          "relation": "아래 품목·수량·회차 조건과 함께 적용",
+          "source_ids": [
+            "N07-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N07-C02",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "한국전력 사업과 중복 신청 가능이라고 공고에 표시",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "고효율 에너지기기 구매 지원 신청",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N07-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "display_title": "[성동구] 성동형 탄소중립포인트제 고효율 에너지기기 구매 지원"
+    },
+    {
+      "program_id": "N14",
+      "title": "탄소중립실천단 길라잡이 양성교육",
+      "district": "성북구",
+      "target": "미확인",
+      "eligibility_logic": "개인 참여자격 미기재 / 교육시간 80% 이상 수료 / 필수 현장학습 / 입력 기준 모집 종료 또는 접수 마감; 관계는 상세 조건 참조.",
+      "benefit": "교육 이수",
+      "application_period": "2026년 모집 공고; 접수 마감",
+      "usage_period": "회차별 운영; 현재 이용기간 미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "탄소중립·에너지 절약 교육과 현장학습 이수",
+      "venue": "성북탄소중립배움터 강의실",
+      "status": "2026 모집 종료",
+      "caveat": "참여 대상·다음 기수",
+      "sources": [
+        {
+          "id": "N14-S01",
+          "url": "https://www.sb.go.kr/www/selectBbsNttView.do?bbsNo=41&key=6350&nttNo=9577877&pageIndex=1",
+          "title": "성북구 탄소중립실천단 길라잡이 양성교육",
+          "status": "기존 자료만",
+          "as_of": "2026-01-05",
+          "checked_at": "2026-09-17",
+          "supports": "교육 내용·수료 조건·신청 부서"
+        }
+      ],
+      "overview_source_ids": [
+        "N14-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N14-C01",
+          "group": "참여 대상",
+          "group_logic": "안내",
+          "requirement": "개인 참여자격 미기재",
+          "detail": "개인 반입·신청 가능 여부 또는 거주 요건은 미확인",
+          "applies_to": "탄소중립·에너지 절약 교육과 현장학습 이수",
+          "relation": "운영기관 사업·공개안내 여부와 구분",
+          "source_ids": [
+            "N14-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N14-C02",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "교육시간 80% 이상 수료",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "탄소중립·에너지 절약 교육과 현장학습 이수",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N14-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N14-C03",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "필수 현장학습",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "탄소중립·에너지 절약 교육과 현장학습 이수",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N14-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N14-C04",
+          "group": "모집 상태",
+          "group_logic": "안내",
+          "requirement": "입력 기준 모집 종료 또는 접수 마감",
+          "detail": "현재 신규모집으로 안내하지 않음",
+          "applies_to": "탄소중립·에너지 절약 교육과 현장학습 이수",
+          "relation": "자격 충족과 별도",
+          "source_ids": [
+            "N14-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "display_title": "[성북구] 탄소중립실천단 길라잡이 양성교육"
+    },
+    {
+      "program_id": "N15",
+      "title": "성북리앤업사이클플라자 의류수선교실",
+      "district": "성북구",
+      "target": "제한없음",
+      "eligibility_logic": "제한없음 / 선착순 / 입력 기준 모집 종료 또는 접수 마감; 관계는 상세 조건 참조.",
+      "benefit": "무료",
+      "application_period": "2026-07-06~07-27; 접수 마감",
+      "usage_period": "회차별 운영; 현재 이용기간 미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "재봉틀을 활용해 의류 수선 교육 참여",
+      "venue": "성북리앤업사이클플라자 4층 교육장B",
+      "status": "당시 강좌 종료",
+      "caveat": "후속 강좌 일정",
+      "sources": [
+        {
+          "id": "N15-S01",
+          "url": "https://www.sb.go.kr/yeyak/unityProgrmWebView.do?key=6960&pageIndex=1&pageUnit=10&progrmNo=4293&searchCnd=all&searchMonth=7&searchYear=2026",
+          "title": "성북리앤업사이클플라자 의류수선교실",
+          "status": "기존 자료만",
+          "as_of": "2026-06",
+          "checked_at": "2026-09-17",
+          "supports": "장소·대상·기간·교육 형태"
+        }
+      ],
+      "overview_source_ids": [
+        "N15-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N15-C01",
+          "group": "참여 대상",
+          "group_logic": "모두 충족",
+          "requirement": "제한없음",
+          "detail": "입력 후보에 기재된 대상; 지자체 주소만으로 주민자격을 추가 추정하지 않음",
+          "applies_to": "재봉틀을 활용해 의류 수선 교육 참여",
+          "relation": "아래 품목·수량·회차 조건과 함께 적용",
+          "source_ids": [
+            "N15-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N15-C02",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "선착순",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "재봉틀을 활용해 의류 수선 교육 참여",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N15-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N15-C03",
+          "group": "모집 상태",
+          "group_logic": "안내",
+          "requirement": "입력 기준 모집 종료 또는 접수 마감",
+          "detail": "현재 신규모집으로 안내하지 않음",
+          "applies_to": "재봉틀을 활용해 의류 수선 교육 참여",
+          "relation": "자격 충족과 별도",
+          "source_ids": [
+            "N15-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "display_title": "[성북구] 성북리앤업사이클플라자 의류수선교실"
+    },
+    {
+      "program_id": "S10",
+      "title": "온트리 탄소중립 실천 미션",
+      "district": "송파구",
+      "target": "앱 미션 참여자로 언급",
+      "eligibility_logic": "2026 가입자격·현재 미션 미확인",
+      "benefit": "포인트 및 관내 탄소중립숲 조성 연계 언급",
+      "application_period": "미확인",
+      "usage_period": "2025 운영 실적 설명",
+      "documents": "미확인",
+      "application_method": "앱 미션 인증으로 언급",
+      "venue": "온라인; 숲 조성은 관내",
+      "status": "과거 운영 실적/회의록 근거; 현재 참여 가능 여부 미확인",
+      "caveat": "12개 미션·포인트 언급을 현재 모집이나 금전 혜택으로 해석하지 않음.",
+      "sources": [
+        {
+          "id": "S10-S01",
+          "url": "https://council.songpa.go.kr/cast/viewer/record.do?key=973e30042d85415d17d082d42eb15911c957c6ebafe2791c5477c0e694723f519460e6d1528d4698&pos=20",
+          "title": "2026년도 예산결산특별위원회 회의록",
+          "status": "공식 본문 확인",
+          "as_of": "2025-12-10",
+          "checked_at": "2026-09-17",
+          "supports": "온트리 미션·인증·포인트·탄소중립숲 언급"
+        }
+      ],
+      "overview_source_ids": [
+        "S10-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S10-C01",
+          "group": "과거 운영 안내",
+          "group_logic": "안내",
+          "requirement": "분리배출·대중교통·잔반·장바구니 등 앱 미션 인증",
+          "detail": "2025 운영 설명이며 2026 앱 상태·미션·포인트 미확인",
+          "applies_to": "과거 운영",
+          "relation": "현재 적격/신청 조건 아님",
+          "source_ids": [
+            "S10-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[송파구] 온트리 탄소중립 실천 미션"
+    },
+    {
+      "program_id": "S12",
+      "title": "폐비닐 직접보상제",
+      "district": "송파구",
+      "target": "일반주택지역 18개 동 주민센터 이용자",
+      "eligibility_logic": "대상 동 및 요일·시간에 폐비닐 1kg 반입",
+      "benefit": "폐비닐 1kg당 10L 종량제봉투 1매",
+      "application_period": "신청 없음",
+      "usage_period": "2026-03~11, 둘째·넷째 주 월~금 09:30~11:30 / 13:00~15:00; 금요일 오전만",
+      "documents": "미확인",
+      "application_method": "대상 동 주민센터 반입 교환",
+      "venue": "각 동 주민센터; 요일별 동은 공고표",
+      "status": "2026-11까지 연장 운영",
+      "caveat": "포스터는 랩을 배출 불가 품목으로 안내하나, 나머지 허용 품목 세부는 이미지 원문 재확인 필요.",
+      "sources": [
+        {
+          "id": "S12-S01",
+          "url": "https://www.songpa.go.kr/child/selectBbsNttView.do?bbsNo=92&key=3712&nttNo=19278012&pageIndex=1&pageUnit=10",
+          "title": "폐비닐 직접보상제 사업 연장 안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026-07-21",
+          "checked_at": "2026-09-17",
+          "supports": "기간·18개동·요일별 장소·시간·1kg 보상·랩 제외"
+        }
+      ],
+      "overview_source_ids": [
+        "S12-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S12-C01",
+          "group": "대상 지역·요일",
+          "group_logic": "모두 충족",
+          "requirement": "일반주택지역 18개 동 중 요일별 지정 주민센터",
+          "detail": "둘째·넷째 주 지정 요일 09:30~11:30 또는13:00~15:00, 금요일 오전만. 동별 표는 공고 참조.",
+          "applies_to": "교환 건",
+          "relation": "수량 C02와 AND",
+          "source_ids": [
+            "S12-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S12-C02",
+          "group": "품목·수량",
+          "group_logic": "모두 충족",
+          "requirement": "폐비닐 1kg",
+          "detail": "랩은 배출 불가로 안내",
+          "applies_to": "교환 건",
+          "relation": "C01과 AND; 1kg당 10L 봉투 1매",
+          "source_ids": [
+            "S12-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[송파구] 폐비닐 직접보상제"
+    },
+    {
+      "program_id": "W11",
+      "title": "EGG 탐험대",
+      "district": "양천구",
+      "target": "환경 체험 방문자; 초등 자녀 가족은 추천 대상이며 필수자격으로 명시되지 않음",
+      "eligibility_logic": "지정 10곳 중 5곳 이상 방문·도장 수집 AND 미션지도 완성 시 기념품",
+      "benefit": "완성한 미션지도에 따른 기념 자석",
+      "application_period": "기사 안내상 11월 말까지 통합예약 신청",
+      "usage_period": "2026년 안내; 현재 예약 가능 회차 미확인",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "양천구 통합예약 안내 확인 → 거점 빨간 우체통의 미션지 → 방문 도장 수집",
+      "venue": "양천태양광발전소·목동재난체험관·안양천생태공원·양천공원 등 지정 10곳",
+      "status": "공식 2026 안내 확인; 현재 예약/기념품 재고 미확인",
+      "caveat": "추천 가족 유형을 필수 연령·거주 조건으로 추가하지 않음",
+      "sources": [
+        {
+          "id": "W11-S01",
+          "url": "https://yangcheon.newstool.co.kr/view.php?aid=17465&eid=9013",
+          "title": "우리동네 EGG(Eco Green Generation) 탐험대 도전",
+          "status": "공식 본문 확인",
+          "as_of": "2026-03-24 기사 / 4월호",
+          "checked_at": "2026-09-17",
+          "supports": "2026 기간, 10개 시설·5개 방문 조건, 스탬프·기념품, 신청 경로"
+        },
+        {
+          "id": "W11-S02",
+          "url": "https://www.pcccr.go.kr/storage/board/base/2025/07/03/BOARD_ATTACH_1751510256077.pdf",
+          "title": "양천구 제1차 탄소중립 녹색성장 기본계획",
+          "status": "기존 자료만",
+          "as_of": "2026-03-24",
+          "checked_at": "2026-09-17",
+          "supports": "EGG 탐험대의 주민 대상·탐방 조건·환경과 소관 계획; 이번 본문 재확인 아님"
+        }
+      ],
+      "overview_source_ids": [
+        "W11-S01",
+        "W11-S02"
+      ],
+      "conditions": [
+        {
+          "id": "W11-C01",
+          "group": "실천 증빙",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "지정 10곳 중 5곳 이상 방문해 도장 수집",
+          "detail": "지정 체험 거점의 미션지 사용",
+          "applies_to": "탐험 활동",
+          "relation": "모든 10곳 방문은 요구하지 않음",
+          "source_ids": [
+            "W11-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W11-C02",
+          "group": "완료 보상",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "미션지도 완성 후 기념 자석",
+          "detail": "실제 교환처·재고는 현재 안내 확인",
+          "applies_to": "기념품 수령",
+          "relation": "방문·도장 기준 충족과 연결",
+          "source_ids": [
+            "W11-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "W11-C03",
+          "group": "접수 안내",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "기사상 11월 말까지 통합예약 신청",
+          "detail": "현재 잔여 회차 확인 안 됨",
+          "applies_to": "참여 신청",
+          "relation": "거주·연령 자격으로 대체하지 않음",
+          "source_ids": [
+            "W11-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[양천구] EGG 탐험대"
+    },
+    {
+      "program_id": "S02",
+      "title": "쓰다점빵 재활용품 교환",
+      "district": "영등포구",
+      "target": "재활용품을 지정 거점에 가져오는 이용자",
+      "eligibility_logic": "거주자격은 본문 미기재; 품목·수량·상태 및 운영일 충족",
+      "benefit": "5L 종량제봉투 1장/교환, 1일 1인 최대 3장",
+      "application_period": "신청 없음",
+      "usage_period": "2026-03-12~11-26 매주 목 15:00~19:00; 9/3 재개",
+      "documents": "없음으로 단정 불가",
+      "application_method": "지정 재활용 분리배출 거점 방문 교환",
+      "venue": "공고상 56개 거점; 영중로27길 3은 3/19 신설, 도신로29가길 12 도림동 거점은 8/21 폐지",
+      "status": "2026 운영 안내; 기상·예산에 따라 당일 미운영/조기종료 가능",
+      "caveat": "56개소는 공고상 거점 수이며 당일 가동 보장이 아니다.",
+      "sources": [
+        {
+          "id": "S02-S01",
+          "url": "https://youth.seoul.go.kr/infoData/sprtInfo/view.do?key=2309130006&sprtInfoId=73647",
+          "title": "2026년 재활용품 교환사업 쓰다점빵 운영 재개 안내",
+          "status": "공식 본문 확인",
+          "as_of": "2026-09-03",
+          "checked_at": "2026-09-17",
+          "supports": "기간·거점·수량·혼합품목·상태·한도·거점변동"
+        }
+      ],
+      "overview_source_ids": [
+        "S02-S01"
+      ],
+      "conditions": [
+        {
+          "id": "S02-C01",
+          "group": "운영",
+          "group_logic": "모두 충족",
+          "requirement": "운영일·시간에 지정 거점 방문",
+          "detail": "매주 목 15:00~19:00, 기상·예산에 따른 미운영/조기종료 가능",
+          "applies_to": "교환 건",
+          "relation": "품목 조건과 AND",
+          "source_ids": [
+            "S02-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S02-C02",
+          "group": "단품 수량",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "투명 무색 페트병 30개 또는 일반팩 30개 또는 멸균팩 50개",
+          "detail": "규격무관; 폐건전지는 대상 제외",
+          "applies_to": "교환 1건",
+          "relation": "혼합 수량 C03과 대체",
+          "source_ids": [
+            "S02-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S02-C03",
+          "group": "혼합 수량",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "페트+일반팩 30개, 페트+멸균팩 50개, 일반팩+멸균팩 50개 중 하나",
+          "detail": "혼합 구성비는 본문 미기재",
+          "applies_to": "교환 1건",
+          "relation": "단품 수량 C02와 대체",
+          "source_ids": [
+            "S02-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S02-C04",
+          "group": "배출 상태",
+          "group_logic": "모두 충족",
+          "requirement": "종이팩은 세척·펼침, 투명페트병은 세척·라벨 제거",
+          "detail": "품목별 상태요건",
+          "applies_to": "반입 품목",
+          "relation": "C02 또는 C03과 AND",
+          "source_ids": [
+            "S02-S01"
+          ],
+          "verification": "현재본문"
+        },
+        {
+          "id": "S02-C05",
+          "group": "지급 한도",
+          "group_logic": "제한",
+          "requirement": "1일 1인 최대 3장",
+          "detail": "기준 수량 충족당 5L 봉투 1장",
+          "applies_to": "이용자",
+          "relation": "자격이 아니라 지급상한",
+          "source_ids": [
+            "S02-S01"
+          ],
+          "verification": "현재본문"
+        }
+      ],
+      "display_title": "[영등포구] 쓰다점빵 재활용품 교환"
+    },
+    {
+      "program_id": "N05",
+      "title": "투명페트병 종량제봉투 교환",
+      "district": "용산구",
+      "target": "거주지 관할 동주민센터 방문",
+      "eligibility_logic": "500mL 이상 투명페트병 / 매주 목요일 거주지 관할 동주민센터 방문 / 20개당 10L 종량제봉투 1장 / 주 120개·종량제봉투 6장까지; 상세 행의 관계 참조.",
+      "benefit": "500ml 이상 투명페트병 20개당 10L 종량제봉투 1장",
+      "application_period": "2026년 연중, 예산 소진 시까지; 매주 목요일",
+      "usage_period": "운영기간 내 거점별 수거·교환",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "라벨·이물질을 제거하고 압착한 500ml 이상 투명페트병을 거주지 관할 동주민센터에 제출",
+      "venue": "거주지 관할 동주민센터",
+      "status": "2026 공식 본문 확인",
+      "caveat": "각 동 접수 시간·예산 잔여 미확인",
+      "sources": [
+        {
+          "id": "N05-S01",
+          "url": "https://www.yongsannews.com/vol595/sub07.html",
+          "title": "용산구소식: 투명페트병 종량제봉투 교환",
+          "status": "공식 본문 확인",
+          "as_of": "2026-05 (소식지 595호)",
+          "checked_at": "2026-09-17",
+          "supports": "기간·방문 장소·교환 기준·주당 상한·담당팀; Main이 공식 소식지 본문 직접 열람하여 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "N05-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N05-C01",
+          "group": "배출 품목",
+          "group_logic": "모두 충족",
+          "requirement": "500mL 이상 투명페트병",
+          "detail": "라벨과 이물질을 제거하고 압착",
+          "applies_to": "라벨·이물질을 제거하고 압착한 500ml 이상 투명페트병을 거주지 관할 동주민센터에 제출",
+          "relation": "장소·수량 기준과 모두 충족",
+          "source_ids": [
+            "N05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N05-C02",
+          "group": "거점·요일",
+          "group_logic": "모두 충족",
+          "requirement": "매주 목요일 거주지 관할 동주민센터 방문",
+          "detail": "교환 기준 미달이면 교환 불가",
+          "applies_to": "라벨·이물질을 제거하고 압착한 500ml 이상 투명페트병을 거주지 관할 동주민센터에 제출",
+          "relation": "품목 기준과 모두 충족",
+          "source_ids": [
+            "N05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N05-C03",
+          "group": "교환 단위",
+          "group_logic": "안내",
+          "requirement": "20개당 10L 종량제봉투 1장",
+          "detail": "최소 20개 단위",
+          "applies_to": "라벨·이물질을 제거하고 압착한 500ml 이상 투명페트병을 거주지 관할 동주민센터에 제출",
+          "relation": "주당 상한 적용",
+          "source_ids": [
+            "N05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N05-C04",
+          "group": "주당 상한",
+          "group_logic": "제한",
+          "requirement": "주 120개·종량제봉투 6장까지",
+          "detail": "예산 소진 시까지 2026 연중",
+          "applies_to": "라벨·이물질을 제거하고 압착한 500ml 이상 투명페트병을 거주지 관할 동주민센터에 제출",
+          "relation": "교환 단위 후 적용",
+          "source_ids": [
+            "N05-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[용산구] 투명페트병 종량제봉투 교환"
+    },
+    {
+      "program_id": "N17",
+      "title": "자원순환 챌린지 헌책 수거 활동",
+      "district": "용산구",
+      "target": "중학생 이상, 개인 또는 단체",
+      "eligibility_logic": "중학생 이상 개인 또는 단체가 1365 자원봉사포털로 신청하고, 허용 품목을 제출한다. 헌책 3kg당 봉사시간 1시간.",
+      "benefit": "헌책 3kg당 자원봉사 1시간; 수익금은 기부",
+      "application_period": "2026년 11월까지, 매주 목·금요일",
+      "usage_period": "미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "1365 자원봉사포털로 신청 후 헌책·문제집·신문을 센터에 제출",
+      "venue": "용산구자원봉사센터",
+      "status": "2026년 11월까지 활동 기간 명시",
+      "caveat": "센터의 정확한 제출 주소·시간; 11월 내 세부 마감일",
+      "sources": [
+        {
+          "id": "N17-S01",
+          "url": "https://www.yongsannews.com/vol595/sub07.html",
+          "title": "용산구소식: 자원순환 챌린지 헌책 수거 활동",
+          "status": "기존 자료만",
+          "as_of": "2026-05 (소식지 595호)",
+          "checked_at": "2026-09-17",
+          "supports": "대상·신청·요일·품목·봉사시간; Main이 공식 소식지 본문 직접 열람하여 확인"
+        }
+      ],
+      "overview_source_ids": [
+        "N17-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N17-C01",
+          "group": "참여 대상",
+          "group_logic": "모두 충족",
+          "requirement": "중학생 이상, 개인 또는 단체",
+          "detail": "입력 후보에 기재된 대상; 지자체 주소만으로 주민자격을 추가 추정하지 않음",
+          "applies_to": "1365 자원봉사포털로 신청 후 헌책·문제집·신문을 센터에 제출",
+          "relation": "아래 품목·수량·회차 조건과 함께 적용",
+          "source_ids": [
+            "N17-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N17-C02",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "1365 자원봉사포털 신청",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "1365 자원봉사포털로 신청 후 헌책·문제집·신문을 센터에 제출",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N17-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N17-C03",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "제출 품목: 헌책·다 푼 문제집·신문",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "1365 자원봉사포털로 신청 후 헌책·문제집·신문을 센터에 제출",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N17-S01"
+          ],
+          "verification": "공식 본문 확인"
+        },
+        {
+          "id": "N17-C04",
+          "group": "봉사시간 산정",
+          "group_logic": "안내",
+          "requirement": "헌책 3kg당 자원봉사 1시간",
+          "detail": "수익금은 기부; 문제집·신문의 시간 산정 방식은 미확인",
+          "applies_to": "제출 건",
+          "relation": "대상·신청·허용품목 조건을 충족한 제출 건의 보상 기준",
+          "source_ids": [
+            "N17-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[용산구] 자원순환 챌린지 헌책 수거 활동"
+    },
+    {
+      "program_id": "W04",
+      "title": "폐배터리(폐건전지) 전용수거함 분리배출",
+      "district": "은평구",
+      "target": "폐배터리 전용수거함 이용자; 거주 요건 미확인",
+      "eligibility_logic": "분리배출 안내형 활동; 포인트나 교환 조건은 확인되지 않음",
+      "benefit": "보상 여부 미확인",
+      "application_period": "미확인",
+      "usage_period": "미확인",
+      "documents": "공식 안내에 구비서류 미기재",
+      "application_method": "동주민센터 등에 설치된 전용수거함 배출(기존 검색자료)",
+      "venue": "동주민센터 등; 정확한 수거함 위치·시간 미확인",
+      "status": "기존 검색자료 보존; 이번 상세 페이지 접근 실패",
+      "caveat": "일반 수거 안내를 개인 보상 사업으로 해석하지 않음",
+      "sources": [
+        {
+          "id": "W04-S01",
+          "url": "https://ehealth.ep.go.kr/dong/selectBbsNttView.do?bbsNo=43&integrDeptCode=&key=3960&nttNo=317631&pageIndex=1&searchCnd=all&searchCtgry=%EC%8B%A0%EC%82%AC1%EB%8F%99&searchKrwd=",
+          "title": "폐배터리(폐건전지) 전용수거함 분리배출 안내",
+          "status": "접근 실패 · 기존 검색자료 보존",
+          "as_of": "2026-06-01 공지",
+          "checked_at": "2026-09-17",
+          "supports": "작성일, 자원순환과·동 주민센터 문의처, 전용수거함 안내; 이번 본문 재확인 아님"
+        }
+      ],
+      "overview_source_ids": [
+        "W04-S01"
+      ],
+      "conditions": [
+        {
+          "id": "W04-C01",
+          "group": "대상 품목",
+          "group_logic": "개별 기준·관계 열 참조",
+          "requirement": "폐배터리(폐건전지) 전용수거함 분리배출",
+          "detail": "배터리 종류별 범위·준비방법은 미확인",
+          "applies_to": "배출 물품",
+          "relation": "보상조건으로 확정하지 않음",
+          "source_ids": [
+            "W04-S01"
+          ],
+          "verification": "기존 자료만 · 이번 본문 접근 실패"
+        }
+      ],
+      "display_title": "[은평구] 폐배터리(폐건전지) 전용수거함 분리배출"
+    },
+    {
+      "program_id": "N01",
+      "title": "폐우산 재활용 사업",
+      "district": "종로구",
+      "target": "미확인",
+      "eligibility_logic": "개인 참여자격 미기재; 관계는 상세 조건 참조.",
+      "benefit": "복지시설 재사용",
+      "application_period": "2026년 11월까지 추진 보도",
+      "usage_period": "미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "폐우산을 수거·선별·수리하여 복지시설에 순환 제공하는 구 사업",
+      "venue": "미확인",
+      "status": "사업 추진 확인, 개인 반입 방법 미확인",
+      "caveat": "주민의 폐우산 반입 장소·시간·수거 기준; 개인 참여 가능 여부",
+      "sources": [
+        {
+          "id": "N01-S01",
+          "url": "https://www.jongno.go.kr/mayor/bbs/selectBoardArticle.do?bbsId=BBSMSTR_000000001618&menuId=388338&menuNo=388338&nttId=250530",
+          "title": "종로구 폐우산 재활용 사업 보도자료",
+          "status": "공식 본문 확인",
+          "as_of": "2026-05-08",
+          "checked_at": "2026-09-17",
+          "supports": "사업 기간, 부서 협업, 선별·수리·복지시설 제공"
+        }
+      ],
+      "overview_source_ids": [
+        "N01-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N01-C01",
+          "group": "참여 대상",
+          "group_logic": "안내",
+          "requirement": "개인 참여자격 미기재",
+          "detail": "개인 반입·신청 가능 여부 또는 거주 요건은 미확인",
+          "applies_to": "폐우산을 수거·선별·수리하여 복지시설에 순환 제공하는 구 사업",
+          "relation": "운영기관 사업·공개안내 여부와 구분",
+          "source_ids": [
+            "N01-S01"
+          ],
+          "verification": "공식 본문 확인"
+        }
+      ],
+      "display_title": "[종로구] 폐우산 재활용 사업"
+    },
+    {
+      "program_id": "N02",
+      "title": "탄소중립 원예테라피·식생활 환경강좌",
+      "district": "종로구",
+      "target": "미확인",
+      "eligibility_logic": "개인 참여자격 미기재 / 개별 강좌/회차의 접수·정원·장소 확인; 관계는 상세 조건 참조.",
+      "benefit": "무료 강좌",
+      "application_period": "2026년 9월 접수 목록에서 확인; 현 시점 접수 여부 미확인",
+      "usage_period": "회차별 운영; 현재 이용기간 미확인",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "탄소중립 원예테라피 및 지속가능 식생활 강좌 참여",
+      "venue": "종로구 예약 포털에 표시된 교육장",
+      "status": "당시 접수 목록 확인",
+      "caveat": "개별 강좌의 최신 접수 상태; 거주지 제한",
+      "sources": [
+        {
+          "id": "N02-S01",
+          "url": "https://www.jongno.go.kr/reserv/main.do",
+          "title": "종로구 통합예약",
+          "status": "공식 포털 열람 · 해당 강좌는 기존 자료만",
+          "as_of": "2026-09",
+          "checked_at": "2026-09-17",
+          "supports": "포털 접근은 확인했으나 이번 목록에서 해당 강좌 상세를 확인하지 못함. 당시 강좌 정보는 기존 조사 보존."
+        }
+      ],
+      "overview_source_ids": [
+        "N02-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N02-C01",
+          "group": "참여 대상",
+          "group_logic": "안내",
+          "requirement": "개인 참여자격 미기재",
+          "detail": "개인 반입·신청 가능 여부 또는 거주 요건은 미확인",
+          "applies_to": "탄소중립 원예테라피 및 지속가능 식생활 강좌 참여",
+          "relation": "운영기관 사업·공개안내 여부와 구분",
+          "source_ids": [
+            "N02-S01"
+          ],
+          "verification": "기존 자료만 · 현재 강좌 상세 미확인"
+        },
+        {
+          "id": "N02-C02",
+          "group": "회차·접수",
+          "group_logic": "회차별",
+          "requirement": "개별 강좌/회차의 접수·정원·장소 확인",
+          "detail": "통합 목록 또는 과거 공고만 확인된 경우 현재 접수로 해석하지 않음",
+          "applies_to": "탄소중립 원예테라피 및 지속가능 식생활 강좌 참여",
+          "relation": "참여자격과 별도",
+          "source_ids": [
+            "N02-S01"
+          ],
+          "verification": "기존 자료만 · 현재 강좌 상세 미확인"
+        }
+      ],
+      "display_title": "[종로구] 탄소중립 원예테라피·식생활 환경강좌"
+    },
+    {
+      "program_id": "N03",
+      "title": "재활용품 종량제봉투 교환사업",
+      "district": "중구",
+      "target": "미확인",
+      "eligibility_logic": "개인 참여자격 미기재 / 품목별 기준·횟수는 동별 최신 공지 확인 필요; 관계는 상세 조건 참조.",
+      "benefit": "종량제봉투",
+      "application_period": "2021년부터 운영 중이라고 2026-04-28 보도",
+      "usage_period": "운영기간 내 거점별 수거·교환",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "폐건전지·종이팩·폐비닐 등 재활용품을 동주민센터로 가져가 종량제봉투와 교환",
+      "venue": "동주민센터",
+      "status": "운영 보도 확인, 세부 기준 미확인",
+      "caveat": "전체 동 운영 요일·장소; 거주 요건",
+      "sources": [
+        {
+          "id": "N03-S01",
+          "url": "https://www.junggu.seoul.kr/news/content.do?cid=1444563789&cmsid=16207&mode=view",
+          "title": "중구-CJ제일제당 자원순환 협약 보도자료",
+          "status": "기존 자료만",
+          "as_of": "2026-04-28",
+          "checked_at": "2026-09-17",
+          "supports": "교환 방식, 2021년부터 운영, 청소행정과"
+        }
+      ],
+      "overview_source_ids": [
+        "N03-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N03-C01",
+          "group": "참여 대상",
+          "group_logic": "안내",
+          "requirement": "개인 참여자격 미기재",
+          "detail": "개인 반입·신청 가능 여부 또는 거주 요건은 미확인",
+          "applies_to": "폐건전지·종이팩·폐비닐 등 재활용품을 동주민센터로 가져가 종량제봉투와 교환",
+          "relation": "운영기관 사업·공개안내 여부와 구분",
+          "source_ids": [
+            "N03-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N03-C02",
+          "group": "세부 조건",
+          "group_logic": "안내 · 세부 기준 미확인",
+          "requirement": "품목별 기준·횟수는 동별 최신 공지 확인 필요",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "폐건전지·종이팩·폐비닐 등 재활용품을 동주민센터로 가져가 종량제봉투와 교환",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N03-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "display_title": "[중구] 재활용품 종량제봉투 교환사업"
+    },
+    {
+      "program_id": "N04",
+      "title": "다시 쓰는 청구 장바구니",
+      "district": "중구",
+      "target": "주민 100명",
+      "eligibility_logic": "주민 100명. 페트병·종이팩·건전지·캔·유리병 60개 또는 우유팩·비닐 3kg은 쿠폰 1회 기준이며, 하루 1쿠폰; 10쿠폰 달성 시 장바구니.",
+      "benefit": "10회 쿠폰 달성 시 장바구니",
+      "application_period": "2026년 7~12월 매주 목요일 09:00~12:00; 소진 시 조기 종료",
+      "usage_period": "운영기간 내 거점별 수거·교환",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "정해진 수량의 페트병·종이팩·건전지·캔·유리병·우유팩·비닐을 가져와 쿠폰을 모아 장바구니 받기",
+      "venue": "청구동주민센터 1층 우측 입구",
+      "status": "기간 명시된 동 특화사업",
+      "caveat": "9월 17일 잔여 장바구니 수량",
+      "sources": [
+        {
+          "id": "N04-S01",
+          "url": "https://www.junggu.seoul.kr/dong/cheonggu/content.do?cid=1459196778&cmsid=13327&mode=view",
+          "title": "청구동 다시 쓰는 청구 장바구니 사업",
+          "status": "기존 자료만",
+          "as_of": "2026-07-07",
+          "checked_at": "2026-09-17",
+          "supports": "대상·장소·기간·교환 조건·보상"
+        }
+      ],
+      "overview_source_ids": [
+        "N04-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N04-C01",
+          "group": "참여 대상",
+          "group_logic": "묶음 안 하나 충족",
+          "requirement": "주민 100명",
+          "detail": "입력 후보에 기재된 대상; 지자체 주소만으로 주민자격을 추가 추정하지 않음",
+          "applies_to": "정해진 수량의 페트병·종이팩·건전지·캔·유리병·우유팩·비닐을 가져와 쿠폰을 모아 장바구니 받기",
+          "relation": "아래 품목·수량·회차 조건과 함께 적용",
+          "source_ids": [
+            "N04-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N04-C02",
+          "group": "세부 조건",
+          "group_logic": "대체 수량 기준(OR)",
+          "requirement": "각 페트병·종이팩·건전지·캔·유리병 60개당 1회",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "정해진 수량의 페트병·종이팩·건전지·캔·유리병·우유팩·비닐을 가져와 쿠폰을 모아 장바구니 받기",
+          "relation": "C03과 대체되는 쿠폰 1회 수량 기준; C04 일일 한도 적용",
+          "source_ids": [
+            "N04-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N04-C03",
+          "group": "세부 조건",
+          "group_logic": "대체 수량 기준(OR)",
+          "requirement": "우유팩·비닐 3kg당 1회",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "정해진 수량의 페트병·종이팩·건전지·캔·유리병·우유팩·비닐을 가져와 쿠폰을 모아 장바구니 받기",
+          "relation": "C02와 대체되는 쿠폰 1회 수량 기준; C04 일일 한도 적용",
+          "source_ids": [
+            "N04-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N04-C04",
+          "group": "세부 조건",
+          "group_logic": "모두 충족",
+          "requirement": "하루 1쿠폰",
+          "detail": "입력에 기록된 개별 요건",
+          "applies_to": "정해진 수량의 페트병·종이팩·건전지·캔·유리병·우유팩·비닐을 가져와 쿠폰을 모아 장바구니 받기",
+          "relation": "다른 세부 조건과 함께 적용; 회차·거점별 상이는 별도 확인",
+          "source_ids": [
+            "N04-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        },
+        {
+          "id": "N04-C05",
+          "group": "보상 달성 기준",
+          "group_logic": "모두 충족",
+          "requirement": "쿠폰 10회 달성",
+          "detail": "장바구니 1개 수령 기준",
+          "applies_to": "참여자",
+          "relation": "C02 또는 C03의 쿠폰 적립과 C04 일일 한도 이후 적용",
+          "source_ids": [
+            "N04-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "display_title": "[중구] 다시 쓰는 청구 장바구니"
+    },
+    {
+      "program_id": "N13",
+      "title": "이동식 재활용 정거장",
+      "district": "중랑구",
+      "target": "미확인",
+      "eligibility_logic": "개인 참여자격 미기재; 관계는 상세 조건 참조.",
+      "benefit": "미확인",
+      "application_period": "미확인",
+      "usage_period": "운영기간 내 거점별 수거·교환",
+      "documents": "미확인(서류 미기재는 불필요를 뜻하지 않음)",
+      "application_method": "재활용 정거장 이용",
+      "venue": "미확인",
+      "status": "2026 정책 추진현황에서 운영 언급만 확인; 개인 이용 정보와 현행성 미확인",
+      "caveat": "장소·운영일·품목·보상; 2026년 현재 가동 여부",
+      "sources": [
+        {
+          "id": "N13-S01",
+          "url": "https://council.jungnang.go.kr/kr/bbs/download.do?bbs_id=active&uid=ABC300ABF0C990005BE090C1191909EF",
+          "title": "중랑구 2026 정책 추진현황 자료",
+          "status": "기존 자료만",
+          "as_of": "2026",
+          "checked_at": "2026-09-17",
+          "supports": "이동식 재활용 정거장 운영 언급"
+        }
+      ],
+      "overview_source_ids": [
+        "N13-S01"
+      ],
+      "conditions": [
+        {
+          "id": "N13-C01",
+          "group": "참여 대상",
+          "group_logic": "안내",
+          "requirement": "개인 참여자격 미기재",
+          "detail": "개인 반입·신청 가능 여부 또는 거주 요건은 미확인",
+          "applies_to": "재활용 정거장 이용",
+          "relation": "운영기관 사업·공개안내 여부와 구분",
+          "source_ids": [
+            "N13-S01"
+          ],
+          "verification": "공식 검색결과만 확인"
+        }
+      ],
+      "display_title": "[중랑구] 이동식 재활용 정거장"
+    }
+  ],
+  "common_groups": [
+    {
+      "id": "DC01",
+      "category": "참여 대상",
+      "name": "거주·생활권",
+      "meaning": "특정 구 거주 또는 재직·재학 등 생활권을 참여에 적용하는 기준",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "주민만/생활권 허용/구민 우선은 다름. 거점 소재지를 주민 자격으로 바꾸지 않음.",
+      "condition_ids": [
+        "W01-C01",
+        "W03-C01",
+        "N09-C01",
+        "N12-C01",
+        "S04-C02",
+        "S06-C01",
+        "S07-C01",
+        "S11-C01"
+      ]
+    },
+    {
+      "id": "DC02",
+      "category": "참여 대상",
+      "name": "연령·학년",
+      "meaning": "아동·학생 대상의 연령이나 학년 범위",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "학년 범위, 가족 동반, 성인 별도 경로, 프로그램별 대상 차이",
+      "condition_ids": [
+        "N09-C01",
+        "N12-C01",
+        "N17-C01",
+        "W09-C01",
+        "S04-C02",
+        "S13-C01"
+      ]
+    },
+    {
+      "id": "DC03",
+      "category": "참여 대상",
+      "name": "개인·가족·팀 단위",
+      "meaning": "누가 단위가 되어 신청하는지와 팀 구성 기준",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "최대/내외 인원, 팀 우선, 기관 대상인지, 개인 신청 허용 여부",
+      "condition_ids": [
+        "N09-C01",
+        "N11-C01",
+        "N17-C01",
+        "W05-C01",
+        "S04-C02"
+      ]
+    },
+    {
+      "id": "DC04",
+      "category": "모집",
+      "name": "정원·선정 방식",
+      "meaning": "선착순·추첨·우선 모집 등 자격 외 선발 기준",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "회차별 정원·거주자 우선 기간·팀 우선·종료 여부",
+      "condition_ids": [
+        "N04-C01",
+        "N12-C03",
+        "N15-C02",
+        "W03-C04",
+        "W05-C01",
+        "W05-C02",
+        "W09-C02",
+        "S04-C02",
+        "S06-C01",
+        "S11-C01"
+      ]
+    },
+    {
+      "id": "DC05",
+      "category": "이용 절차",
+      "name": "가입·적립 수단",
+      "meaning": "서비스를 이용하거나 기록·포인트를 받는 수단",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "앱 이름·카드 대체 가능성·회원코드/본인인증·기기별 분기; 수단별 독립 조건 유지",
+      "condition_ids": [
+        "N06-C02",
+        "N06-C03",
+        "N17-C02",
+        "W01-C02",
+        "W02-C02",
+        "W06-C02",
+        "S07-C01",
+        "S11-C02"
+      ]
+    },
+    {
+      "id": "DC06",
+      "category": "반입·실천",
+      "name": "인정 품목",
+      "meaning": "해당 활동에서 받는 물품의 종류·규격",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "투명 여부·용량·팩 종류·제외품목·기기별 인정 범위. 수량이나 보상 통일 아님.",
+      "condition_ids": [
+        "N04-C02",
+        "N04-C03",
+        "N05-C01",
+        "N08-C01",
+        "N10-C01",
+        "N16-C02",
+        "N17-C03",
+        "W02-C01",
+        "W04-C01",
+        "W06-C01",
+        "W07-C01",
+        "W08-C01",
+        "S02-C02",
+        "S02-C03",
+        "S05-C01",
+        "S05-C02",
+        "S12-C02"
+      ]
+    },
+    {
+      "id": "DC07",
+      "category": "반입·실천",
+      "name": "세척·분리·포장",
+      "meaning": "물품을 가져오거나 기기에 투입하기 전에 갖출 상태",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "라벨·뚜껑 제거, 압착/펼침, 팩 종류 구분, 투명봉투 요구를 개별로 유지",
+      "condition_ids": [
+        "N05-C01",
+        "N06-C01",
+        "N16-C03",
+        "W07-C02",
+        "W07-C04",
+        "W08-C02",
+        "S02-C04"
+      ]
+    },
+    {
+      "id": "DC08",
+      "category": "보상 기준",
+      "name": "수량·무게별 보상",
+      "meaning": "품목별 수량 또는 무게와 연결된 지급 기준",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "개수/kg·혼합 품목 분기·최소치·지급 구간·봉투 규격·봉사시간을 각각 보존",
+      "condition_ids": [
+        "N04-C02",
+        "N04-C03",
+        "N05-C03",
+        "N08-C01",
+        "N16-C05",
+        "N17-C04",
+        "W06-C01",
+        "W08-C03",
+        "S02-C02",
+        "S02-C03",
+        "S05-C01",
+        "S05-C02",
+        "S12-C02"
+      ]
+    },
+    {
+      "id": "DC09",
+      "category": "보상 기준",
+      "name": "개인별 기간 한도",
+      "meaning": "하루·주·연간 등 기간별 개인 투입량 또는 보상 상한",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "기간·한도 단위·품목 합산 여부·개수와 봉투/코인 한도를 구분",
+      "condition_ids": [
+        "N04-C04",
+        "N05-C04",
+        "N08-C03",
+        "W02-C03",
+        "W07-C03",
+        "S02-C05",
+        "S05-C01",
+        "S07-C03"
+      ]
+    },
+    {
+      "id": "DC10",
+      "category": "보상 기준",
+      "name": "적립 후 교환·완료 보상",
+      "meaning": "누적 실적이나 완료 기준에 따라 받는 혜택",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "쿠폰·마일리지·도장·참여율마다 단위·교환처·재고가 다름",
+      "condition_ids": [
+        "N04-C05",
+        "W01-C04",
+        "W05-C04",
+        "W11-C02"
+      ]
+    },
+    {
+      "id": "DC11",
+      "category": "실천 증빙",
+      "name": "인증·관측 기록",
+      "meaning": "실천 사진·QR·방문 도장·관측 결과 등 제출 또는 기록",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "무엇을 인증하는지, 인증 수단·회차·횟수·현재 인정기간을 각각 유지",
+      "condition_ids": [
+        "W01-C03",
+        "W05-C03",
+        "W11-C01",
+        "S07-C02",
+        "S09-C01",
+        "S10-C01",
+        "S11-C02"
+      ]
+    },
+    {
+      "id": "DC12",
+      "category": "교육 이수",
+      "name": "참여율·필수 활동",
+      "meaning": "교육·활동 완료를 위해 요구하는 참석이나 필수 일정",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "전 회차 참석과 80% 이상은 다름. 수료·보상 기준인지 모집 대상인지 구분",
+      "condition_ids": [
+        "N12-C02",
+        "N14-C02",
+        "N14-C03",
+        "W05-C04"
+      ]
+    },
+    {
+      "id": "DC13",
+      "category": "운영 안내",
+      "name": "지정 장소·시간·기기 상태",
+      "meaning": "방문 시 이용 가능한 거점과 운영 주기·시간·가동 여부",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "동별 일정·특정창구·휴일·기기 점검·재고/예산; 개인 자격으로 저장하지 않음",
+      "condition_ids": [
+        "N02-C02",
+        "N05-C02",
+        "N06-C04",
+        "N08-C02",
+        "N10-C02",
+        "N16-C04",
+        "W02-C04",
+        "W07-C05",
+        "S02-C01",
+        "S05-C01",
+        "S05-C02",
+        "S12-C01",
+        "S13-C02"
+      ]
+    },
+    {
+      "id": "DC14",
+      "category": "운영 안내",
+      "name": "회차별 접수·종료",
+      "meaning": "특정 교육·행사·이벤트의 신청 기간과 종료 상태",
+      "shared_part": "같은 종류의 기준을 묶어 비교; 실제 값·조건 관계는 각 상세행 유지",
+      "retain_per_program": "종료회차는 현재 신청 불가, 종료일 미확인은 종료 아님, 현재 잔여석 별도",
+      "condition_ids": [
+        "N02-C02",
+        "N11-C04",
+        "N12-C04",
+        "N14-C04",
+        "N15-C03",
+        "W09-C03",
+        "W11-C03",
+        "S04-C01",
+        "S11-C01"
+      ]
+    }
+  ]
+}
