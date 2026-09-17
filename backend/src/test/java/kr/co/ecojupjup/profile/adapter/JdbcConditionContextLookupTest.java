@@ -57,16 +57,18 @@ class JdbcConditionContextLookupTest {
         assertNull(result.households().get(0).members().get(1).onResidentRegister());
         assertThrows(IllegalStateException.class,() -> JdbcConditionContextLookup.project(mapper.readTree(raw(inputs)),OWNER,new Selection("scheme:G031","G031-A01",UUID.randomUUID(),null,null)));
     }
-    @Test void jdbcUsesBoundParametersAndMapsOnlyMissingScopeSqlstate() {
-        var jdbc=mock(JdbcTemplate.class); var lookup=new JdbcConditionContextLookup(jdbc,mapper);
+    @Test void lookupChecksOwnerAndSelectedEntityBeforeDecrypting() {
+        var jdbc=mock(JdbcTemplate.class);
+        var facts=mock(kr.co.ecojupjup.profile.facts.PrivateFactsStore.class);
+        var lookup=new JdbcConditionContextLookup(jdbc,mapper,facts);
         var selection=new Selection("scheme:G031","G031-A01",HOUSE,null,null);
-        when(jdbc.queryForObject(anyString(),eq(String.class),any(Object[].class))).thenReturn(raw("[]"));
-        assertEquals(OWNER,lookup.load(OWNER,selection).userId());
-        verify(jdbc).queryForObject(contains("app.user_detail_context"),eq(String.class),eq(OWNER),eq("scheme:G031"),eq("G031-A01"),eq(HOUSE),isNull(),isNull());
-        when(jdbc.queryForObject(anyString(),eq(String.class),any(Object[].class)))
-                .thenThrow(new UncategorizedSQLException("scope","select",new SQLException("private ownership detail","22023")));
+        when(jdbc.queryForObject(anyString(),eq(Boolean.class),any(Object[].class))).thenReturn(true,true,false);
         assertThrows(ConditionContextService.NotFound.class,()->lookup.load(OWNER,selection));
-        when(jdbc.queryForObject(anyString(),eq(String.class),any(Object[].class))).thenThrow(new DataAccessResourceFailureException("down"));
+        verifyNoInteractions(facts);
+        verify(jdbc).queryForObject(contains("household_id=?"),eq(Boolean.class),eq(OWNER),eq(HOUSE));
+        reset(jdbc);
+        when(jdbc.queryForObject(anyString(),eq(Boolean.class),any(Object[].class)))
+            .thenThrow(new DataAccessResourceFailureException("down"));
         assertThrows(DataAccessResourceFailureException.class,()->lookup.load(OWNER,selection));
     }
 }

@@ -3,6 +3,8 @@ package kr.co.ecojupjup.profile.application;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Isolation;
 
 @Service
 public class ConditionContextService {
@@ -22,6 +24,7 @@ public class ConditionContextService {
     }
     private final Lookup lookup;
     public ConditionContextService(Lookup lookup) { this.lookup = lookup; }
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
     public ConditionContext load(UUID authenticatedUserId, Selection selection) {
         return lookup.load(Objects.requireNonNull(authenticatedUserId), Objects.requireNonNull(selection));
     }
