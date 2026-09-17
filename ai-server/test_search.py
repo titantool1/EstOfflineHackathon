@@ -1,7 +1,16 @@
 import unittest
 from unittest.mock import patch
 
-from search import build_answer, build_scope_filter, generate_answer, infer_doc_types, rrf_merge, safe_source_url
+from search import (
+    build_answer,
+    build_scope_filter,
+    filter_and_generate_answer,
+    generate_answer,
+    infer_doc_types,
+    rrf_merge,
+    safe_source_url,
+    select_results,
+)
 
 
 class SearchTests(unittest.TestCase):
@@ -58,6 +67,27 @@ class SearchTests(unittest.TestCase):
         self.assertIn("테스트 카페", answer)
         self.assertEqual(mode, "template")
         self.assertIsNone(model)
+
+    def test_llm_selection_keeps_order_and_rejects_invalid_numbers(self):
+        candidates = [{"docId": str(index)} for index in range(1, 7)]
+        selected = select_results(candidates, [4, 2, 4, 0, 99, "3", True, 1], 3)
+        self.assertEqual([item["docId"] for item in selected], ["4", "2", "1"])
+
+    def test_filter_falls_back_to_rrf_without_api_key(self):
+        candidates = [
+            {"title": "첫 번째", "docType": "policy", "needsReview": False},
+            {"title": "두 번째", "docType": "place", "needsReview": True},
+            {"title": "세 번째", "docType": "action", "needsReview": False},
+        ]
+        with patch.dict("os.environ", {}, clear=True):
+            answer, results, mode, model, filter_mode = filter_and_generate_answer(
+                "테스트 질문", candidates, 2
+            )
+        self.assertIn("첫 번째", answer)
+        self.assertEqual([item["title"] for item in results], ["첫 번째", "두 번째"])
+        self.assertEqual(mode, "template")
+        self.assertIsNone(model)
+        self.assertEqual(filter_mode, "rrf")
 
 
 if __name__ == "__main__":
