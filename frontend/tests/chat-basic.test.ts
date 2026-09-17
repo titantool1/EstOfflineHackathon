@@ -75,6 +75,12 @@ test("member lookup uses only the session cookie and maps anonymous access", asy
 });
 
 test("request boundary rejects cross-origin, null, and malformed input", () => {
+  assert.equal(sameOrigin(new Request("http://0.0.0.0:3000/api/chat", {
+    headers: { Host: "127.0.0.1:3300", Origin: "http://127.0.0.1:3300" },
+  })), true);
+  assert.equal(sameOrigin(new Request("http://0.0.0.0:3000/api/chat", {
+    headers: { Host: "127.0.0.1:3300", Origin: "http://0.0.0.0:3000" },
+  })), false);
   assert.equal(sameOrigin(new Request("http://app.test/api/chat", { headers: { Origin: "http://evil.test" } })), false);
   assert.equal(sameOrigin(new Request("http://app.test/api/chat", { headers: { Origin: "http://app.test" } })), true);
   assert.equal(chatRequest(null), null);

@@ -8,4 +8,16 @@ export function chatRequest(value: unknown): ChatRequest | null {
   return message && message.length <= 2000
     ? { conversationId: value.conversationId as string | undefined, clientRequestId: value.clientRequestId, message } : null;
 }
-export function sameOrigin(request: Request) { return request.headers.get("Origin") === new URL(request.url).origin; }
+export function sameOrigin(request: Request) {
+  const requestUrl = new URL(request.url);
+  const host = request.headers.get("Host") ?? requestUrl.host;
+  const origin = request.headers.get("Origin");
+  if (!origin || !host || /[\\/@,\s]/.test(host)) return false;
+  try {
+    const expected = new URL(`${requestUrl.protocol}//${host}`);
+    const actual = new URL(origin);
+    return ["http:", "https:"].includes(expected.protocol)
+      && actual.username === "" && actual.password === "" && actual.pathname === "/" && actual.search === "" && actual.hash === ""
+      && actual.origin === expected.origin;
+  } catch { return false; }
+}
