@@ -31,6 +31,7 @@ export interface Mission {
   sourceDocId?: string;
   sourceUrl?: string;
   sourceType?: "policy" | "action" | "place";
+  requiresPhotoProof?: boolean;
   verificationStatus: VerificationStatus;
 }
 
@@ -100,6 +101,7 @@ export const missions: Mission[] = [
     duration: "약 10분",
     interestIds: ["waste-reduction"],
     sourceProgramId: "C09",
+    requiresPhotoProof: true,
     verificationStatus: "needs-review",
   },
   {
@@ -159,6 +161,7 @@ export const missions: Mission[] = [
     duration: "약 20분",
     interestIds: ["waste-reduction"],
     sourceProgramId: "C06",
+    requiresPhotoProof: true,
     verificationStatus: "needs-review",
   },
   {
@@ -253,6 +256,7 @@ export const missions: Mission[] = [
     benefit: "지역 플로깅·봉사 프로그램과 연결 예정",
     duration: "약 20분",
     interestIds: ["eco-learning", "waste-reduction"],
+    requiresPhotoProof: true,
     verificationStatus: "needs-review",
   },
   {

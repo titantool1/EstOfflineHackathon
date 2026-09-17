@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SiteHeader } from "@/features/layout/site-header";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 type SearchResult = {
@@ -166,13 +167,7 @@ export default function ChatPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f8f1]">
-      <header className="border-b border-[#e5eddc] bg-white/90">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <Link href="/" className="flex items-center gap-2 font-bold text-[#267a38]"><span className="text-xl">🌱</span> 에코줍줍</Link>
-          <nav className="hidden gap-7 text-sm font-medium text-[#527051] md:flex"><Link href="/">홈</Link><Link href="/missions">에코 미션</Link><Link href="/map">실천 지도</Link><Link href="/chat" className="font-bold text-[#287b39]">줍줍이 챗봇</Link></nav>
-          <span className="rounded-full bg-[#e9f5e2] px-4 py-2 text-xs font-semibold text-[#2d7938]">서울특별시 기준</span>
-        </div>
-      </header>
+      <SiteHeader active="chat" />
       <main className="mx-auto grid max-w-6xl gap-5 px-5 py-8 lg:grid-cols-[1fr_300px]">
         <section className="flex min-h-[680px] flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-[#e2ebdc]">
           <div className="flex items-center justify-between gap-3 border-b border-[#e8eee3] p-5">

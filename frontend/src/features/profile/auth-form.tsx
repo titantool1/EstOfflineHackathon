@@ -12,41 +12,36 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
   const [nickname, setNickname] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [created, setCreated] = useState(false);
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setError(""); setBusy(true);
     const accounts = createAccountClient();
     try {
-      if (signup) { await accounts.signup(email, password, nickname); setCreated(true); }
+      if (signup) await accounts.signup(email, password, nickname);
       await accounts.login(email, password);
       setPassword(""); router.replace("/profile"); router.refresh();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "요청을 완료하지 못했습니다.");
     } finally { setBusy(false); }
   }
-  const field = "w-full rounded-xl border border-[#cfddc8] p-3 text-base";
-  return <main className="min-h-screen bg-[#f5f8f1] px-5 py-12">
-    <section className="mx-auto max-w-md rounded-3xl bg-white p-7 shadow-sm">
-      <Link href="/" className="font-bold text-[#267a38]">에코줍줍</Link>
-      <h1 className="my-6 text-2xl font-bold">{signup ? "회원가입" : "로그인"}</h1>
-      {created ? <p role="status">회원가입 완료. <Link href="/login" className="underline">로그인하기</Link></p> :
-      <form onSubmit={submit} className="space-y-4">
-        {signup && <div><label htmlFor="nickname">닉네임 (선택)</label>
-          <input id="nickname" name="nickname" autoComplete="nickname" className={field}
-            value={nickname} onChange={e => setNickname(e.target.value)} aria-describedby="nickname-hint" />
-          <p id="nickname-hint" className="mt-1 text-sm text-[#64765f]">20자 이하. 비워두면 에코쭙 + 숫자로 자동 생성돼요.</p></div>}
-        <div><label htmlFor="email">이메일</label><input id="email" type="email" autoComplete="email" required maxLength={254}
-          className={field} value={email} onChange={e => setEmail(e.target.value)} /></div>
-        <div><label htmlFor="password">비밀번호</label><input id="password" type="password" required
-          autoComplete={signup ? "new-password" : "current-password"} minLength={signup ? 8 : 1}
-          className={field} value={password} onChange={e => setPassword(e.target.value)} />
-          {signup && <p className="mt-1 text-sm text-[#64765f]">8자 이상 입력해 주세요.</p>}</div>
-        <button disabled={busy} className="w-full rounded-xl bg-[#2e843b] p-3 font-bold text-white disabled:opacity-60">
-          {busy ? "처리 중" : signup ? "가입하기" : "로그인"}</button>
-      </form>}
-      {error && <p role="alert" className="mt-4 text-red-700">{error}</p>}
-      <p className="mt-6 text-sm"><Link href={signup ? "/login" : "/signup"} className="underline">
-        {signup ? "이미 계정이 있어요" : "회원가입"}</Link></p>
-    </section>
+  const field = "mt-2 w-full rounded-xl border border-[#dcebd5] bg-[#f7faf4] px-4 py-4 text-base text-[#244f2b] outline-none placeholder:text-[#b5de94] focus:border-[#62a94c] focus:ring-2 focus:ring-[#d9f0c7]";
+  const title = signup ? "회원가입" : "로그인";
+  return <main className="min-h-screen bg-[#f5f8f1]">
+    <header className="flex h-16 items-center border-b border-[#e2ebda] bg-white px-6 sm:px-12"><Link href="/" className="flex items-center gap-2 text-2xl font-bold text-[#267a38]"><span className="text-3xl">🌱</span> 에코줍줍</Link></header>
+    <div className="grid min-h-[calc(100vh-4rem)] lg:grid-cols-2">
+      <section className="hidden bg-[#2e843b] px-12 py-16 text-white lg:flex lg:flex-col lg:items-center lg:justify-center">
+        <div className="max-w-xl"><div className="mb-10 text-center text-9xl" aria-hidden="true">🌍</div><h2 className="text-4xl font-bold leading-tight">내 상황에 맞는 친환경 혜택을<br />줍줍이가 찾아 드립니다</h2><p className="mt-8 text-lg leading-8 text-[#d7f1ca]">서울에서 받을 수 있는 제도·혜택과 실천 장소를 한 곳에서 찾아보세요. 모든 안내에는 출처와 확인일을 붙입니다.</p><div className="mt-8 flex flex-wrap gap-3">{["제도 18건", "실천 장소 17,761곳", "자치구 혜택 25구"].map((item) => <span key={item} className="rounded-xl bg-[#67ad32] px-4 py-2 text-sm font-bold">{item}</span>)}</div></div>
+      </section>
+      <section className="flex items-center justify-center px-5 py-12 sm:px-10"><div className="w-full max-w-xl rounded-[2rem] bg-white p-8 shadow-sm ring-1 ring-[#dcebd5] sm:p-12"><h1 className="text-4xl font-bold text-[#155b2d]">{title}</h1><p className="mt-6 text-base leading-7 text-[#62a747]">{signup ? "계정을 만들고 나에게 맞는 친환경 혜택을 저장해 보세요." : "저장한 관심사와 설정을 다음 방문에도 그대로 불러와요."}</p>
+        <form onSubmit={submit} className="mt-7 space-y-5">
+          {signup && <div><label htmlFor="nickname" className="font-bold text-[#4e9e47]">닉네임 <span className="font-normal text-[#82a87d]">(선택)</span></label><input id="nickname" name="nickname" autoComplete="nickname" maxLength={20} className={field} value={nickname} onChange={e => setNickname(e.target.value)} placeholder="에코줍줍" /><p className="mt-2 text-sm text-[#82a87d]">비워두면 자동으로 생성됩니다.</p></div>}
+          <div><label htmlFor="email" className="font-bold text-[#4e9e47]">이메일</label><input id="email" type="email" autoComplete="email" required maxLength={254} className={field} value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" /></div>
+          <div><label htmlFor="password" className="font-bold text-[#4e9e47]">비밀번호</label><input id="password" type="password" required autoComplete={signup ? "new-password" : "current-password"} minLength={signup ? 8 : 1} className={field} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" />{signup && <p className="mt-2 text-sm text-[#82a87d]">8자 이상 입력해 주세요.</p>}</div>
+          <button disabled={busy} className="w-full rounded-xl bg-[#2e843b] py-4 text-lg font-bold text-white transition hover:bg-[#236e30] disabled:opacity-60">{busy ? "처리 중…" : signup ? "가입하고 시작하기" : "로그인"}</button>
+        </form>
+        {error && <p role="alert" className="mt-4 text-sm font-semibold text-red-700">{error}</p>}
+        <Link href={signup ? "/login" : "/signup"} className="mt-5 flex w-full justify-center rounded-xl border border-[#b8df91] py-4 text-lg font-bold text-[#397f40]">{signup ? "이미 계정이 있어요 · 로그인" : "처음이에요 · 가입하고 시작하기"}</Link>
+        <p className="mt-6 text-sm leading-6 text-[#a8d58e]">※ 이메일·비밀번호만 받습니다. 이름·연락처·계좌 등 외부 신청에 필요한 정보는 받지 않습니다.</p>
+      </div></section>
+    </div>
   </main>;
 }

@@ -66,6 +66,7 @@ function resultToMission(result: SearchRecommendation, selected: InterestId[]): 
     sourceDocId: result.docId,
     sourceUrl: result.sourceUrl || undefined,
     sourceType: result.docType,
+    requiresPhotoProof: result.docType === "place",
     verificationStatus: result.needsReview ? "needs-review" : "verified",
   };
 }
@@ -119,19 +120,34 @@ function missionMetrics(mission: Mission, selected: InterestId[], events: Awaite
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const selected = [...new Set((url.searchParams.get("interests") ?? "").split(",").filter(isInterestId))];
+  const scope = url.searchParams.get("scope") === "outside" ? "outside" : "interest";
   const excluded = new Set((url.searchParams.get("exclude") ?? "").split(",").filter(Boolean).slice(0, 100));
   const seed = (url.searchParams.get("seed") ?? `${Date.now()}`).slice(0, 160);
   let candidates: Mission[] = [];
   let usedMappedData = false;
   try {
-    candidates = await mappedCandidates(selected, excluded, seed);
+    candidates = await mappedCandidates(scope === "outside" ? [] : selected, excluded, seed);
     usedMappedData = candidates.length > 0;
   } catch {
     // 검색 서버가 잠시 내려가도 준비된 MVP 미션으로 계속 사용할 수 있게 한다.
   }
-  if (!candidates.length) {
-    const unsure = selected.includes("unsure");
-    candidates = missions.filter((mission) => !excluded.has(mission.id) && (unsure || !selected.length || mission.interestIds.some((id) => selected.includes(id))));
+  const unsure = selected.includes("unsure");
+  const preparedCandidates = missions.filter((mission) => !excluded.has(mission.id) && (scope === "outside"
+    ? !mission.interestIds.some((id) => selected.includes(id))
+    : unsure || !selected.length || mission.interestIds.some((id) => selected.includes(id))));
+
+  // 실시간 데이터가 있더라도, 사진 인증처럼 MVP에서 직접 수행할 수 있는
+  // 미션 후보를 함께 둔다. 그렇지 않으면 정책/안내 데이터만 연속 노출될 수 있다.
+  candidates = [...candidates, ...preparedCandidates];
+
+  if (scope === "outside") candidates = candidates.filter((mission) => !mission.interestIds.some((id) => selected.includes(id)));
+
+  // 여러 미션을 넘겨 본 사용자가 인증 흐름을 실제로 확인할 수 있게 한다.
+  // 사진 인증 미션을 이미 본 경우에는 일반 추천 규칙을 그대로 따른다.
+  const hasSeenPhotoMission = [...excluded].some((id) => missions.find((mission) => mission.id === id)?.requiresPhotoProof);
+  if (excluded.size >= 2 && !hasSeenPhotoMission) {
+    const photoCandidates = candidates.filter((mission) => mission.requiresPhotoProof);
+    if (photoCandidates.length) candidates = photoCandidates;
   }
 
   if (!candidates.length) {

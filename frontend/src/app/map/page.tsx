@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SiteHeader } from "@/features/layout/site-header";
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import KakaoMap, { type EcoPlace, type RoutePoint } from "./KakaoMap";
 
@@ -230,13 +230,7 @@ export default function MapPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f8f1]">
-      <header className="border-b border-[#e5eddc] bg-white/90">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <Link href="/" className="flex items-center gap-2 font-bold text-[#267a38]"><span className="text-xl">🌱</span> 에코줍줍</Link>
-          <nav className="hidden gap-7 text-sm font-medium text-[#527051] md:flex"><Link href="/">홈</Link><Link href="/missions">에코 미션</Link><Link href="/map" className="font-bold text-[#287b39]">실천 지도</Link><Link href="/chat">줍줍이 챗봇</Link></nav>
-          <Link href="/chat" className="rounded-full bg-[#e9f5e2] px-4 py-2 text-xs font-semibold text-[#2d7938]">챗봇에 물어보기</Link>
-        </div>
-      </header>
+      <SiteHeader active="map" />
 
       <main className="mx-auto max-w-6xl px-5 py-8">
         <div className="mb-6">
