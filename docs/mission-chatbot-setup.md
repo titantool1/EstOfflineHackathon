@@ -1,0 +1,113 @@
+# 챗봇·에코미션 통합 브랜치 설치
+
+대상 브랜치: `codex/mission-chatbot-integration`
+
+## 준비물
+
+- Git
+- Docker Desktop 및 Docker Compose
+- Python 3
+- Node.js 24.14.1 (`.nvmrc` 기준)과 npm
+
+## 새로 받기
+
+```bash
+git clone --branch codex/mission-chatbot-integration --single-branch \
+  https://github.com/titantool1/EstOfflineHackathon.git
+cd EstOfflineHackathon
+python3 scripts/setup-local.py
+npm ci --prefix frontend
+```
+
+공유 API 키 TXT가 있으면 값을 출력하거나 Git에 넣지 말고 다음처럼 가져온다.
+
+```bash
+python3 scripts/setup-local.py --api-keys /absolute/path/to/api-keys.txt
+```
+
+## 챗봇·로그인·미션을 `localhost:3000`에서 실행
+
+터미널 1에서 PostgreSQL, Spring, Elasticsearch를 실행한다.
+
+```bash
+cd EstOfflineHackathon
+./scripts/setup-db.sh
+docker compose up -d --wait elasticsearch
+```
+
+터미널 2에서 기존 FastAPI 검색 서버를 실행한다. 생성된 `frontend/.env.local`의 기본 주소와 맞추기 위해 18000 포트를 사용한다.
+
+```bash
+cd EstOfflineHackathon
+AI_SERVER_PORT=18000 ./run-ai.sh
+```
+
+터미널 3에서 Next 개발 서버를 실행한다.
+
+```bash
+cd EstOfflineHackathon/frontend
+npm run dev
+```
+
+접속 주소:
+
+- 홈: `http://localhost:3000`
+- 챗봇: `http://localhost:3000/chat`
+- 회원가입: `http://localhost:3000/signup`
+- 관심사 선택: `http://localhost:3000/onboarding`
+- 미션 추천: `http://localhost:3000/missions`
+- 미션 통계: `http://localhost:3000/missions/insights`
+
+개발 중에는 `localhost`와 `127.0.0.1`을 섞지 않는다. 브라우저 저장소도 서로 다른 출처로 취급된다.
+
+## 검색 데이터 주의
+
+Git에는 Elasticsearch의 `eco-jupjup-vector-v2` 인덱스 17,828건이 포함되지 않는다. 새 Docker 볼륨으로 설치한 팀원은 검색 인덱스 스냅샷 또는 원본 CSV와 적재 절차를 별도로 공유받아야 한다. 인덱스가 없어도 화면·로그인·미션은 실행되지만 챗봇 검색 결과는 나오지 않는다.
+
+## 전체 통합 Compose 방식
+
+최신 `main` 기반의 PostgreSQL·Spring·Next·Elasticsearch 전체 컨테이너는 다음 명령으로 실행한다.
+
+```bash
+python3 scripts/setup-local.py
+./start.sh
+docker compose ps
+```
+
+이 방식의 웹 주소는 `http://127.0.0.1:3300`이다. 현재 기존 FastAPI 검색 서버는 통합 Compose 서비스에 포함되지 않았으므로, 챗봇까지 함께 시연할 때는 위의 `localhost:3000` 개발 방식을 사용한다.
+
+## 기존 저장소에서 받기
+
+작업 내용이 없다면:
+
+```bash
+git fetch origin
+git switch --track origin/codex/mission-chatbot-integration
+npm ci --prefix frontend
+```
+
+이미 같은 브랜치를 받은 뒤 갱신할 때:
+
+```bash
+git switch codex/mission-chatbot-integration
+git pull --ff-only
+npm ci --prefix frontend
+```
+
+개인 작업이 남아 있으면 먼저 커밋하거나 안전하게 보관한 뒤 브랜치를 전환한다.
+
+## 확인과 종료
+
+```bash
+cd frontend
+npm run lint
+npm run build
+```
+
+`next dev`와 `next build`는 같은 `.next` 디렉터리를 사용하므로 동시에 실행하지 않는다. 프론트와 AI 서버는 실행한 터미널에서 `Ctrl+C`로 종료하고, Docker 서비스는 저장 데이터를 유지한 채 다음처럼 중지한다.
+
+```bash
+cd EstOfflineHackathon
+./stop.sh
+```
+
