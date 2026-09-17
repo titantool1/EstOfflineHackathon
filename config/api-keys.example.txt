@@ -1,0 +1,6 @@
+# Copy to .local/api-keys.txt and fill values locally.
+# Import: python3 scripts/setup-local.py --api-keys .local/api-keys.txt
+# UTF-8 text; one KEY=value per line. Do not commit the filled file.
+OPENAI_API_KEY=
+KAKAO_REST_API_KEY=
+NEXT_PUBLIC_KAKAO_MAP_KEY=

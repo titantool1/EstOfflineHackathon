@@ -1,93 +1,93 @@
 services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-18.6-bookworm}
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-eco}
+      POSTGRES_USER: ${POSTGRES_USER:-eco}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/setup-local.py first}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55433}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    mem_limit: 512m
+    shm_size: 128mb
+
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_LOCAL_VERSION}
-    container_name: ${ES_LOCAL_CONTAINER_NAME}
+    build:
+      context: ./infra/elasticsearch
+      args:
+        ES_VERSION: ${ES_LOCAL_VERSION:-9.5.3}
+    image: eco-team-elasticsearch:${ES_LOCAL_VERSION:-9.5.3}-nori
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      xpack.security.autoconfiguration.enabled: "false"
+      xpack.security.http.ssl.enabled: "false"
+      xpack.license.self_generated.type: basic
+      xpack.ml.enabled: "false"
+      node.store.allow_mmap: "false"
+      ELASTIC_PASSWORD: ${ES_LOCAL_PASSWORD:?Run scripts/setup-local.py first}
+      ES_JAVA_OPTS: ${ES_LOCAL_JAVA_OPTS:--Xms512m -Xmx512m}
+    ports:
+      - "127.0.0.1:${ES_LOCAL_PORT:-19201}:9200"
     volumes:
       - dev-elasticsearch:/usr/share/elasticsearch/data
-    ports:
-      - 127.0.0.1:${ES_LOCAL_PORT}:9200
-    extra_hosts:
-      - host.docker.internal:host-gateway
-      - model-runner.docker.internal:host-gateway
-    environment:
-      - discovery.type=single-node
-      - ELASTIC_PASSWORD=${ES_LOCAL_PASSWORD}
-      - xpack.security.enabled=true
-      - xpack.security.http.ssl.enabled=false
-      - xpack.license.self_generated.type=trial
-      - xpack.ml.use_auto_machine_memory_percent=true
-      - ES_JAVA_OPTS=${ES_LOCAL_JAVA_OPTS}
-      - cluster.routing.allocation.disk.watermark.low=${ES_LOCAL_DISK_SPACE_REQUIRED}
-      - cluster.routing.allocation.disk.watermark.high=${ES_LOCAL_DISK_SPACE_REQUIRED}
-      - cluster.routing.allocation.disk.watermark.flood_stage=${ES_LOCAL_DISK_SPACE_REQUIRED}
-      - "_JAVA_OPTIONS=-XX:UseSVE=0"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl --output /dev/null --silent --head --fail -u elastic:${ES_LOCAL_PASSWORD} http://elasticsearch:9200",
-        ]
+      test: ["CMD", "bash", "/usr/local/bin/eco-healthcheck"]
       interval: 10s
       timeout: 10s
-      retries: 30
+      retries: 18
+      start_period: 30s
+    mem_limit: 1g
 
   kibana_settings:
+    profiles: [tools]
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_LOCAL_VERSION:-9.5.3}
+    restart: "no"
     depends_on:
       elasticsearch:
         condition: service_healthy
-    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_LOCAL_VERSION}
-    container_name: ${KIBANA_LOCAL_SETTINGS_CONTAINER_NAME}
-    restart: 'no'
-    command: >
-      bash -c '
-        echo "Setup the kibana_system password";
-        start_time=$$(date +%s);
-        timeout=60;
-        until curl -s -u "elastic:${ES_LOCAL_PASSWORD}" -X POST http://elasticsearch:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_LOCAL_PASSWORD}\"}" -H "Content-Type: application/json" | grep -q "^{}"; do
-          if [ $$(($$(date +%s) - $$start_time)) -ge $$timeout ]; then
-            echo "Error: Elasticsearch timeout";
-            exit 1;
-          fi;
-          sleep 2;
-        done;
-      '
+    environment:
+      ELASTIC_PASSWORD: ${ES_LOCAL_PASSWORD:?Run scripts/setup-local.py first}
+      KIBANA_PASSWORD: ${KIBANA_LOCAL_PASSWORD:?Run scripts/setup-local.py first}
+    volumes:
+      - ./infra/kibana/setup.sh:/setup.sh:ro
+    entrypoint: ["bash", "/setup.sh"]
 
   kibana:
+    profiles: [tools]
+    image: docker.elastic.co/kibana/kibana:${ES_LOCAL_VERSION:-9.5.3}
+    restart: unless-stopped
     depends_on:
       kibana_settings:
         condition: service_completed_successfully
-    image: docker.elastic.co/kibana/kibana:${ES_LOCAL_VERSION}
-    container_name: ${KIBANA_LOCAL_CONTAINER_NAME}
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_LOCAL_PASSWORD:?Run scripts/setup-local.py first}
+      XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: ${KIBANA_ENCRYPTION_KEY:?Run scripts/setup-local.py first}
+      NODE_OPTIONS: --max-old-space-size=768
+    ports:
+      - "127.0.0.1:${KIBANA_LOCAL_PORT:-15602}:5601"
     volumes:
       - dev-kibana:/usr/share/kibana/data
-      - ./config/telemetry.yml:/usr/share/kibana/config/telemetry.yml
-    ports:
-      - 127.0.0.1:${KIBANA_LOCAL_PORT}:5601
-    extra_hosts:
-      - host.docker.internal:host-gateway
-      - model-runner.docker.internal:host-gateway
-    environment:
-      - SERVER_NAME=kibana
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_USERNAME=kibana_system
-      - ELASTICSEARCH_PASSWORD=${KIBANA_LOCAL_PASSWORD}
-      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${KIBANA_ENCRYPTION_KEY}
-      - ELASTICSEARCH_PUBLICBASEURL=http://localhost:${ES_LOCAL_PORT}
-      - XPACK_SPACES_DEFAULTSOLUTION=es
+      - ./config/telemetry.yml:/usr/share/kibana/config/telemetry.yml:ro
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "curl -s -I http://kibana:5601 | grep -q 'HTTP/1.1 302 Found'",
-        ]
+      test: ["CMD-SHELL", "curl --silent --fail --output /dev/null http://localhost:5601/login"]
       interval: 10s
       timeout: 10s
-      retries: 30
+      retries: 24
+      start_period: 30s
+    mem_limit: 1536m
 
 volumes:
+  postgres-data:
   dev-elasticsearch:
   dev-kibana:

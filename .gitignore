@@ -31,3 +31,8 @@ logs/
 
 # HuggingFace 모델 캐시
 .cache/
+
+# Integration environment secrets/runtime
+.local/
+/api-keys*.txt
+!.env.local.example
