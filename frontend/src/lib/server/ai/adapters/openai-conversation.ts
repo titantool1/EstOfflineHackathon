@@ -1,6 +1,6 @@
 import "server-only";
 import OpenAI from "openai";
-import type { ResponseInput, FunctionTool } from "openai/resources/responses/responses";
+import type { Response as OpenAIResponse, ResponseInput, FunctionTool } from "openai/resources/responses/responses";
 import { AiError } from "../contracts.ts";
 import type { ConversationProvider } from "../conversation-contracts.ts";
 
@@ -13,6 +13,18 @@ export function createConversationProvider(options: { apiKey: string; model: str
     if (error instanceof AiError) throw error;
     throw new AiError(signal.aborted ? "AI_CANCELLED" : "MODEL_UNAVAILABLE");
   };
+  const request = (handle: { id: string }, input: ResponseInput, tools: FunctionTool[], instructions: string) => ({
+    model: options.model, conversation: handle.id, input,
+    instructions, tools, parallel_tool_calls: false,
+    tool_choice: tools.length ? "auto" as const : "none" as const,
+    reasoning: { effort: "low" as const }, max_output_tokens: 2200, store: true,
+  });
+  const reply = (response: OpenAIResponse) => ({
+    text: response.output_text?.trim() || null,
+    calls: response.output.filter(item => item.type === "function_call").map(item => ({
+      callId: item.call_id, name: item.name, arguments: item.arguments,
+    })),
+  });
   return {
     async create(history, signal) {
       signal.throwIfAborted();
@@ -21,24 +33,28 @@ export function createConversationProvider(options: { apiKey: string; model: str
         return { id: conversation.id, responseIds: [] };
       } catch (error) { return failure(error, signal); }
     },
-    async respond(handle, input, tools, instructions, signal) {
+    async respond(handle, input, tools, instructions, signal, onTextDelta) {
       signal.throwIfAborted();
       try {
-        const response = await client().responses.create({
-          model: options.model, conversation: handle.id, input: input as ResponseInput,
-          instructions, tools: tools as FunctionTool[], parallel_tool_calls: false,
-          tool_choice: tools.length ? "auto" : "none",
-          reasoning: { effort: "low" }, max_output_tokens: 2200, store: true,
-        }, { signal });
+        const sdk = client();
+        const params = request(handle, input as ResponseInput, tools as FunctionTool[], instructions);
+        if (onTextDelta) {
+          const stream = sdk.responses.stream(params, { signal });
+          for await (const event of stream) {
+            if (event.type === "response.created" && !handle.responseIds.includes(event.response.id))
+              handle.responseIds.push(event.response.id);
+            if (event.type === "response.output_text.delta") onTextDelta(event.delta);
+          }
+          const response = await stream.finalResponse();
+          if (!handle.responseIds.includes(response.id)) handle.responseIds.push(response.id);
+          if (response.status !== "completed") throw new AiError("MODEL_INCOMPLETE");
+          return reply(response);
+        }
+        const response = await sdk.responses.create(params, { signal });
         // Track even incomplete responses independently of the working condition memory.
         handle.responseIds.push(response.id);
         if (response.status !== "completed") throw new AiError("MODEL_INCOMPLETE");
-        return {
-          text: response.output_text?.trim() || null,
-          calls: response.output.filter(item => item.type === "function_call").map(item => ({
-            callId: item.call_id, name: item.name, arguments: item.arguments,
-          })),
-        };
+        return reply(response);
       } catch (error) { return failure(error, signal); }
     },
     async close(handle, signal) {

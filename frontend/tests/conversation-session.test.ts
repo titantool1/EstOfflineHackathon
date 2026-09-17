@@ -105,7 +105,12 @@ test("failed answer commit keeps memory/history and recreates provider from comp
   const runner = createConversationRunner({ ...api, provider: model.provider }), session = runner.createSession(owner);
   session.history = [{ role: "user", content: "이전 질문" }, { role: "assistant", content: "완료된 답변" }];
   const before = structuredClone({ memory: session.memory, history: session.history });
-  await assert.rejects(runner.runTurn(session, turn, { commit: async () => { throw new Error("save failed"); } }), /save failed/);
+  const events: unknown[] = [];
+  await assert.rejects(runner.runTurn(session, turn, {
+    onEvent: event => events.push(event),
+    commit: async () => { throw new Error("save failed"); },
+  }), /save failed/);
+  assert.ok(events.some(event => JSON.stringify(event) === JSON.stringify({ type: "progress", stage: "updating_conditions" })));
   assert.match(model.instructions[4], /\"value\":true/);
   assert.deepEqual({ memory: session.memory, history: session.history }, before);
   assert.equal(session.provider, null); assert.deepEqual(model.closed, ["conv-1"]);

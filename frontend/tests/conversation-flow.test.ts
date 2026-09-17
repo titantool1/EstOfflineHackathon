@@ -55,6 +55,39 @@ test("ordinary dialogue completes without a tool call", async () => {
   assert.deepEqual(fake.inputs, [[{ role: "user", content: "[user-turn:turn-7]\n텀블러 혜택 알려줘" }]]);
 });
 
+test("stream events show only public progress and reset provisional text before a tool", async () => {
+  const events: unknown[] = [];
+  let modelCalls = 0;
+  const fake = { respond: async (_handle: ConversationHandle, _items: ModelInput[], _tools: FunctionDefinition[],
+    _instructions: string, _signal: AbortSignal, onTextDelta?: (text: string) => void) => {
+    if (++modelCalls === 1) {
+      onTextDelta?.("확인 중 비밀 아님");
+      return call("call-secret", '{"query":"member-private-value"}');
+    }
+    onTextDelta?.("최종 답변");
+    return final("최종 답변");
+  } };
+  const result = await createConversationGraph(fake)({ ...input(), onEvent: event => events.push(event) }, new AbortController().signal);
+  assert.deepEqual(result, { text: "최종 답변", modelCalls: 2, toolCalls: 1 });
+  assert.deepEqual(events, [
+    { type: "reset" }, { type: "progress", stage: "thinking" },
+    { type: "progress", stage: "answering" }, { type: "delta", text: "확인 중 비밀 아님" },
+    { type: "reset" }, { type: "progress", stage: "searching" },
+    { type: "reset" }, { type: "progress", stage: "thinking" },
+    { type: "progress", stage: "answering" }, { type: "delta", text: "최종 답변" },
+  ]);
+  assert.doesNotMatch(JSON.stringify(events), /member-private-value|call-secret|search_catalog/);
+});
+
+test("streamed provisional text is bounded independently of the final response", async () => {
+  const fake = { respond: async (_handle: ConversationHandle, _items: ModelInput[], _tools: FunctionDefinition[],
+    _instructions: string, _signal: AbortSignal, onTextDelta?: (text: string) => void) => {
+    onTextDelta?.("x".repeat(6001));
+    return final("짧은 답변");
+  } };
+  await rejectsCode(createConversationGraph(fake)({ ...input(), onEvent: () => {} }, new AbortController().signal), "INVALID_MODEL_OUTPUT");
+});
+
 test("tool output keeps the exact call id and preserves no_results", async () => {
   const noResults = { status: "no_results", items: [] };
   const fake = provider([

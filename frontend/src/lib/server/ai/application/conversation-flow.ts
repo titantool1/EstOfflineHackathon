@@ -9,6 +9,7 @@ import type {
   FunctionDefinition,
   ModelInput,
   ModelReply,
+  ConversationEventSink,
 } from "../conversation-contracts.ts";
 
 const MODEL_CALL_LIMIT = 6;
@@ -22,6 +23,7 @@ type RunInput = {
   instructions: string | (() => string);
   tools: FunctionDefinition[];
   execute: (name: string, args: unknown, signal: AbortSignal) => Promise<unknown>;
+  onEvent?: ConversationEventSink;
 };
 
 const State = Annotation.Root({
@@ -103,6 +105,14 @@ function currentInstructions(value: RunInput["instructions"]) {
   return instructions;
 }
 
+function toolProgress(name: string) {
+  if (name === "search_catalog") return "searching" as const;
+  if (name === "get_catalog_action") return "reading" as const;
+  if (name === "load_user_conditions") return "checking_conditions" as const;
+  if (name === "update_conditions") return "updating_conditions" as const;
+  return "thinking" as const;
+}
+
 export function createConversationGraph(provider: Pick<ConversationProvider, "respond">) {
   return async function run(input: RunInput, signal: AbortSignal) {
     const offeredTools = validateInput(input);
@@ -112,18 +122,34 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
       .addNode("model", async (state) => {
         if (signal.aborted) cancelled(signal);
         if (state.modelCalls >= MODEL_CALL_LIMIT) throw new AiError("MODEL_CALL_LIMIT");
+        input.onEvent?.({ type: "reset" });
+        input.onEvent?.({ type: "progress", stage: "thinking" });
         let reply: ModelReply;
         try {
           const instructions = currentInstructions(input.instructions)
             + (state.finishAfterToolFailure ? "\n\n" + toolFailureCompletion : "");
+          let streamedLength = 0, answering = false;
+          const onEvent = input.onEvent;
+          const onTextDelta = onEvent ? (text: string) => {
+            if (typeof text !== "string") throw new AiError("INVALID_MODEL_OUTPUT");
+            streamedLength += text.length;
+            if (streamedLength > 6000) throw new AiError("INVALID_MODEL_OUTPUT");
+            if (!text) return;
+            if (!answering) {
+              onEvent({ type: "progress", stage: "answering" });
+              answering = true;
+            }
+            onEvent({ type: "delta", text });
+          } : undefined;
           reply = validateReply(await provider.respond(input.conversation, state.nextInput,
-            state.finishAfterToolFailure ? [] : input.tools, instructions, signal));
+            state.finishAfterToolFailure ? [] : input.tools, instructions, signal, onTextDelta));
           if (state.finishAfterToolFailure && reply.calls.length) throw new AiError("INVALID_MODEL_OUTPUT");
         } catch (error) {
           if (isAbort(error, signal)) cancelled(signal);
           throw error instanceof AiError ? error : new AiError("MODEL_FAILED");
         }
         if (signal.aborted) cancelled(signal);
+        if (reply.calls.length) input.onEvent?.({ type: "reset" });
         return {
           reply,
           text: reply.calls.length ? "" : reply.text!.trim(),
@@ -146,6 +172,7 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
           output = toolFailure("INVALID_TOOL_ARGUMENTS");
         }
         if (output === undefined) {
+          input.onEvent?.({ type: "progress", stage: toolProgress(call.name) });
           try {
             output = toolOutput(await input.execute(call.name, args, signal));
           } catch (error) {

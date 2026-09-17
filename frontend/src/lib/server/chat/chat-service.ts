@@ -4,10 +4,12 @@ import { AiError } from "../ai/contracts.ts";
 import type { ConversationSession, ConversationTurn } from "../ai/conversation-contracts.ts";
 import type { ConversationResult } from "../ai/application/conversation-session.ts";
 
+import type { ChatTurnEvent } from "../../chat-stream.ts";
+
 type Runtime = {
   createSession(userId: string): ConversationSession;
   runTurn(session: ConversationSession, turn: ConversationTurn, options: {
-    commit: (result: ConversationResult) => Promise<void>; signal?: AbortSignal;
+    commit: (result: ConversationResult) => Promise<void>; signal?: AbortSignal; onEvent?: (event: ChatTurnEvent) => void;
   }): Promise<ConversationResult>;
   closeSession(session: ConversationSession, signal?: AbortSignal): Promise<void>;
 };
@@ -32,7 +34,7 @@ export function createChatService(runtime: Runtime) {
   };
   return {
     async send(input: { conversationId?: string; clientRequestId: string; message: string }, context: {
-      userId: string; cookie: string; requestId: string; signal: AbortSignal;
+      userId: string; cookie: string; requestId: string; signal: AbortSignal; onEvent?: (event: ChatTurnEvent) => void;
     }): Promise<{ conversationId: string; message: { role: "assistant"; text: string } }> {
       let conversationId = input.conversationId;
       let entry = conversationId ? entries.get(conversationId) : undefined;
@@ -48,8 +50,8 @@ export function createChatService(runtime: Runtime) {
         text: input.message, sessionHeaders: { Cookie: context.cookie }, requestId: context.requestId };
       try {
         let committed = false;
-        const answer = await runtime.runTurn(active.session, turn, { signal: context.signal,
-          commit: async () => { committed = true; } });
+        const answer = await runtime.runTurn(active.session, turn, { signal: context.signal, onEvent: context.onEvent,
+          commit: async () => { context.signal.throwIfAborted(); committed = true; } });
         if (!committed) fail(503, "CHAT_COMMIT_FAILED");
         return { conversationId, message: { role: "assistant" as const, text: answer.text } };
       } catch (error) {
