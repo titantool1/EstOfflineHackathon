@@ -49,3 +49,5 @@ docker compose stop
 현재는 실행 환경 확인 단계다. 실제 모델 호출과 QA 품질 재시험은 별도 진행하며, 팀의 원본 frontend 브랜치는 이 작업에서 변경하지 않는다.
 
 검증 결과와 남은 연결 범위: [셋업 확인](docs/setup-check-2026-09-16.md).
+
+장소 API 시험은 [별도 시험 안내](docs/place-search-trial.md)를 따른다. REST API 키 설정 후 실제 호출은 카카오맵 서비스 비활성으로 HTTP403이었다. 카카오맵 사용 설정 ON 후 검색 시험을 재개한다.
