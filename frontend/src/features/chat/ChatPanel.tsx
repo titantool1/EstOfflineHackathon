@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { createChatClient } from "./chat-client";
+import { SourceText } from "../sources/SourceText";
 
 type Message = { id: string; role: "assistant" | "user"; text: string; isError?: boolean };
 const welcome: Message = { id: "welcome", role: "assistant", text: "안녕하세요! 친환경 제도와 실천 방법을 함께 찾아볼게요. 무엇이 궁금한가요?" };
@@ -49,7 +50,9 @@ export function ChatPanel() {
     <div className="flex-1 space-y-5 overflow-y-auto bg-[#fafcf8] p-5" aria-live="polite">
       {messages.map(message => <div key={message.id} className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
         {message.role === "assistant" && <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#e6f4df] text-sm">🌱</span>}
-        <p className={`max-w-[84%] whitespace-pre-line rounded-2xl px-4 py-3 text-sm leading-6 ${message.role === "user" ? "rounded-tr-sm bg-[#2f843d] text-white" : message.isError ? "rounded-tl-sm bg-[#fff5f0] text-[#8c4934] ring-1 ring-[#f0d8ce]" : "rounded-tl-sm bg-white text-[#3a5139] shadow-sm ring-1 ring-[#e7eee3]"}`}>{message.text}</p>
+        <p className={`max-w-[84%] whitespace-pre-line rounded-2xl px-4 py-3 text-sm leading-6 ${message.role === "user" ? "rounded-tr-sm bg-[#2f843d] text-white" : message.isError ? "rounded-tl-sm bg-[#fff5f0] text-[#8c4934] ring-1 ring-[#f0d8ce]" : "rounded-tl-sm bg-white text-[#3a5139] shadow-sm ring-1 ring-[#e7eee3]"}`}>
+          {message.role === "assistant" && !message.isError ? <SourceText text={message.text} /> : message.text}
+        </p>
       </div>)}
       {isThinking && <div className="flex gap-3"><span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#e6f4df]">🌱</span><p className="rounded-2xl bg-white px-4 py-3 text-sm text-[#6d806b]">답변을 만들고 있어요…</p></div>}
       {needsNewConversation && <button type="button" onClick={() => void startNew()} className="rounded-xl bg-[#2f843d] px-4 py-2 text-sm font-bold text-white">새 상담 시작하기</button>}

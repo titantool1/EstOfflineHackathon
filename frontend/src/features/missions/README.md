@@ -4,6 +4,8 @@
 
 현재 화면: `src/app/missions/page.tsx`. 이번에는 기존 화면 코드를 이동하지 않았다. 기능 구현 때 라우트에 몰린 UI·상태·클라이언트 요청을 필요한 만큼 이 폴더로 옮기고 라우트는 화면 진입점으로 둔다. 빈 컴포넌트·훅·저장소를 먼저 생성하지 않는다.
 
+미션 데이터에 실제 출처가 있으면 `sources?: { id?: string; url: string; title: string; description?: string }[]`로 전달한다. `url`과 `title`은 카탈로그 출처 필드와 같고, 출처가 없는 미션에는 빈 링크를 만들지 않는다.
+
 DB와 외부 서비스 접근은 브라우저에서 직접 하지 않는다. 서버 호출은 `src/app/api` → `src/lib/server` → Spring 모듈 또는 AI 실행부를 거친다. 구체적인 API 필드와 저장 계약은 후속 구현에서 정한다.
 
 [전체 구조와 담당 경계](../../../../docs/architecture.md).
