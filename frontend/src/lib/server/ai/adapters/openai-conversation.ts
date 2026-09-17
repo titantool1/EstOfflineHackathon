@@ -27,6 +27,7 @@ export function createConversationProvider(options: { apiKey: string; model: str
         const response = await client().responses.create({
           model: options.model, conversation: handle.id, input: input as ResponseInput,
           instructions, tools: tools as FunctionTool[], parallel_tool_calls: false,
+          tool_choice: tools.length ? "auto" : "none",
           reasoning: { effort: "low" }, max_output_tokens: 2200, store: true,
         }, { signal });
         // Track even incomplete responses independently of the working condition memory.

@@ -1,6 +1,7 @@
 import "server-only";
 import { Annotation, END, START, StateGraph } from "@langchain/langgraph";
 import { AiError } from "../contracts.ts";
+import { endsToolUseForTurn, toolFailureCompletion } from "./tool-failure-policy.ts";
 import type {
   ConversationHandle,
   ConversationProvider,
@@ -30,6 +31,7 @@ const State = Annotation.Root({
   modelCalls: Annotation<number>(),
   toolCalls: Annotation<number>(),
   seenCallIds: Annotation<string[]>(),
+  finishAfterToolFailure: Annotation<boolean>(),
 });
 
 function cancelled(signal: AbortSignal): never {
@@ -60,8 +62,8 @@ function validateReply(value: unknown): ModelReply {
   return reply as ModelReply;
 }
 
-function toolFailure(code: string) {
-  return JSON.stringify({ status: "error", error: { code } });
+function toolFailure(code: string, stopRetry = false) {
+  return JSON.stringify({ status: "error", error: { code }, ...(stopRetry ? { retryable_in_turn: false } : {}) });
 }
 
 function failureCode(error: unknown) {
@@ -112,9 +114,11 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
         if (state.modelCalls >= MODEL_CALL_LIMIT) throw new AiError("MODEL_CALL_LIMIT");
         let reply: ModelReply;
         try {
-          const instructions = currentInstructions(input.instructions);
+          const instructions = currentInstructions(input.instructions)
+            + (state.finishAfterToolFailure ? "\n\n" + toolFailureCompletion : "");
           reply = validateReply(await provider.respond(input.conversation, state.nextInput,
-            input.tools, instructions, signal));
+            state.finishAfterToolFailure ? [] : input.tools, instructions, signal));
+          if (state.finishAfterToolFailure && reply.calls.length) throw new AiError("INVALID_MODEL_OUTPUT");
         } catch (error) {
           if (isAbort(error, signal)) cancelled(signal);
           throw error instanceof AiError ? error : new AiError("MODEL_FAILED");
@@ -134,6 +138,7 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
         if (state.toolCalls >= TOOL_CALL_LIMIT) throw new AiError("TOOL_CALL_LIMIT");
 
         let output: string | undefined;
+        let finishAfterToolFailure = false;
         let args: unknown;
         try {
           args = JSON.parse(call.arguments);
@@ -145,7 +150,8 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
             output = toolOutput(await input.execute(call.name, args, signal));
           } catch (error) {
             if (isAbort(error, signal)) cancelled(signal);
-            output = toolFailure(failureCode(error));
+            finishAfterToolFailure = endsToolUseForTurn(error);
+            output = toolFailure(failureCode(error), finishAfterToolFailure);
           }
         }
         if (signal.aborted) cancelled(signal);
@@ -154,6 +160,7 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
           reply: null,
           toolCalls: state.toolCalls + 1,
           seenCallIds: [...state.seenCallIds, call.callId],
+          finishAfterToolFailure,
         };
       })
       .addEdge(START, "model")
@@ -170,6 +177,7 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
           modelCalls: 0,
           toolCalls: 0,
           seenCallIds: [],
+          finishAfterToolFailure: false,
         }, { signal, recursionLimit: 20 });
       } catch (error) {
         if (isAbort(error, signal)) cancelled(signal);

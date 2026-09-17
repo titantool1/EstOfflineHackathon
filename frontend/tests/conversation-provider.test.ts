@@ -13,7 +13,8 @@ test("SDK reuses Conversation, passes exact tool output and tracks response IDs"
     const body = JSON.parse(String(init?.body)); bodies.push(body);
     if (String(url).endsWith("/conversations")) return Response.json({ id: "conv_1", object: "conversation", created_at: 1, metadata: {} });
     assert.equal(body.conversation, "conv_1"); assert.equal(body.store, true);
-    assert.equal(body.parallel_tool_calls, false); assert.equal(body.model, "test-model");
+    assert.equal(body.parallel_tool_calls, false);
+    assert.equal(body.tool_choice, "none"); assert.equal(body.model, "test-model");
     return Response.json(reply());
   } });
   const handle = await provider.create([{ role: "user", content: "완료된 질문" }, { role: "assistant", content: "완료된 답변" }], signal());
