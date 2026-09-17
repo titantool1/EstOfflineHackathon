@@ -16,11 +16,12 @@ export default function MapPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchRegion, setSearchRegion] = useState<{ sido: string; sigungu: string } | null>(null);
   const placesRequest = useRef<AbortController | null>(null);
+  const useNeighborhood = useRef(true);
   const loadPlaces = useCallback((query: string, initial = false, browseDistrict = readBrowseDistrict()) => {
     placesRequest.current?.abort();
     const controller = new AbortController(); placesRequest.current = controller;
     const target = initial ? targetFromSearch(window.location.search) : null;
-    return requestPlaces(query, { signal: controller.signal, browseDistrict }).then(result => {
+    return requestPlaces(query, { signal: controller.signal, browseDistrict, useNeighborhood: useNeighborhood.current }).then(result => {
       if (controller.signal.aborted) return;
       const nextPlaces = target ? [target, ...result.places.filter(place => place.id !== target.id)] : result.places;
       setSearchRegion(result.region);
@@ -38,6 +39,7 @@ export default function MapPage() {
   useEffect(() => {
     void loadPlaces("", true);
     const unsubscribe = subscribeBrowseDistrict(() => {
+      useNeighborhood.current = false;
       setInput(""); setPlaces([]); setActiveId(null); setActiveCategory("전체"); setSearchRegion(null); setError(null); setIsLoading(true);
       void loadPlaces("");
     });

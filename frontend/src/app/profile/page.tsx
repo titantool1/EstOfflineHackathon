@@ -34,7 +34,7 @@ export default function ProfilePage() {
     logoutPending.current = true; setLoggingOut(true);
     try {
       await createAccountClient().logout();
-      setView({ kind: "signedOut", message: "로그아웃했어요." });
+      window.location.replace("/login");
     } catch (error) {
       setView({ kind: error instanceof AccountError && error.code === "AUTHENTICATION_REQUIRED" ? "signedOut" : "failed",
         message: error instanceof AccountError && error.outcomeUnknown

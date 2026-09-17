@@ -193,12 +193,6 @@ export function NeighborhoodForm() {
         {saving ? "저장 중" : "이 동네로 저장"}
       </button>}
       {message && <p role={message.includes("저장했어요") ? "status" : "alert"} className={`mt-4 rounded-2xl p-4 text-sm leading-6 ${message.includes("저장했어요") ? "bg-[#eef5ea] text-[#267a38]" : "bg-[#fff5f0] text-[#8c4934]"}`}>{message}</p>}
-      {message === "관심동네를 저장했어요." && <div className="mt-4 rounded-2xl bg-[#eef5ea] p-4">
-        <p className="font-semibold">이제 관심사를 선택하러 가볼까요?</p>
-        <Link href="/onboarding" className="mt-3 block rounded-xl bg-[#2e843b] p-3 text-center font-bold text-white">
-          관심사 선택하기
-        </Link>
-      </div>}
       {loadFailed && <button type="button" onClick={retryLoad} disabled={loading || saving}
         className="mt-3 min-h-11 rounded-xl border px-4 py-2 font-semibold text-[#267a38]">저장된 동네 다시 불러오기</button>}
       {failedSearch && <button type="button" disabled={loading || saving || state.resolving}

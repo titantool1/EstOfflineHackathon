@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
 
-const destinations = [["/", "홈"], ["/missions", "에코 미션"], ["/map", "실천 지도"], ["/chat", "줍줍이 챗봇"]] as const;
+const destinations = [["/", "홈"], ["/chat", "줍줍이 챗봇"], ["/missions", "에코 미션"], ["/map", "실천 지도"]] as const;
 
 export function SiteHeader() {
   const pathname = usePathname();
