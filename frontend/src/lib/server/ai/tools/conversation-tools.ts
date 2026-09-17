@@ -5,6 +5,7 @@ import type { ConditionChange, ConditionMemory } from "../application/condition-
 import { applyConditionChanges, conditionView } from "../application/condition-memory.ts";
 import type { createUserConditionLoader } from "../adapters/user-condition-context.ts";
 import type { createCatalogTools } from "./catalog-tools.ts";
+import { compactCatalogEvidence } from "./catalog-evidence.ts";
 
 const object = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value);
 function exact(value: unknown, keys: string[]): asserts value is Record<string, unknown> {
@@ -58,7 +59,7 @@ export function createConversationTools(options: {
         if (++details > 2) throw new AiError("CATALOG_DETAIL_LIMIT");
         const result = await catalog.execute(name, args, { requestId: turn.requestId, signal });
         if (result.status === "ok") inspected.add(key(args.programKey, args.actionId));
-        return result;
+        return compactCatalogEvidence(result);
       }
       if (name === "load_user_conditions") {
         exact(args, ["programKey", "actionId"]);
