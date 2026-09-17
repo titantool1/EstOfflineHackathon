@@ -47,7 +47,7 @@ function EventFailure({ label, retry }: { label: string; retry: () => void }) {
   </p>;
 }
 
-function MissionCard({ item, batchId, position, total, paneTitle, returnHref, status, record, completionKnown, alreadyCompleted }: {
+function MissionCard({ item, batchId, position, total, paneTitle, returnHref, status, record, completionKnown, alreadyCompleted, onPhotoCompleted }: {
   item: MissionRecommendationItem;
   batchId: string;
   position: number;
@@ -58,6 +58,7 @@ function MissionCard({ item, batchId, position, total, paneTitle, returnHref, st
   record: (type: MissionEventInput["eventType"]) => void;
   completionKnown: boolean;
   alreadyCompleted: boolean;
+  onPhotoCompleted: () => void;
 }) {
   const [selfVerified, setSelfVerified] = useState(false);
   const articleRef = useRef<HTMLElement>(null);
@@ -108,7 +109,8 @@ function MissionCard({ item, batchId, position, total, paneTitle, returnHref, st
       <Link href={missionRouteHref("/chat", missionPosition, returnHref)} className="inline-flex min-h-11 items-center text-xs font-bold text-[#5d7f5d] underline underline-offset-4">이 미션을 챗봇에 물어보기</Link>
       {item.relatedPlaceCount > 0 && <Link href={missionRouteHref("/map/mission", missionPosition, returnHref)} aria-label={`${title} 관련 장소 보기`} className="inline-flex min-h-11 items-center text-xs font-bold text-[#5d7f5d] underline">관련 장소 {item.relatedPlaceCount}곳 보기</Link>}
     </div>
-    <MissionPhotoToggle actionId={item.actionId} />
+    <MissionPhotoToggle key={item.itemId} actionId={item.actionId} programKey={item.programKey} batchId={batchId} itemId={item.itemId}
+      completed={alreadyCompleted || completed?.kind === "recorded"} onCompleted={onPhotoCompleted} />
     <p className="mt-5 border-t border-[#edf2e9] pt-4 text-xs leading-5 text-[#71816f]">실천 기록은 본인의 자기보고예요. 자격을 자동 판정하거나 공식 완료·포인트 지급을 보장하지 않아요.</p>
     {impression?.kind === "failed" && <EventFailure label={eventLabel.impression} retry={() => record("impression")} />}
     {accepted?.kind === "failed" && <EventFailure label={eventLabel.accepted} retry={() => record("accepted")} />}
@@ -237,7 +239,8 @@ export function MissionCards({ pane, mode, title, description, initialPosition, 
       <MissionCard key={active.itemId} item={active} batchId={state.batch.batchId} position={state.index}
         total={state.batch.items.length} paneTitle={title} returnHref={returnHref} status={status} record={record}
         completionKnown={completedMissions !== null && acceptedMissions !== null}
-        alreadyCompleted={completedMissions?.some(done => sameMission(done, active)) ?? false} />
+        alreadyCompleted={completedMissions?.some(done => sameMission(done, active)) ?? false}
+        onPhotoCompleted={() => onCompleted({ programKey: active.programKey, actionId: active.actionId })} />
       <nav aria-label={`${title} 카드 이동`} className="mt-5 flex items-center justify-between gap-3">
         <button type="button" onClick={() => dispatch({ type: "back" })} disabled={state.index === 0}
           className="rounded-xl border bg-white px-5 py-3 text-sm font-bold disabled:opacity-40">이전 미션</button>

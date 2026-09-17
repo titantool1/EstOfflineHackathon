@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useRef, useState, type FormEvent } from "react";
 import { AccountError, accountErrorMessage, createAccountClient } from "./account-client";
 
-export function AuthForm({ mode, returnTo = "/profile", sessionExpired = false }: {
-  mode: "signup" | "login"; returnTo?: string; sessionExpired?: boolean;
+export function AuthForm({ mode, sessionExpired = false }: {
+  mode: "signup" | "login"; sessionExpired?: boolean;
 }) {
   const signup = mode === "signup";
   const router = useRouter();
@@ -29,7 +29,7 @@ export function AuthForm({ mode, returnTo = "/profile", sessionExpired = false }
         signupConfirmed = true; setCreated(true);
       }
       await accounts.login(email, password);
-      router.replace(signup ? "/onboarding" : returnTo); router.refresh();
+      router.replace(signup ? "/onboarding" : "/"); router.refresh();
     } catch (caught) {
       if (signup && !signupConfirmed && caught instanceof AccountError && caught.outcomeUnknown) {
         setOutcomeUnknown(true);

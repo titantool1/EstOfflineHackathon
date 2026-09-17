@@ -32,7 +32,7 @@ export function ChatAuthentication({ returnTo, children }: { returnTo: string; c
       <button onClick={() => { setView({ kind: "loading" }); setAttempt(value => value + 1); }} className="mt-4 min-h-11 font-bold text-[#347b3d] underline">다시 확인</button>
     </> : <>
       <h1 className="text-2xl font-bold text-[#155b2d]">로그인하고 줍줍이와 이야기해요</h1>
-      <p role="status" className="mt-4 text-sm leading-6 text-[#61745f]">{view.kind === "expired" ? "로그인이 만료됐어요. 다시 로그인하면 이 상담 화면으로 돌아와요." : "로그인하면 내 상황에 맞는 친환경 제도와 실천 방법을 상담할 수 있어요."}</p>
+      <p role="status" className="mt-4 text-sm leading-6 text-[#61745f]">{view.kind === "expired" ? "로그인이 만료됐어요. 다시 로그인하면 홈 화면으로 이동해요." : "로그인하면 내 상황에 맞는 친환경 제도와 실천 방법을 상담할 수 있어요."}</p>
       <Link href={loginHref(returnTo, view.kind === "expired")} className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-[#2e843b] px-6 py-3 font-bold text-white">로그인하고 계속하기</Link>
     </>}
   </section>;

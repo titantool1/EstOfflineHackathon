@@ -54,7 +54,7 @@ export function MissionDetailScreen({ batchId, itemId, returnTo }: {
       </p>
     </section>
 
-    <MissionPhotoToggle actionId={detail.action_id} />
+    <MissionPhotoToggle key={itemId} actionId={detail.action_id} programKey={detail.program_key} batchId={batchId} itemId={itemId} />
 
     <section aria-labelledby="condition-title" className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#dfe9da] md:p-8">
       <h2 id="condition-title" className="text-xl font-bold text-[#29452a]">행동 조건과 근거</h2>
