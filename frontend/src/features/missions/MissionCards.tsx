@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { MissionPhotoToggle } from "./photo/MissionPhotoToggle";
 import { SourceText } from "@/features/sources/SourceText";
 import { createMissionClient, MissionClientError } from "./client.ts";
 import type { MissionEventInput, MissionRecommendationItem } from "./contract.ts";
@@ -111,6 +112,7 @@ function MissionCard({ item, batchId, position, total, paneTitle, returnHref, st
       </button>
     </div>
     <p className="mt-3 text-xs text-[#71816f]">실천 기록은 본인의 자기보고이며 프로그램의 공식 완료·포인트 지급을 뜻하지 않아요.</p>
+    <MissionPhotoToggle actionId={item.actionId} />
     {impression?.kind === "failed" && <EventFailure label={eventLabel.impression} retry={() => record("impression")} />}
     {accepted?.kind === "failed" && <EventFailure label={eventLabel.accepted} retry={() => record("accepted")} />}
     {completed?.kind === "failed" && <EventFailure label={eventLabel.self_reported_completed} retry={() => record("self_reported_completed")} />}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { MissionPhotoToggle } from "./photo/MissionPhotoToggle";
 import { SourceLink } from "@/features/sources/SourceLink";
 import { displayValue } from "./detail-contract.ts";
 import { missionRouteHref, safeMissionReturnHref } from "./return-context.ts";
@@ -44,6 +45,8 @@ export function MissionDetailScreen({ batchId, itemId, returnTo }: {
         자격은 아직 평가하지 않았어요. 실제 참여 전 현재 조건과 운영 상태를 출처에서 확인해 주세요.
       </p>
     </section>
+
+    <MissionPhotoToggle actionId={detail.action_id} />
 
     <section aria-labelledby="condition-title" className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#dfe9da] md:p-8">
       <h2 id="condition-title" className="text-xl font-bold text-[#29452a]">행동 조건과 근거</h2>
