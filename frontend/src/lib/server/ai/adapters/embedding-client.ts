@@ -1,5 +1,5 @@
 import "server-only";
-import { AiError } from "./contracts.ts";
+import { AiError } from "../contracts.ts";
 
 export const EMBEDDING = {
   model: "BAAI/bge-m3", revision: "5617a9f61b028005a4858fdac845db406aefb181",

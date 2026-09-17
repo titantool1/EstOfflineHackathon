@@ -1,7 +1,8 @@
 import "server-only";
 import { Annotation, END, START, StateGraph } from "@langchain/langgraph";
-import { AiError } from "./contracts.ts";
-import type { AnswerModel, EmbedQuery, Evidence, SearchTool } from "./contracts.ts";
+import { AiError } from "../contracts.ts";
+import type { AnswerModel, EmbedQuery, Evidence } from "../contracts.ts";
+import type { SearchTool } from "../tools/contracts.ts";
 
 const State = Annotation.Root({
   query: Annotation<string>(),
@@ -10,7 +11,8 @@ const State = Annotation.Root({
   answer: Annotation<string>(),
 });
 
-// Retrieval is an explicit application tool. The graph owns no DB/ES client or user memory.
+// This is the current fixed embed -> search -> answer application flow.
+// It does not implement an SDK function-calling loop or own DB/ES access or user memory.
 export function createSearchAnswerGraph(ports: { embed: EmbedQuery; search: SearchTool; answer: AnswerModel }) {
   return async (query: string, signal: AbortSignal = AbortSignal.timeout(90_000)) => {
     if (!query.trim() || query.length > 2000) throw new AiError("INVALID_QUERY");

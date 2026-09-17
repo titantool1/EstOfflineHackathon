@@ -2,7 +2,9 @@
 
 ## 현재 기준
 
-실행 환경과 기본 연결은 준비됐다. 이번4단계는 기능을 구현할 위치·책임·연결 지점을 정한다. DB는 별도로 구성/시험 중이므로 스키마·조회문·저장 포트·실제 DTO는 이 작업에서 확정하지 않는다. 디렉터리가 존재하는 것과 기능 구현 완료를 구분한다.
+기능을 채우기 전에 합의한 아키텍처의 코드 틀부터 정리한다. Next TypeScript는 AI·LangGraph·도구 연결을, Spring은 HTTP API·업무 규칙·SQL/DB·권한을 맡는다. Next는 Spring HTTP API를 호출하고 DB를 직접 조회하지 않는다. DDD는 기능별 책임을 묶는 기준, SRP는 변경 이유가 다른 책임을 나누는 기준으로 적용하며 외부 접근은 헥사고날의 포트/어댑터 경계로 분리한다.
+
+검증한 [DB 파일](../database/README.md)은 `3b5fd2c`로 저장소에 반영돼 있다. 이번에는 이를 보존하며 새 업무 API·조회 SQL·Flyway 적용을 시작하지 않는다. 사용자 정보 수명·조건 비교 범위·구체적인 요청/응답 필드는 DB와 실제 기능을 연결할 때 정한다.
 
 ```mermaid
 flowchart LR
@@ -28,16 +30,16 @@ flowchart LR
 |---|---|---|
 | identity | 인증·세션·요청 사용자 식별 | 인증 방식·사용자 ID 확정 |
 | profile | 관심사·채택한 사용자 사실·정정 | 사용자정보 DB와 입력 계약 |
-| catalog | 제도·행동·조건·출처 상세 | 자료 관계·상세 조회 |
+| catalog | 제도·행동·조건·출처와 지원하는 조건 비교 규칙 | 자료 관계·상세 조회·비교 지원 범위 |
 | search | 허용 필터·키워드/벡터 후보 검색 | PG/ES 투영·지역·ID 계약 |
 | recommendation | 후보 제외·정렬·발견·추천 이유 | profile/catalog/activity의 필요한 읽기 |
-| conversation | 대화 소유권·실행 상태·결과 저장 | Next 그래프와 실행/저장 계약 |
-| places | 지역 해석·장소 조회 | 카카오/자료의 지역·장소 매핑 |
+| conversation | 대화 소유권·보존할 결과·중복 방지 기록 | 저장 정책; 그래프 노드·호출 상태는 Next 책임 |
+| places | 정규 지역 검사·지도 후보·장소 조회 | 지역·장소 매핑; 자연어 해석·모델 후보 선택은 Next |
 | activity | 노출·조회·자기보고 실천 사건 | 중복 방지·집계·소유권 |
 | health | 실제 PG 연결 상태 | 현재 구현 예시 |
 | common/api | 공통 응답·오류·요청 ID | 현재 구현됨 |
 
-새8개 기능 패키지는 `package-info.java`로 위치와 책임만 표시한다. 빈 컨트롤러·서비스·repository와 임의의 성공/빈 목록 API는 만들지 않는다. 실제 기능을 구현할 때 해당 모듈 아래 필요한 부분만 추가한다.
+기존8개 기능 패키지는 `package-info.java`로 위치와 책임을 표시한다. 한 Spring 서버 안의 모듈이며 각각 별도 서버를 만들지 않는다. 빈 컨트롤러·서비스·repository와 임의의 성공/빈 목록 API는 만들지 않는다. 실제 기능을 구현할 때 해당 모듈 아래 필요한 부분만 추가한다.
 
 ```text
 <feature>/api/          요청·응답 변환, 인증된 호출 문맥 전달
@@ -47,6 +49,8 @@ flowchart LR
 ```
 
 핵심 규칙은 HTTP·DB·모델 SDK·환경변수를 직접 읽지 않는다. 응용 처리는 포트를 사용하고 어댑터가 이를 구현한다. 다른 모듈의 컨트롤러·테이블·JDBC 구현을 직접 호출하지 말고 필요한 응용 인터페이스로 연결한다. 작은 기능은 함수/클래스 하나로 충분하며 인터페이스를 기계적으로 추가하지 않는다. 예시인 health에도 업무 저장 계약을 억지로 끼워 넣지 않는다.
+
+현재 `health/api/HealthController` → `health/application/HealthService`·`DatabaseProbe` → `health/adapter/JdbcDatabaseProbe`가 실행 가능한 참조 구조다. health에는 업무 판단 규칙이 없으므로 빈 domain 계층을 추가하지 않는다. 챗 도구와 일반 화면에서 필요한 같은 기능은 Spring의 같은 응용 서비스로 연결한다.
 
 ## Next 기능 위치
 
@@ -58,9 +62,27 @@ flowchart LR
 | `frontend/src/features/chat` | 대화 UI·전송 상태 위치 |
 | `frontend/src/features/map` | 지도·장소 표시/선택 위치 |
 | `frontend/src/lib/server/spring-client.ts` | 현재 Spring 상태 조회 어댑터 |
-| `frontend/src/lib/server/ai` | 현재 그래프·모델·임베딩·검색 도구 주입 경계 |
+| `frontend/src/lib/server/ai/runtime.ts` | 환경값을 읽고 실제 구현을 조립하는 진입점 |
+| `frontend/src/lib/server/ai/application/search-answer-flow.ts` | 현재 LangGraph 검색/답변 흐름 |
+| `frontend/src/lib/server/ai/contracts.ts` | 모델·임베딩 함수 계약, 근거 자료와 AI 오류 |
+| `frontend/src/lib/server/ai/tools/contracts.ts` | 현재 검색 도구의 주입 계약; 실제 업무 구현은 후속 |
+| `frontend/src/lib/server/ai/adapters` | OpenAI·BGE SDK/HTTP 접근과 응답·오류 변환 |
 
 features에는 책임 안내와 [API 경로 위치](api-skeleton.md)를 두었으며 기존 화면은 아직 이동하지 않았다. 기능을 실제 연결할 때 컴포넌트·훅·화면용 요청 코드를 분리한다. DB 레코드나 모델 SDK 타입을 그대로 브라우저 계약으로 사용하지 않는다. 인증 쿠키 중계와 사용자 소유권 확인은 실제 사용자 API 연결 시 함께 정한다.
+
+그래프는 계약만 알고 어댑터를 직접 생성하지 않는다. `runtime.ts`가 모델·임베딩 어댑터와 호출자가 제공한 도구를 조립한다. 도구의 Spring 연결 구현은 해당 업무 API를 만들 때 tools에 추가하고 HTTP 통신은 공통 Spring 클라이언트로 모은다. 도구마다 노드·서비스·Repository를 일대일로 만들지 않는다.
+
+현재 그래프는 `임베딩 → 검색 → 답변/검색 결과 없음`의 고정 골격이다. 기존 실험의 `모델 → 도구 → 결과 → 모델/완료` 대화 루프가 이 코드에 구현됐다는 뜻은 아니다. 이번에는 기존 동작과 검사를 유지한 채 책임별 위치만 정리한다. 후속 대화 실행부도 application, 도구 정의·연결은 tools, OpenAI 호출은 adapters 안에 채운다.
+
+## 오류 처리 경계
+
+| 담당 | 책임 |
+|---|---|
+| Spring | 업무 입력·권한·DB 오류를 HTTP 상태와 공통 오류 코드로 반환 |
+| Next 서버 | Spring 연결 실패·시간 초과·잘못된 응답, 모델·도구 실패를 변환하고 그래프의 후속 처리를 결정 |
+| 프론트 화면 | 오류 표시·로딩 해제·입력 복구·재시도 안내 |
+
+기존 `ApiResponse`의 `{data, error: {code, message}, requestId}` 형식을 사용하며 성공 시 error는 null, 실패 시 data는 null이다. 검색 결과 없음·정보 부족과 장애를 구분한다. LangGraph의 호출 한도·인수 수정·실패 종료는 Next, Spring의 트랜잭션·처리 결과 기록은 Spring 책임이다. 쓰기 요청의 시간 초과는 반영 여부를 확인하기 전 자동 재전송하지 않는다. 업무별 오류 코드와 저장 정책은 해당 기능을 채울 때 추가한다.
 
 ## DB 결과를 받을 때 맞출 지점
 
@@ -74,6 +96,6 @@ features에는 책임 안내와 [API 경로 위치](api-skeleton.md)를 두었�
 
 ## 이번 단계 완료 기준과 다음 순서
 
-패키지 위치와 문서 연결이 맞고 기존 실행 코드·API·DB 설정을 보존하며 Java 컴파일/기존 계약 검사를 통과하면 뼈대 정리를 마친다. 브라우저 동작·모델 품질·업무 API 구현을 이번 완료 범위에 포함하지 않는다.
+기존 AI 실행 코드의 책임별 이동, import·문서 연결과 기존 AI 검사·린트·웹 빌드로 틀 정리를 확인한다. Spring은 모듈 책임 주석만 맞추고 실행 코드·DB 파일·설정을 보존한다. 브라우저 동작·모델 품질·업무 API 구현은 이번 완료 범위에 포함하지 않는다.
 
 다음은 DB 설계/시험 결과와 인증 기준을 받아 한 기능씩 입력/출력→응용 처리→어댑터→화면을 연결한다. 각 기능의 검증이 끝나면 main에 반영한다. 상태 조회·AI 실행 골격은 [2단계](environment-step2.md)와 [3단계](environment-step3.md)를 따른다.

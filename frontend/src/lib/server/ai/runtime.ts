@@ -1,10 +1,10 @@
 import "server-only";
 import { readFile } from "node:fs/promises";
-import { createSearchAnswerGraph } from "./graph.ts";
-import { createEmbeddingClient } from "./embedding.ts";
-import { createAnswerModel } from "./model.ts";
+import { createSearchAnswerGraph } from "./application/search-answer-flow.ts";
+import { createEmbeddingClient } from "./adapters/embedding-client.ts";
+import { createAnswerModel } from "./adapters/openai-answer-model.ts";
 import { AiError } from "./contracts.ts";
-import type { SearchTool } from "./contracts.ts";
+import type { SearchTool } from "./tools/contracts.ts";
 
 export async function configuredEmbedding() {
   let token: string;

@@ -1,7 +1,7 @@
 import "server-only";
 import OpenAI from "openai";
-import { AiError } from "./contracts.ts";
-import type { AnswerModel } from "./contracts.ts";
+import { AiError } from "../contracts.ts";
+import type { AnswerModel } from "../contracts.ts";
 
 export function createAnswerModel(options: { apiKey: string; model: string; fetch?: typeof fetch }): AnswerModel {
   // Construct only on invocation so configuration probes/builds never call the provider.

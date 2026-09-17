@@ -1,8 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { createSearchAnswerGraph } from "../src/lib/server/ai/graph.ts";
-import { createEmbeddingClient, EMBEDDING } from "../src/lib/server/ai/embedding.ts";
-import { createAnswerModel } from "../src/lib/server/ai/model.ts";
+import { createSearchAnswerGraph } from "../src/lib/server/ai/application/search-answer-flow.ts";
+import { createEmbeddingClient, EMBEDDING } from "../src/lib/server/ai/adapters/embedding-client.ts";
+import { createAnswerModel } from "../src/lib/server/ai/adapters/openai-answer-model.ts";
 
 const vector = [1, ...Array(1023).fill(0)];
 const evidence = [{ id: "test:1", text: "시험 근거" }];

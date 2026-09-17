@@ -1,5 +1,4 @@
 export type Evidence = { id: string; text: string };
-export type SearchTool = (query: string, vector: number[], signal: AbortSignal) => Promise<Evidence[]>;
 export type AnswerModel = (query: string, evidence: Evidence[], signal: AbortSignal) => Promise<string>;
 export type EmbedQuery = (query: string, signal: AbortSignal) => Promise<number[]>;
 

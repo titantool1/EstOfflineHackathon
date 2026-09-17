@@ -66,6 +66,8 @@ UTF-8 TXT(BOM/Windows 줄바꿈 포함), 빈 줄·주석·값 양옆 따옴표�
 
 ## 3. 다음 단계
 
+기능을 채우기 전 [합의한 아키텍처의 코드 틀](docs/architecture.md)을 정리한다. Next AI 실행부는 application/도구 계약/adapters와 runtime 조립으로 나누고, Spring은 기존 기능 패키지·health 참조 구조를 유지한다. DB 커밋은 포함돼 있지만 실제 업무 조회·Flyway·새 챗 연결은 아직이다.
+
 1. 완료 범위 확인: 웹 → Spring → PG 상태 조회와 공통 응답·오류·요청 ID. 실제 기능 API와 인증은 아직 없음.
 2. LangGraph·모델·BGE 실행 골격 준비. AI를 켜려면 아래3단계 문서대로 모델 다운로드 후 ai 프로필 실행.
 3. [기능별 모듈 뼈대와 책임 경계](docs/architecture.md), [화면 API 연결 자리](docs/api-skeleton.md) 준비. DB 설계·조회/저장 계약은 별도 작업 결과와 맞춘다.
