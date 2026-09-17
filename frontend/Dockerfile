@@ -7,7 +7,7 @@ COPY . .
 # Only the public JavaScript map key is a build argument.
 ARG NEXT_PUBLIC_KAKAO_MAP_KEY=""
 ENV NEXT_PUBLIC_KAKAO_MAP_KEY=$NEXT_PUBLIC_KAKAO_MAP_KEY
-RUN npm run test:ai && npm run test:server && npm run test:catalog && npm run test:conversation && npm run test:neighborhood && npm run test:interests && npx eslint src/app/api/health/route.ts src/app/api/ai src/app/api/signup src/app/api/profile src/app/api/missions src/app/api/activity src/features src/lib/server tests/spring-client.test.ts tests/catalog-tools.test.ts tests/kakao-local.test.ts tests/neighborhood-bff.test.ts tests/neighborhood-client.test.ts tests/neighborhood-state.test.ts tests/interests.test.ts && npm run build
+RUN npm run test:ai && npm run test:server && npm run test:catalog && npm run test:conversation && npm run test:neighborhood && npm run test:interests && npm run test:missions && npx eslint src/app/api/health/route.ts src/app/api/ai src/app/api/signup src/app/api/profile src/app/api/missions src/app/api/activity src/features src/lib/server tests/spring-client.test.ts tests/catalog-tools.test.ts tests/kakao-local.test.ts tests/neighborhood-bff.test.ts tests/neighborhood-client.test.ts tests/neighborhood-state.test.ts tests/interests.test.ts tests/missions.test.ts && npm run build
 
 FROM node:24.14.1-bookworm-slim AS runtime
 WORKDIR /app

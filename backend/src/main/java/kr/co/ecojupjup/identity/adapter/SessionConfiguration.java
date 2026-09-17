@@ -57,7 +57,7 @@ public class SessionConfiguration {
             .requestCache(cache -> cache.disable())
             .securityContext(context -> context.requireExplicitSave(true).securityContextRepository(contexts))
             .csrf(csrf -> csrf.csrfTokenRepository(tokens).csrfTokenRequestHandler(new XorCsrfTokenRequestAttributeHandler()))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/me","/api/profile/**").authenticated()
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/me","/api/profile/**","/api/missions/**").authenticated()
                 .anyRequest().permitAll())
             .exceptionHandling(errors -> errors
                 .authenticationEntryPoint((request,response,error) -> failure(request,response,mapper,401,"AUTHENTICATION_REQUIRED","로그인이 필요합니다."))
