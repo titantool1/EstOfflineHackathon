@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { DistrictSelect } from "./DistrictSelect";
 import { usePathname } from "next/navigation";
 import { useRef } from "react";
 
@@ -20,7 +19,6 @@ export function SiteHeader() {
       <Link href="/" className="flex min-h-11 shrink-0 items-center gap-2 font-bold text-[#267a38]"><span aria-hidden="true" className="text-xl">🌱</span> 에코줍줍</Link>
       <nav aria-label="주 메뉴" className="hidden gap-1 md:flex">{links}</nav>
       <div className="ml-auto flex items-center gap-2">
-        <div className="hidden sm:block"><DistrictSelect /></div>
         <Link href="/profile" aria-label="내 프로필" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#b8df91] bg-[#e9f5e2] text-sm text-[#2d7938]"><span aria-hidden="true">👤</span></Link>
         <details ref={menu} className="md:hidden" onKeyDown={event => {
           if (event.key === "Escape") { close(); menu.current?.querySelector("summary")?.focus(); }
@@ -29,7 +27,6 @@ export function SiteHeader() {
           <nav aria-label="모바일 주 메뉴" className="absolute inset-x-0 top-full max-h-[60dvh] overflow-y-auto border-b border-[#dce8d7] bg-white p-3 shadow-lg">{links}</nav>
         </details>
       </div>
-      <div className="w-full sm:hidden"><DistrictSelect id="mobile-district" /></div>
     </div>
   </header>;
 }

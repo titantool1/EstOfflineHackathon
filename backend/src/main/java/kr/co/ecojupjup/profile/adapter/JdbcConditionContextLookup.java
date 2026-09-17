@@ -37,6 +37,12 @@ public class JdbcConditionContextLookup implements ConditionContextService.Looku
         checkSelection(owner,"user_vehicles","vehicle_id",selection.vehicleId());
         return new Projection(owner,selection).build();
     }
+    @Override
+    public ConditionContext loadConversation(UUID owner) {
+        if (!Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM app.users WHERE id=?)", Boolean.class, owner)))
+            throw new ConditionContextService.NotFound();
+        return new Projection(owner, new Selection("conversation", "conversation", null, null, null), true).build();
+    }
     private void checkSelection(UUID owner,String table,String field,UUID id) {
         if(id!=null && !Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM app."+table+
                 " WHERE user_id=? AND "+field+"=?)",Boolean.class,owner,id))) throw new ConditionContextService.NotFound();
@@ -45,7 +51,11 @@ public class JdbcConditionContextLookup implements ConditionContextService.Looku
         private final UUID owner;
         private final Selection selection;
         private final Map<String,List<StoredFact>> cache=new java.util.HashMap<>();
-        Projection(UUID owner,Selection selection) { this.owner=owner;this.selection=selection; }
+        private final boolean conversation;
+        Projection(UUID owner,Selection selection) { this(owner, selection, false); }
+        Projection(UUID owner,Selection selection,boolean conversation) {
+            this.owner=owner;this.selection=selection;this.conversation=conversation;
+        }
         List<StoredFact> family(FactTable table) {
             return cache.computeIfAbsent(table.name(),k->facts.list(owner,table));
         }
@@ -79,9 +89,9 @@ public class JdbcConditionContextLookup implements ConditionContextService.Looku
             var basic=jdbc.queryForList("""
                 SELECT input_key,source_kind,relation,service_code,
                     jsonb_agg(condition_id ORDER BY condition_id)::text AS conditions
-                FROM app.benefit_condition_inputs WHERE program_key=? AND action_id=?
+                FROM app.benefit_condition_inputs WHERE (? OR (program_key=? AND action_id=?))
                 GROUP BY input_key,source_kind,relation,service_code,selector_code ORDER BY input_key,selector_code
-                """,selection.programKey(),selection.actionId());
+                """,conversation,selection.programKey(),selection.actionId());
             for(var binding:basic) {
                 String kind=(String)binding.get("source_kind");
                 var input=mapper.createObjectNode().put("input_key",(String)binding.get("input_key"));
@@ -115,10 +125,10 @@ public class JdbcConditionContextLookup implements ConditionContextService.Looku
                 SELECT b.input_key,d.domain,d.field_name,d.value_type,b.subject_scope,b.welfare_code,
                     jsonb_agg(b.condition_id ORDER BY b.condition_id)::text AS conditions
                 FROM app.detail_condition_inputs b JOIN app.detail_input_definitions d USING(input_key,domain)
-                WHERE b.program_key=? AND b.action_id=?
+                WHERE ((? AND b.subject_scope='self') OR (b.program_key=? AND b.action_id=?))
                 GROUP BY b.input_key,d.domain,d.field_name,d.value_type,b.subject_scope,b.welfare_code,b.selector_code
                 ORDER BY b.input_key,b.selector_code
-                """,selection.programKey(),selection.actionId());
+                """,conversation,selection.programKey(),selection.actionId());
             for(var binding:detail) {
                 String scope=(String)binding.get("subject_scope"),domain=(String)binding.get("domain"),field=(String)binding.get("field_name");
                 var input=mapper.createObjectNode().put("input_key",(String)binding.get("input_key"))

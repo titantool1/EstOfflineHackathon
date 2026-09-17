@@ -36,6 +36,7 @@ const personalDefinitions: FunctionDefinition[] = [
 export function createConversationTools(options: {
   catalog: ReturnType<typeof createCatalogTools>; load: ReturnType<typeof createUserConditionLoader>;
   places?: ReturnType<typeof createPlaceTools>;
+  fixedConditions?: boolean;
   turn: ConversationTurn; memory: ConditionMemory;
 }) {
   const { catalog, load, turn } = options;
@@ -44,7 +45,7 @@ export function createConversationTools(options: {
   const candidates = new Set<string>(), inspected = new Set<string>();
   const key = (program: unknown, action: unknown) => JSON.stringify([program, action]);
   return {
-    definitions: [...catalog.definitions, ...(options.places?.definitions ?? []), ...personalDefinitions] as FunctionDefinition[],
+    definitions: [...catalog.definitions, ...(options.places?.definitions ?? []), ...personalDefinitions.filter(d => !options.fixedConditions || d.name !== "update_conditions")] as FunctionDefinition[],
     memory: () => structuredClone(memory),
     async execute(name: string, args: unknown, signal: AbortSignal): Promise<unknown> {
       signal.throwIfAborted();
@@ -77,6 +78,7 @@ export function createConversationTools(options: {
         return { status: "ok", context: result.body.data, bindings: result.bindings, conditions: conditionView(memory) };
       }
       if (name === "update_conditions") {
+        if (options.fixedConditions) throw new AiError("TOOL_NOT_AVAILABLE");
         exact(args, ["changes"]);
         if (!Array.isArray(args.changes) || !args.changes.length || args.changes.length > 50) throw new AiError("INVALID_TOOL_ARGUMENTS");
         for (const change of args.changes) {

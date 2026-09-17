@@ -29,7 +29,7 @@ export function AuthForm({ mode, returnTo = "/profile", sessionExpired = false }
         signupConfirmed = true; setCreated(true);
       }
       await accounts.login(email, password);
-      router.replace(signup ? "/profile" : returnTo); router.refresh();
+      router.replace(signup ? "/onboarding" : returnTo); router.refresh();
     } catch (caught) {
       if (signup && !signupConfirmed && caught instanceof AccountError && caught.outcomeUnknown) {
         setOutcomeUnknown(true);

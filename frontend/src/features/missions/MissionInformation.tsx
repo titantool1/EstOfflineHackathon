@@ -40,11 +40,24 @@ export function MissionInformation({ batchId, itemId }: { batchId: string; itemI
 
 function Conditions({ title, items }: { title: string; items: ParticipationCondition[] }) {
   if (!items.length) return null;
+  const groups = new Map<string, ParticipationCondition[]>();
+  for (const item of items) {
+    const group = item.group ?? "";
+    groups.set(group, [...(groups.get(group) ?? []), item]);
+  }
   return <section className="mt-3">
     <h3 className="text-xs font-bold text-[#4d9849]">{title}</h3>
-    <ul className="mt-2 space-y-3 text-sm leading-6 text-[#436943]">{items.map((item, index) => <li key={index}>
-      <p className="font-semibold">{item.title}</p>
-      {item.detail && <p className="mt-1 whitespace-pre-wrap text-[#5d755b]">{item.detail}</p>}
-    </li>)}</ul>
+    {[...groups].map(([group, conditions]) => {
+      const sharedDetail = group && conditions.length > 1 && conditions.every(item => item.detail === conditions[0].detail)
+        ? conditions[0].detail : null;
+      return <div key={group} className="mt-3">
+      {group && <h4 className="rounded-lg bg-[#eef6e8] px-3 py-2 text-xs font-bold leading-5 text-[#315f33]">{group}</h4>}
+      <ul className="mt-2 space-y-3 text-sm leading-6 text-[#436943]">{conditions.map((item, index) => <li key={index}>
+        <p className="font-semibold">{item.title}</p>
+        {item.detail && !sharedDetail && <p className="mt-1 whitespace-pre-wrap text-[#5d755b]">{item.detail}</p>}
+      </li>)}</ul>
+      {sharedDetail && <p className="mt-2 text-sm leading-6 text-[#5d755b]">{sharedDetail}</p>}
+    </div>;
+    })}
   </section>;
 }

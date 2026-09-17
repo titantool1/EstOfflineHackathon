@@ -1,7 +1,7 @@
 import "server-only";
 import { AiError } from "../contracts.ts";
 import type { ConditionMemory } from "./condition-memory.ts";
-import { createConditionMemory } from "./condition-memory.ts";
+import { createConditionMemory, conditionView } from "./condition-memory.ts";
 import type { ConversationEventSink, ConversationProvider, ConversationSession, ConversationTurn } from "../conversation-contracts.ts";
 import type { createCatalogTools } from "../tools/catalog-tools.ts";
 import type { createUserConditionLoader } from "../adapters/user-condition-context.ts";
@@ -10,12 +10,18 @@ import { createConversationTools } from "../tools/conversation-tools.ts";
 import { createConversationGraph } from "./conversation-flow.ts";
 import { createConversationContext } from "./conversation-context.ts";
 
+import { applyInterpretation, type ConditionInterpreter, type Clarification } from './condition-interpretation.ts';
+
 export type ConversationResult = { text: string; memory: ConditionMemory; modelCalls: number; toolCalls: number };
 
 export function createConversationRunner(ports: {
+  prepareConditions?: (turn: ConversationTurn, previous: ConditionMemory, signal: AbortSignal) => Promise<ConditionMemory>;
+  interpretConditions?: ConditionInterpreter;
   places?: ReturnType<typeof createPlaceTools>;
   provider: ConversationProvider; catalog: ReturnType<typeof createCatalogTools>; load: ReturnType<typeof createUserConditionLoader>;
 }) {
+  if (!!ports.prepareConditions !== !!ports.interpretConditions) throw new AiError('CONDITION_PIPELINE_NOT_CONFIGURED');
+  const prepared = new WeakSet<ConversationSession>();
   const busy = new WeakSet<ConversationSession>(), closed = new WeakSet<ConversationSession>();
   const run = createConversationGraph(ports.provider);
   async function cleanup(session: ConversationSession, signal: AbortSignal) {
@@ -42,20 +48,33 @@ export function createConversationRunner(ports: {
       try {
         await cleanup(session, signal);
         session.provider ??= await ports.provider.create(structuredClone(session.history), signal);
-        const tools = createConversationTools({ ...ports, turn, memory: session.memory });
+        let working = structuredClone(session.memory);
+        let clarification: Clarification | null = null;
+        if (ports.prepareConditions && ports.interpretConditions) {
+          options.onEvent?.({ type: 'progress', stage: 'checking_conditions' });
+          if (!prepared.has(session)) working = await ports.prepareConditions(turn, working, signal);
+          const parsed = await ports.interpretConditions({ currentText: turn.text, history: structuredClone(session.history),
+            slots: conditionView(working).map((item, slot) => ({ slot, input: item.input, fact: item.fact })) }, signal);
+          const applied = applyInterpretation(working, session.userId, { id: turn.turnId, text: turn.text }, parsed);
+          working = applied.memory; clarification = applied.clarification;
+          options.onEvent?.({ type: 'progress', stage: 'updating_conditions' });
+        }
+        const tools = createConversationTools({ ...ports, turn, memory: working, fixedConditions: !!ports.interpretConditions });
+        const definitions = clarification ? [] : tools.definitions;
         const reply = await run({ conversation: session.provider, text: turn.text, turnId: turn.turnId,
-          tools: tools.definitions, execute: tools.execute,
-          instructions: () => createConversationContext({ memory: tools.memory(), tools: tools.definitions }),
+          tools: definitions, execute: tools.execute,
+          instructions: () => createConversationContext({ memory: tools.memory(), tools: definitions, clarification, fixedConditions: !!ports.interpretConditions }),
           onEvent: options.onEvent,
         }, signal);
         signal.throwIfAborted();
-        const result = { ...reply, memory: tools.memory() };
+        const result = { ...reply, modelCalls: reply.modelCalls + (ports.interpretConditions ? 1 : 0), memory: tools.memory() };
         // Prepare all local state before the durable commit boundary.
         const memory = structuredClone(result.memory);
         const history = [...session.history, { role: "user" as const, content: turn.text },
           { role: "assistant" as const, content: reply.text }].slice(-40);
         await options.commit(structuredClone(result));
         session.memory = memory;
+        prepared.add(session);
         session.history = history;
         return result;
       } catch (error) {

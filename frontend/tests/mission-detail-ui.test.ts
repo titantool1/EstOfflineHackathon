@@ -77,3 +77,20 @@ test("imported candidate source names are accepted without inventing URLs, but o
   assert.equal(isMissionItemDetail(withPlace({ ...place, source: { ...place.source, origin: "unknown" } })), false);
   assert.equal(isMissionItemDetail(withPlace({ ...place, source: { ...place.source, url: "javascript:alert(1)" } })), false);
 });
+
+test("mission markers use only valid non-closed linked coordinates and deduplicate places", async () => {
+  const { missionMapPlaces } = await import("../src/features/missions/mission-map.ts");
+  const base = detail.detail.places[0];
+  const linked = { ...base, status: "unknown" as const, latitude: 37.5, longitude: 127 };
+  const markers = missionMapPlaces([
+    linked, { ...linked, service_key: "another-service" },
+    { ...linked, place_id: "closed", status: "closed" },
+    { ...linked, place_id: "missing", latitude: null },
+    { ...linked, place_id: "string", latitude: "37.5" },
+    { ...linked, place_id: "out-of-range", longitude: 181 },
+    { ...linked, place_id: "nan", latitude: NaN },
+  ]);
+  assert.equal(markers.length, 1); assert.equal(markers[0].id, linked.place_id);
+  assert.equal(markers[0].latitude, 37.5); assert.equal(markers[0].longitude, 127);
+  assert.deepEqual(missionMapPlaces([]), []);
+});

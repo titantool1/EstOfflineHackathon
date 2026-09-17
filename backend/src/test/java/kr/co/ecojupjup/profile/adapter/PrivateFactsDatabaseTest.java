@@ -68,6 +68,14 @@ class PrivateFactsDatabaseTest {
         store=new JdbcPrivateFactsStore(jdbc,json,crypto); lookup=new JdbcConditionContextLookup(jdbc,json,store);
         assertThat(transaction(()->lookup.load(owner,selected))).isEqualTo(before);
         assertThat(transaction(()->lookup.load(owner,unselected))).isEqualTo(beforeUnselected);
+        var general=transaction(()->lookup.loadConversation(owner));
+        assertThat(general.inputs()).isNotEmpty().allSatisfy(i->assertThat(i.target().kind()).isEqualTo("self"));
+        assertThat(general.inputs().stream().filter(i->i.inputKey().equals("person.birth_date")).findFirst().orElseThrow().fact().value()).isEqualTo("1990-02-03");
+        assertThat(general.households()).isEmpty();
+        var another=transaction(()->lookup.loadConversation(other));
+        assertThat(another.inputs()).allSatisfy(i->{assertThat(i.target().id()).isEqualTo(other);assertThat(i.fact()).isNull();});
+        assertThatThrownBy(()->lookup.loadConversation(UUID.randomUUID())).isInstanceOf(ConditionContextService.NotFound.class);
+
         for(FactTable table:FactTable.values()) {
             assertThat(store.list(owner,table)).isNotEmpty();
             assertThat(jdbc.queryForList("SELECT column_name FROM information_schema.columns WHERE table_schema='app' AND table_name=?",String.class,table.sqlTable()))

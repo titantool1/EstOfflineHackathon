@@ -110,3 +110,21 @@ export function createUserConditionLoader(config: Parameters<typeof createSpring
       bindings: projection.bindings };
   };
 }
+
+// Load catalog-supported self facts once per conversation, without model-selected search IDs.
+export function createConversationConditionLoader(config: Parameters<typeof createSpringClient>[0]) {
+ const spring = createSpringClient(config), selection = { programKey: 'conversation', actionId: 'conversation' };
+ return async (request: { authenticatedUserId: string; requestId?: string; sessionHeaders?: HeadersInit }, previous: ConditionMemory, signal: AbortSignal) => {
+  if (previous.userId !== request.authenticatedUserId) throw new Error('CONDITION_MEMORY_OWNER_MISMATCH');
+  const result = await spring.request<UserConditionContext>('/api/profile/conversation-context', {
+   requestId: request.requestId, headers: request.sessionHeaders, signal,
+   validate: (value): value is UserConditionContext => {
+    try { const out = projectUserConditionContext(value, request.authenticatedUserId, selection);
+     return out.seeds.every(s => s.input.target.kind === 'self'); } catch { return false; }
+   },
+  });
+  if (result.body.error || !result.body.data) throw new Error(result.body.error?.code ?? 'CONDITION_CONTEXT_UNAVAILABLE');
+  const projection = projectUserConditionContext(result.body.data, request.authenticatedUserId, selection);
+  return addConditionInputs(previous, request.authenticatedUserId, projection.seeds);
+ };
+}

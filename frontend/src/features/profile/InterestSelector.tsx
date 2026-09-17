@@ -13,7 +13,7 @@ import { interestIcon } from "./interest-icons.ts";
 type View =
   | { kind: "loading" }
   | { kind: "failed"; message: string; status?: number }
-  | { kind: "ready"; options: InterestOption[] };
+  | { kind: "ready"; options: InterestOption[]; hasSavedInterests: boolean };
 
 function message(error: unknown): string {
   if (error instanceof InterestClientError) {
@@ -42,7 +42,7 @@ export function InterestSelector({ isEditing = false }: { isEditing?: boolean })
     client.get(controller.signal).then(profile => {
       if (controller.signal.aborted || current !== loadRequest.current) return;
       setSelected(profile.interestIds);
-      setView({ kind: "ready", options: profile.options });
+      setView({ kind: "ready", options: profile.options, hasSavedInterests: profile.interestIds.length > 0 });
     }).catch(error => {
       if (controller.signal.aborted || current !== loadRequest.current) return;
       setView({ kind: "failed", message: message(error),
@@ -102,8 +102,8 @@ export function InterestSelector({ isEditing = false }: { isEditing?: boolean })
 
   return <section className="mt-9 rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-[#e2ebda] sm:p-10 lg:p-14">
     <div className="mx-auto max-w-5xl text-center"><span aria-hidden="true" className="inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-[#edf8e7] text-3xl">🌿</span>
-      <h1 className="mt-5 text-3xl font-bold text-[#155b2d] sm:text-4xl">{isEditing ? "관심사를 수정해볼까요?" : "어떤 혜택부터 찾아볼까요?"}</h1>
-      <p className="mt-5 text-sm leading-6 text-[#568344] sm:text-base">{isEditing ? "기존에 선택한 관심사가 표시돼요. 최대 3개까지 바꾸고 확인해 주세요." : "관심 있는 분야를 최대 3개까지 고르면 관련 혜택과 실천 방법을 먼저 보여드려요."}</p>
+      <h1 className="mt-5 text-3xl font-bold text-[#155b2d] sm:text-4xl">{isEditing ? (view.hasSavedInterests ? "관심사를 수정해볼까요?" : "관심사를 설정해볼까요?") : "어떤 혜택부터 찾아볼까요?"}</h1>
+      <p className="mt-5 text-sm leading-6 text-[#568344] sm:text-base">{isEditing && view.hasSavedInterests ? "기존에 선택한 관심사가 표시돼요. 최대 3개까지 바꾸고 확인해 주세요." : "관심 있는 분야를 최대 3개까지 고르면 관련 혜택과 실천 방법을 먼저 보여드려요."}</p>
     </div>
     <div role="group" aria-label="관심사 선택" className="mx-auto mt-8 grid max-w-5xl gap-4 sm:grid-cols-2">
       {view.options.map(option => {

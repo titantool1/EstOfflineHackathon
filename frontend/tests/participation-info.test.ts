@@ -47,3 +47,83 @@ test("empty and structured fields are not flattened into internal keys; source U
   detail.conditions = []; detail.overview_sources = [];
   assert.deepEqual(participationInfo(detail), { action: [], common: [], sources: [] });
 });
+
+function grouped(requirement: string, group: string, logic: string, detail = "") {
+  const entry = condition(requirement, detail);
+  entry.condition.group = group;
+  entry.condition.group_logic = logic;
+  return entry;
+}
+
+test("appliance support keeps alternative welfare types separate from mandatory purchase and limits", () => {
+  const input = catalog([
+    grouped("다자녀 가구", "복지할인 자격", "묶음 안 하나 충족(기존 자료)", "기존 자료상 15% 유형이나 2026 본문 미열람"),
+    grouped("대상 제품 구매", "구매·제품", "모두 충족"),
+    grouped("중증장애인", "복지할인 자격", "묶음 안 하나 충족(기존 자료)", "기존 자료상 30% 유형; 2026 본문 미열람"),
+    grouped("잔여 한도", "가구 누적한도", "제한"),
+  ]);
+  input.program_key = "scheme:G022";
+  const original = structuredClone(input);
+  const { action } = participationInfo(input);
+  assert.equal(action[0].group, "복지할인 자격 · 이 중 하나");
+  assert.equal(action[2].group, action[0].group);
+  assert.equal(action[1].group, "필수 조건 · 모두 충족");
+  assert.equal(action[3].group, "지원 한도");
+  assert.equal(action[0].detail, "현재 유형별 지원 비율은 공식 안내에서 확인해 주세요.");
+  assert.deepEqual(input, original, "stored evidence must not be rewritten");
+});
+
+test("voucher income, alternative household types and exclusions retain separate meanings", () => {
+  const input = catalog([
+    grouped("수급 자격", "소득·수급 자격", "모두 충족"),
+    grouped("노인", "세대원 특성", "묶음 안 하나 충족"),
+    grouped("영유아", "세대원 특성", "묶음 안 하나 충족"),
+    grouped("전원 시설 수급", "제외·중복", "제외", "전원 해당 시 제외"),
+  ]);
+  input.program_key = "scheme:G031";
+  const { action } = participationInfo(input);
+  assert.deepEqual(action.map(x => x.group), ["필수 조건 · 모두 충족", "세대원 특성 · 이 중 하나", "세대원 특성 · 이 중 하나", "제외·중복 제한"]);
+  assert.equal(action[3].detail, "전원 해당 시 제외");
+});
+
+test("remodeling preferential categories do not become mandatory participation requirements", () => {
+  const input = catalog([
+    grouped("사업·금융 심사", "심사·금융", "모두 충족"),
+    grouped("건물 유형별 성능", "성능개선 기준", "건물유형별 하나 충족"),
+    grouped("신혼부부", "우대 이자지원", "묶음 안 하나 충족", "혼인 7년 이내; 5.5%p"),
+    grouped("다자녀", "우대 이자지원", "묶음 안 하나 충족"),
+  ]);
+  input.program_key = "scheme:G027";
+  const { action } = participationInfo(input);
+  assert.equal(action[1].group, "성능개선 · 해당 건물 유형의 기준 충족");
+  assert.equal(action[2].group, "추가 우대 · 기본 조건을 갖추고 이 중 하나");
+  assert.equal(action[3].group, action[2].group);
+  assert.equal(action[2].detail, "혼인 7년 이내; 5.5%p");
+});
+
+test("unreviewed and conditional branches are not guessed; same text in different roles is retained", () => {
+  const input = catalog([grouped("동일 내용", "세대원 특성", "묶음 안 하나 충족"), grouped("동일 내용", "제외·중복", "제외")]);
+  input.program_key = "scheme:G031";
+  assert.equal(participationInfo(input).action.length, 2);
+  input.program_key = "scheme:unreviewed";
+  assert.equal(participationInfo(input).action[0].group, undefined);
+  input.program_key = "scheme:G031";
+  input.conditions = [grouped("조건부 안내", "조건", "조건부 모두 충족")];
+  assert.equal(participationInfo(input).action[0].group, undefined);
+});
+
+test("editorial replacements retain uncertainty and closure rather than claiming current eligibility", () => {
+  const { action } = participationInfo(catalog([
+    condition("이전 조건", "기존 자료"),
+    condition("입력 기준 모집 종료 또는 접수 마감", "현재 신규모집으로 안내하지 않음"),
+    condition("20개당 10L 종량제봉투 1장", "주 120개·6장까지"),
+    condition("기존 민간건축물", "앱에서 수량입력"),
+  ]));
+  assert.match(action[0].detail!, /이전 안내.*현재 적용 여부/);
+  assert.equal(action[1].title, "확인된 회차는 모집이 마감됐어요.");
+  assert.match(action[1].detail!, /다음 모집 여부/);
+  assert.equal(action[2].title, "20개당 10L 종량제봉투 1장");
+  assert.equal(action[2].detail, "주 120개·6장까지");
+  assert.equal(action[3].title, "기존 민간건축물");
+  assert.equal(action[3].detail, "앱에서 수량입력");
+});

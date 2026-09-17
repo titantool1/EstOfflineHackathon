@@ -44,6 +44,18 @@ public class ConditionContextController {
             return failure(404, "CONDITION_CONTEXT_NOT_FOUND", "조회할 사용자·혜택·대상을 찾을 수 없습니다.", requestId);
         }
     }
+    @GetMapping("/api/profile/conversation-context")
+    public ResponseEntity<?> conversation(HttpServletRequest request) {
+        String requestId = (String) request.getAttribute(RequestIdFilter.ATTRIBUTE);
+        UUID owner = MemberRequestContext.owner(request);
+        if (owner == null) return failure(401, "AUTHENTICATION_REQUIRED", "사용자 정보를 확인해 주세요.", requestId);
+        try {
+            return ResponseEntity.ok().header("Cache-Control", "no-store")
+                    .body(ApiResponse.success(service.loadConversation(owner), requestId));
+        } catch (ConditionContextService.NotFound error) {
+            return failure(404, "CONDITION_CONTEXT_NOT_FOUND", "사용자 정보를 찾을 수 없습니다.", requestId);
+        }
+    }
     private ResponseEntity<?> failure(int status, String code, String message, String id) {
         return ResponseEntity.status(status).header("Cache-Control", "no-store")
                 .body(ApiResponse.failure(code, message, id));

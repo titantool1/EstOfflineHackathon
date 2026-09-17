@@ -18,12 +18,17 @@ public class ConditionContextService {
     }
     public interface Lookup {
         ConditionContext load(UUID authenticatedUserId, Selection selection);
+        ConditionContext loadConversation(UUID authenticatedUserId);
     }
     public static class NotFound extends RuntimeException {
         public NotFound() { super("CONDITION_CONTEXT_NOT_FOUND"); }
     }
     private final Lookup lookup;
     public ConditionContextService(Lookup lookup) { this.lookup = lookup; }
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
+    public ConditionContext loadConversation(UUID authenticatedUserId) {
+        return lookup.loadConversation(Objects.requireNonNull(authenticatedUserId));
+    }
     @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
     public ConditionContext load(UUID authenticatedUserId, Selection selection) {
         return lookup.load(Objects.requireNonNull(authenticatedUserId), Objects.requireNonNull(selection));

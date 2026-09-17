@@ -27,6 +27,18 @@ class ConditionContextControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(new ConditionContextController(new ConditionContextService(lookup)))
                 .setControllerAdvice(new ApiExceptionHandler()).addFilters(new RequestIdFilter()).build();
     }
+    @Test void conversationContextRequiresSessionAndIgnoresOwnerOverrides() throws Exception {
+        mvc.perform(get("/api/profile/conversation-context").param("userId",OWNER.toString()).header("X-User-Id",OWNER.toString()))
+                .andExpect(status().isUnauthorized());
+        verifyNoInteractions(lookup);
+        when(lookup.loadConversation(OWNER)).thenReturn(new ConditionContext(OWNER,"conversation","conversation",
+                List.of(),List.of(),List.of(),List.of(),"not_evaluated"));
+        mvc.perform(get("/api/profile/conversation-context").requestAttr(MemberRequestContext.ATTRIBUTE,OWNER)
+                .param("userId",UUID.randomUUID().toString()))
+                .andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store"))
+                .andExpect(jsonPath("$.data.userId").value(OWNER.toString()));
+        verify(lookup).loadConversation(OWNER);
+    }
     @Test void noMemberContextNeverAcceptsAnOwnerHeaderOrQuery() throws Exception {
         mvc.perform(get("/api/profile/condition-context").param("programKey","scheme:G031").param("actionId","G031-A01")
                 .param("userId",OWNER.toString()).header("X-User-Id",OWNER.toString()))
