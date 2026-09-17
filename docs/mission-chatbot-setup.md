@@ -68,7 +68,7 @@ npm run dev
 
 ## 검색 데이터
 
-`search-data/eco-jupjup-vector-v2.full.jsonl.gz`에 정책·행동·장소 17,828건과 384차원 임베딩이 포함돼 있다. 위 복원 명령을 실행하면 모델로 전체 데이터를 다시 임베딩하지 않고 챗봇 검색을 시작할 수 있다. 자세한 검증값과 교체 방법은 `search-data/README.md`를 따른다.
+`search-data/eco-jupjup-vector-v2.full.jsonl.gz`에 정책·행동·장소 17,850건, 384차원 임베딩과 관심사 매핑이 포함돼 있다. 위 복원 명령을 실행하면 모델로 전체 데이터를 다시 임베딩하지 않고 챗봇 검색과 관심사 추천을 시작할 수 있다. 자세한 검증값과 교체 방법은 `search-data/README.md`를 따른다.
 
 ## 전체 통합 Compose 방식
 

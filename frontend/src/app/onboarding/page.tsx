@@ -6,21 +6,18 @@ import { useState } from "react";
 
 import { interests } from "@/features/missions/catalog";
 
-const interestStorageKey = "eco_interests_v1";
+const interestStorageKey = "eco_interests_v2";
 
 export default function OnboardingPage() {
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>([]);
-  const [unsure, setUnsure] = useState(false);
 
   const toggleInterest = (id: string) => {
-    setUnsure(false);
-    setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
-  };
-
-  const chooseUnsure = () => {
-    setSelected([]);
-    setUnsure(true);
+    setSelected((current) => {
+      if (id === "unsure") return current.includes(id) ? [] : [id];
+      const withoutUnsure = current.filter((item) => item !== "unsure");
+      return withoutUnsure.includes(id) ? withoutUnsure.filter((item) => item !== id) : [...withoutUnsure, id];
+    });
   };
 
   const continueToMissions = () => {
@@ -28,7 +25,7 @@ export default function OnboardingPage() {
     router.push("/missions");
   };
 
-  const canContinue = selected.length > 0 || unsure;
+  const canContinue = selected.length > 0;
 
   return (
     <main className="min-h-screen bg-[#f5f8f1] px-5 py-8 sm:py-12">
@@ -59,7 +56,6 @@ export default function OnboardingPage() {
               );
             })}
           </div>
-          <button type="button" onClick={chooseUnsure} className={`mt-5 w-full rounded-xl py-3 text-sm font-semibold transition ${unsure ? "bg-[#e9f6e5] text-[#347d3d] ring-1 ring-[#4a9c4a]" : "text-[#668165] hover:bg-[#f4f8f1]"}`}>아직 잘 모르겠어요 · 전체에서 추천받기</button>
           <div className="mt-6 flex flex-col gap-3 border-t border-[#edf1ea] pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs leading-5 text-[#82917f]">MVP에서는 선택값을 이 브라우저에만 저장하며<br className="hidden sm:block" /> 이름·연락처 같은 개인정보는 수집하지 않아요.</p>
             <button type="button" disabled={!canContinue} onClick={continueToMissions} className={`inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-bold transition ${canContinue ? "bg-[#2e843b] text-white hover:bg-[#236e30]" : "cursor-not-allowed bg-[#e4e9e1] text-[#9aa698]"}`}>미션 추천받기 →</button>

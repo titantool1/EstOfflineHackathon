@@ -1,10 +1,11 @@
 export type InterestId =
-  | "recycling"
-  | "zero-waste"
-  | "mobility"
-  | "cafe-food"
-  | "energy"
-  | "education";
+  | "green-mobility"
+  | "green-shopping"
+  | "energy-saving"
+  | "home-upgrade"
+  | "waste-reduction"
+  | "eco-learning"
+  | "unsure";
 
 export type VerificationStatus = "verified" | "needs-review";
 
@@ -13,6 +14,8 @@ export interface Interest {
   icon: string;
   title: string;
   description: string;
+  programIds: string[];
+  exclusive?: boolean;
 }
 
 export interface Mission {
@@ -25,46 +28,62 @@ export interface Mission {
   duration: string;
   interestIds: InterestId[];
   sourceProgramId?: string;
+  sourceDocId?: string;
+  sourceUrl?: string;
+  sourceType?: "policy" | "action" | "place";
   verificationStatus: VerificationStatus;
 }
 
-// 관심사가 확정되면 이 목록만 수정하면 온보딩과 통계 화면에 함께 반영됩니다.
 export const interests: Interest[] = [
   {
-    id: "recycling",
-    icon: "♻️",
-    title: "재활용·분리배출",
-    description: "폐건전지·의류, 페트병·캔·종이팩, 무인회수기",
-  },
-  {
-    id: "zero-waste",
-    icon: "🥤",
-    title: "다회용·제로웨이스트",
-    description: "텀블러·다회용기, 리필스테이션, 제로웨이스트 상점",
-  },
-  {
-    id: "mobility",
+    id: "green-mobility",
     icon: "🚲",
-    title: "친환경 이동",
-    description: "따릉이·대중교통, 무공해차, 전기차·수소차",
+    title: "교통비·친환경 이동",
+    description: "대중교통·자전거·친환경차",
+    programIds: ["G003", "G008", "SDG-ZEV-2026", "G007"],
   },
   {
-    id: "cafe-food",
-    icon: "☕",
-    title: "친환경 카페·외식",
-    description: "개인컵 할인, 제로식당, 잔반·음식물쓰레기 감량",
+    id: "green-shopping",
+    icon: "🛍️",
+    title: "친환경 쇼핑·장보기",
+    description: "친환경제품·먹거리 할인",
+    programIds: ["G004", "G034", "G035", "G024", "KR-CNP-GREEN-2026"],
   },
   {
-    id: "energy",
+    id: "energy-saving",
     icon: "💡",
-    title: "에너지·탄소 절감",
-    description: "전기·수도·가스 절약, 에코마일리지, 태양광",
+    title: "전기·난방비 절약",
+    description: "절약·캐시백·요금 지원",
+    programIds: ["G021", "G031", "G048", "G070", "G075", "G080", "SEOUL-EM-BLDG-2026"],
   },
   {
-    id: "education",
+    id: "home-upgrade",
+    icon: "🏠",
+    title: "집·가전 개선",
+    description: "고효율가전·주택·태양광",
+    programIds: ["G022", "G027", "G047", "G101", "SDG-FOOD-REDUCER-H2-2026"],
+  },
+  {
+    id: "waste-reduction",
+    icon: "♻️",
+    title: "재활용·쓰레기 줄이기",
+    description: "폐가전·빈병·음식물",
+    programIds: ["G038", "G042", "SDG-FOOD-REDUCER-H2-2026", "KR-CNP-GREEN-2026", "SEOUL-EM-GREEN-2026"],
+  },
+  {
+    id: "eco-learning",
     icon: "🌳",
-    title: "환경교육·지역활동",
-    description: "환경 체험, 플로깅, 나무심기, 봉사·챌린지",
+    title: "환경 체험·배우기",
+    description: "교육·체험·기후행동",
+    programIds: ["G002", "G039", "G117", "G007", "SEOUL-EM-GREEN-2026"],
+  },
+  {
+    id: "unsure",
+    icon: "🌿",
+    title: "아직 잘 모르겠어요",
+    description: "자격조건이 적은 제도부터 가볍게 추천",
+    programIds: ["G007", "G008", "G024", "G035", "G038", "G042", "G117"],
+    exclusive: true,
   },
 ];
 
@@ -79,7 +98,7 @@ export const missions: Mission[] = [
     howTo: ["내용물을 비우고 헹구기", "라벨과 뚜껑 분리하기", "가까운 전용 수거함에 배출하기"],
     benefit: "고품질 재활용품 배출 관련 탄소중립포인트 혜택과 연결 예정",
     duration: "약 10분",
-    interestIds: ["recycling"],
+    interestIds: ["waste-reduction"],
     sourceProgramId: "C09",
     verificationStatus: "needs-review",
   },
@@ -91,7 +110,7 @@ export const missions: Mission[] = [
     howTo: ["사용한 건전지 모으기", "가까운 주민센터·수거함 확인하기", "전용함에 안전하게 배출하기"],
     benefit: "지역별 교환·보상 혜택은 위치 데이터와 연결 예정",
     duration: "약 15분",
-    interestIds: ["recycling"],
+    interestIds: ["waste-reduction"],
     verificationStatus: "needs-review",
   },
   {
@@ -102,7 +121,7 @@ export const missions: Mission[] = [
     howTo: ["보증금 대상 표시 확인하기", "병을 깨끗하게 보관하기", "판매점 또는 반환처에 반납하기"],
     benefit: "빈용기 보증금 환급 가능",
     duration: "약 15분",
-    interestIds: ["recycling"],
+    interestIds: ["waste-reduction"],
     sourceProgramId: "G042",
     verificationStatus: "verified",
   },
@@ -114,7 +133,7 @@ export const missions: Mission[] = [
     howTo: ["깨끗한 개인컵 준비하기", "주문할 때 개인컵 사용 요청하기", "참여 매장의 적립 여부 확인하기"],
     benefit: "참여 매장에서 탄소중립포인트 또는 자체 할인 가능",
     duration: "약 5분",
-    interestIds: ["zero-waste", "cafe-food"],
+    interestIds: ["green-shopping", "waste-reduction"],
     sourceProgramId: "C03",
     verificationStatus: "verified",
   },
@@ -126,7 +145,7 @@ export const missions: Mission[] = [
     howTo: ["세척한 빈 용기 준비하기", "가까운 리필스테이션 찾기", "필요한 양만 리필하기"],
     benefit: "참여처에 따라 탄소중립포인트 적립 가능",
     duration: "약 30분",
-    interestIds: ["zero-waste"],
+    interestIds: ["green-shopping", "waste-reduction"],
     sourceProgramId: "C05",
     verificationStatus: "needs-review",
   },
@@ -138,7 +157,7 @@ export const missions: Mission[] = [
     howTo: ["다회용기 가능 매장 찾기", "주문 옵션에서 다회용기 선택하기", "사용 후 안내에 따라 반납하기"],
     benefit: "참여 서비스에서 탄소중립포인트 적립 가능",
     duration: "약 20분",
-    interestIds: ["zero-waste", "cafe-food"],
+    interestIds: ["waste-reduction"],
     sourceProgramId: "C06",
     verificationStatus: "needs-review",
   },
@@ -150,7 +169,7 @@ export const missions: Mission[] = [
     howTo: ["오늘 이동 경로 하나 고르기", "대중교통 경로 확인하기", "탑승 후 실천 완료 기록하기"],
     benefit: "K-패스 등 교통비 지원 제도와 연결 예정",
     duration: "이동 시간",
-    interestIds: ["mobility"],
+    interestIds: ["green-mobility"],
     sourceProgramId: "G003",
     verificationStatus: "needs-review",
   },
@@ -162,7 +181,7 @@ export const missions: Mission[] = [
     howTo: ["주변 대여소 확인하기", "안전한 자전거 경로 고르기", "헬멧과 교통법규 지키기"],
     benefit: "친환경 이동 실적 또는 탄소중립포인트 연계 가능",
     duration: "약 20분",
-    interestIds: ["mobility"],
+    interestIds: ["green-mobility"],
     sourceProgramId: "C12",
     verificationStatus: "needs-review",
   },
@@ -174,7 +193,7 @@ export const missions: Mission[] = [
     howTo: ["이동 거리와 인원 확인하기", "무공해차 대여 가능 여부 확인하기", "일반 차량과 비용 비교하기"],
     benefit: "무공해차 대여 관련 탄소중립포인트 연계 가능",
     duration: "약 10분",
-    interestIds: ["mobility", "energy"],
+    interestIds: ["green-mobility"],
     sourceProgramId: "C07",
     verificationStatus: "needs-review",
   },
@@ -186,7 +205,7 @@ export const missions: Mission[] = [
     howTo: ["주문 전 양 확인하기", "먹을 만큼만 덜기", "남은 음식은 다회용기에 포장하기"],
     benefit: "잔반 감량 실천에 따른 포인트 제도와 연결 예정",
     duration: "식사 한 끼",
-    interestIds: ["cafe-food"],
+    interestIds: ["waste-reduction"],
     sourceProgramId: "C13",
     verificationStatus: "needs-review",
   },
@@ -198,7 +217,7 @@ export const missions: Mission[] = [
     howTo: ["식당에 개인 용기 사용 가능 여부 묻기", "세척한 용기 준비하기", "포장 후 실천 기록하기"],
     benefit: "참여 매장에서 탄소중립포인트 적립 가능",
     duration: "약 15분",
-    interestIds: ["cafe-food", "zero-waste"],
+    interestIds: ["waste-reduction"],
     sourceProgramId: "C18",
     verificationStatus: "needs-review",
   },
@@ -210,7 +229,7 @@ export const missions: Mission[] = [
     howTo: ["집 안 대기전력 제품 찾기", "오늘 쓰지 않을 제품 3개 고르기", "안전하게 전원 차단하기"],
     benefit: "에너지 절감량을 에코마일리지 데이터와 연결 예정",
     duration: "약 5분",
-    interestIds: ["energy"],
+    interestIds: ["energy-saving"],
     sourceProgramId: "SEOUL-EM-BLDG",
     verificationStatus: "needs-review",
   },
@@ -222,7 +241,7 @@ export const missions: Mission[] = [
     howTo: ["평소 샤워 시간 떠올리기", "3분 짧게 타이머 맞추기", "완료 후 실천 기록하기"],
     benefit: "수도·에너지 절감형 에코마일리지와 연결 예정",
     duration: "약 10분",
-    interestIds: ["energy"],
+    interestIds: ["energy-saving"],
     verificationStatus: "needs-review",
   },
   {
@@ -233,7 +252,7 @@ export const missions: Mission[] = [
     howTo: ["장갑과 봉투 준비하기", "안전한 산책 경로 고르기", "쓰레기 5개 줍고 분리배출하기"],
     benefit: "지역 플로깅·봉사 프로그램과 연결 예정",
     duration: "약 20분",
-    interestIds: ["education", "recycling"],
+    interestIds: ["eco-learning", "waste-reduction"],
     verificationStatus: "needs-review",
   },
   {
@@ -244,7 +263,7 @@ export const missions: Mission[] = [
     howTo: ["관심 주제 하나 고르기", "일정과 장소 확인하기", "참여할 프로그램 저장 또는 신청하기"],
     benefit: "환경교육·체험 프로그램 데이터와 연결 예정",
     duration: "약 10분",
-    interestIds: ["education"],
+    interestIds: ["eco-learning"],
     sourceProgramId: "G117",
     verificationStatus: "needs-review",
   },
@@ -256,7 +275,7 @@ export const missions: Mission[] = [
     howTo: ["지역 활동 검색하기", "준비물과 모집 기간 확인하기", "가능한 일정 하나 저장하기"],
     benefit: "지역활동 및 탄소중립포인트 연계 여부 확인 예정",
     duration: "약 10분",
-    interestIds: ["education", "energy"],
+    interestIds: ["eco-learning", "home-upgrade"],
     sourceProgramId: "C14",
     verificationStatus: "needs-review",
   },
@@ -269,4 +288,3 @@ export function isInterestId(value: string): value is InterestId {
 export function findInterest(id: string) {
   return interests.find((interest) => interest.id === id);
 }
-

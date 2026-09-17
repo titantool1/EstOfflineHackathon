@@ -8,6 +8,7 @@ export interface MissionEvent {
   anonymousUserId: string;
   recommendationSessionId: string;
   missionId: string;
+  missionTitle?: string;
   eventType: MissionEventType;
   interestSnapshot: InterestId[];
   sequenceNumber: number;
@@ -25,6 +26,7 @@ export interface FunnelCounts {
 
 export interface MissionStats {
   missionId: string;
+  missionTitle?: string;
   interestId: InterestId | "general";
   events: FunnelCounts;
   users: FunnelCounts;

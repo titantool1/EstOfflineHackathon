@@ -1,6 +1,6 @@
 # 에코줍줍 프론트엔드
 
-Next.js 16 기반 화면이며 `/chat`의 줍줍이 챗봇과 `/map`의 에코실천지도는 같은 출처의 Route Handler를 통해 로컬 FastAPI 검색 서버에 연결됩니다. `/onboarding`과 `/missions`에서는 관심사를 고르고 미션을 한 개씩 추천받으며, `/missions/insights`에서 관심사별 노출·확인·선택·완료 퍼널을 확인합니다. Elasticsearch 및 OpenAI API 키는 브라우저로 전달되지 않습니다.
+Next.js 16 기반 화면이며 `/chat`의 줍줍이 챗봇과 `/map`의 에코실천지도는 같은 출처의 Route Handler를 통해 로컬 FastAPI 검색 서버에 연결됩니다. `/onboarding`과 `/missions`에서는 7개 관심사 중 하나 이상을 고르고 Elasticsearch에 매핑된 제도·행동·장소를 한 개씩 추천받으며, `/missions/insights`에서 관심사별 노출·확인·선택·완료 퍼널을 확인합니다. Elasticsearch 및 OpenAI API 키는 브라우저로 전달되지 않습니다.
 
 ## Getting Started
 

@@ -11,6 +11,8 @@ from dotenv import load_dotenv
 from elasticsearch import Elasticsearch
 from sentence_transformers import SentenceTransformer
 
+from interest_mapping import INTEREST_RULES, UNSURE_INTEREST_ID, classify_source, featured_program_ids
+
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT_DIR / ".env")
@@ -35,7 +37,7 @@ SOURCE_FIELDS = [
     "conditions", "eligibility", "status", "is_accepting_applications",
     "source_checked_at", "verification_status", "source_urls", "needs_review",
     "review_notes", "benefit_link_status",
-    "location", "geo_searchable",
+    "location", "geo_searchable", "interest_ids", "policy_id", "action_id",
 ]
 
 _client: Elasticsearch | None = None
@@ -194,6 +196,8 @@ def present_hit(hit: dict[str, Any]) -> dict[str, Any]:
     location = source.get("location") if isinstance(source.get("location"), dict) else {}
     return {
         "docId": first_text(source.get("doc_id"), hit.get("_id")),
+        "policyId": first_text(source.get("policy_id")),
+        "actionId": first_text(source.get("action_id")),
         "docType": doc_type,
         "title": first_text(source.get("name"), source.get("policy_name"), hit.get("_id")),
         "category": first_text(source.get("category"), source.get("place_type"), source.get("subtype")),
@@ -211,6 +215,146 @@ def present_hit(hit: dict[str, Any]) -> dict[str, Any]:
         "longitude": location.get("lon"),
         "score": round(float(hit["rrf_score"]), 8),
         "ranks": hit["ranks"],
+        "interestIds": source.get("interest_ids") if isinstance(source.get("interest_ids"), list) else [],
+    }
+
+
+def recommend_by_interests(
+    interest_ids: list[str],
+    *,
+    region: str | None = "서울특별시",
+    size: int = 40,
+    excluded_doc_ids: list[str] | None = None,
+    seed: str = "eco-jupjup",
+) -> dict[str, Any]:
+    started = time.perf_counter()
+    selected = list(dict.fromkeys(
+        interest_id for interest_id in interest_ids
+        if interest_id in INTEREST_RULES or interest_id == UNSURE_INTEREST_ID
+    ))
+    effective = [interest_id for interest_id in selected if interest_id in INTEREST_RULES]
+    featured = featured_program_ids(selected)
+    excluded = list(dict.fromkeys((excluded_doc_ids or [])[:100]))
+
+    should: list[dict[str, Any]] = [{"terms": {"doc_id": featured, "boost": 5}}]
+    if effective:
+        should.append({"terms": {"interest_ids": effective, "boost": 1}})
+
+    bool_query: dict[str, Any] = {"should": should, "minimum_should_match": 1}
+    must_not: list[dict[str, Any]] = []
+    if excluded:
+        must_not.append({"terms": {"doc_id": excluded}})
+    if region:
+        must_not.append({"term": {"excluded_regions": region}})
+        bool_query["filter"] = [{
+            "bool": {
+                "should": [
+                    {"term": {"sido": region}},
+                    {"term": {"region_scope": region}},
+                    {"term": {"region_scope": "전국"}},
+                    {"bool": {"must_not": [
+                        {"exists": {"field": "sido"}},
+                        {"exists": {"field": "region_scope"}},
+                    ]}},
+                ],
+                "minimum_should_match": 1,
+            }
+        }]
+    if must_not:
+        bool_query["must_not"] = must_not
+
+    seed_number = 2166136261
+    for character in seed[:160]:
+        seed_number ^= ord(character)
+        seed_number = (seed_number * 16777619) & 0xFFFFFFFF
+    response = get_client().search(
+        index=INDEX_NAME,
+        size=size,
+        query={
+            "function_score": {
+                "query": {"bool": bool_query},
+                "functions": [{
+                    "random_score": {"seed": seed_number, "field": "_seq_no"},
+                    "weight": 0.25,
+                }],
+                "score_mode": "sum",
+                "boost_mode": "sum",
+            }
+        },
+        source={"includes": SOURCE_FIELDS},
+    )
+    index_results = [present_hit({
+        "_id": hit["_id"],
+        "_source": hit.get("_source", {}),
+        "rrf_score": float(hit.get("_score") or 0),
+        "ranks": {},
+    }) for hit in response["hits"]["hits"]]
+
+    catalog_path = ROOT_DIR / "database" / "fixtures" / "catalog" / "schemes.json"
+    catalog_programs = json.loads(catalog_path.read_text(encoding="utf-8"))["programs"]
+    excluded_set = set(excluded)
+    catalog_results: list[dict[str, Any]] = []
+    for program in catalog_programs:
+        program_id = str(program.get("program_id") or "")
+        if program_id not in featured or program_id in excluded_set:
+            continue
+        sources = program.get("sources") if isinstance(program.get("sources"), list) else []
+        checked_values = [source.get("checked_at") for source in sources if isinstance(source, dict) and source.get("checked_at")]
+        source_values = [source.get("url") for source in sources if isinstance(source, dict) and source.get("url")]
+        condition_values = [
+            condition.get("requirement") for condition in program.get("conditions", [])
+            if isinstance(condition, dict) and condition.get("requirement")
+        ]
+        mapped_ids = classify_source({
+            "doc_id": program_id,
+            "policy_id": program_id,
+            "doc_type": "policy",
+            "name": program.get("title"),
+            "benefit_text": program.get("benefit"),
+        })
+        catalog_results.append({
+            "docId": program_id,
+            "policyId": program_id,
+            "actionId": None,
+            "docType": "policy",
+            "title": program.get("title"),
+            "category": "검토된 혜택 제도",
+            "summary": program.get("benefit") or "혜택 상세를 확인해 주세요.",
+            "region": None,
+            "address": None,
+            "conditions": " · ".join(condition_values[:4]) or program.get("target"),
+            "status": program.get("status"),
+            "sourceCheckedAt": max(checked_values) if checked_values else None,
+            "verificationStatus": "reviewed_catalog",
+            "sourceUrl": safe_source_url(source_values),
+            "needsReview": any(marker in f"{program.get('status', '')} {program.get('caveat', '')}" for marker in ("미확인", "실패", "기존 자료")),
+            "benefitLinkStatus": None,
+            "latitude": None,
+            "longitude": None,
+            "score": 10.0,
+            "ranks": {},
+            "interestIds": mapped_ids,
+        })
+
+    seen_ids: set[str] = set()
+    results = []
+    for item in [*catalog_results, *index_results]:
+        if item["docId"] in seen_ids:
+            continue
+        seen_ids.add(item["docId"])
+        results.append(item)
+        if len(results) >= size:
+            break
+    return {
+        "interestIds": selected,
+        "featuredProgramIds": featured,
+        "results": results,
+        "meta": {
+            "index": INDEX_NAME,
+            "region": region,
+            "resultCount": len(results),
+            "tookMs": round((time.perf_counter() - started) * 1000),
+        },
     }
 
 

@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
 
+from interest_mapping import classify_source, featured_program_ids
 from search import (
     build_answer,
     build_scope_filter,
@@ -14,6 +15,23 @@ from search import (
 
 
 class SearchTests(unittest.TestCase):
+    def test_interest_mapping_covers_places_actions_and_shared_programs(self):
+        self.assertEqual(classify_source({"doc_type": "place", "place_type": "따릉이대여소"}), ["green-mobility"])
+        self.assertEqual(
+            classify_source({"doc_type": "action", "action_id": "KR-CNP-GREEN-2026-A07"}),
+            ["green-shopping"],
+        )
+        self.assertEqual(
+            classify_source({"doc_type": "policy", "policy_id": "SDG-FOOD-REDUCER-H2-2026"}),
+            ["home-upgrade", "waste-reduction"],
+        )
+
+    def test_unsure_interest_uses_low_barrier_starter_programs(self):
+        starters = featured_program_ids(["unsure"])
+        self.assertIn("G008", starters)
+        self.assertIn("G117", starters)
+        self.assertNotIn("G031", starters)
+
     def test_rrf_promotes_results_found_by_both_retrievers(self):
         bm25 = [{"_id": "a"}, {"_id": "b"}, {"_id": "c"}]
         vector = [{"_id": "c"}, {"_id": "d"}, {"_id": "a"}]

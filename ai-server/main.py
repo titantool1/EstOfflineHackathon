@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from search import healthcheck, hybrid_search, search_places
+from search import healthcheck, hybrid_search, recommend_by_interests, search_places
 
 app = FastAPI()
 
@@ -32,6 +32,14 @@ class PlacesRequest(BaseModel):
     longitude: float = Field(default=126.9780, ge=-180, le=180)
     distance_km: float = Field(default=30, gt=0, le=100)
     size: int = Field(default=40, ge=1, le=50)
+
+
+class InterestRecommendationRequest(BaseModel):
+    interest_ids: list[str] = Field(default_factory=list, max_length=7)
+    region: str | None = Field(default="서울특별시", max_length=50)
+    size: int = Field(default=40, ge=1, le=60)
+    exclude_doc_ids: list[str] = Field(default_factory=list, max_length=100)
+    seed: str = Field(default="eco-jupjup", max_length=160)
 
 
 @app.get("/health")
@@ -74,3 +82,17 @@ def places(request: PlacesRequest):
         )
     except Exception as exc:
         raise HTTPException(status_code=503, detail="장소를 불러오는 중 문제가 발생했습니다.") from exc
+
+
+@app.post("/api/interest-recommendations")
+def interest_recommendations(request: InterestRecommendationRequest):
+    try:
+        return recommend_by_interests(
+            request.interest_ids,
+            region=request.region,
+            size=request.size,
+            excluded_doc_ids=request.exclude_doc_ids,
+            seed=request.seed,
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail="관심사 추천을 불러오는 중 문제가 발생했습니다.") from exc

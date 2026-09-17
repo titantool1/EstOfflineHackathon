@@ -34,10 +34,13 @@ export function validateMissionEvent(value: unknown): MissionEvent | null {
 
   if (stringFields.some((field) => typeof event[field] !== "string" || !(event[field] as string).trim())) return null;
   if (stringFields.some((field) => (event[field] as string).length > 160)) return null;
-  if (!missions.some((mission) => mission.id === event.missionId)) return null;
+  const missionId = event.missionId as string;
+  const isMappedMission = /^data:[A-Za-z0-9._:-]{1,150}$/.test(missionId);
+  if (!missions.some((mission) => mission.id === missionId) && !isMappedMission) return null;
+  if (event.missionTitle !== undefined && (typeof event.missionTitle !== "string" || !event.missionTitle.trim() || event.missionTitle.length > 200)) return null;
   if (!eventTypes.includes(event.eventType as MissionEventType)) return null;
   if (!Number.isInteger(event.sequenceNumber) || (event.sequenceNumber as number) < 0 || (event.sequenceNumber as number) > 1000) return null;
-  if (!Array.isArray(event.interestSnapshot) || event.interestSnapshot.length > 6) return null;
+  if (!Array.isArray(event.interestSnapshot) || event.interestSnapshot.length > 7) return null;
 
   const interestSnapshot = [...new Set(event.interestSnapshot.filter((item): item is InterestId => typeof item === "string" && isInterestId(item)))];
   if (interestSnapshot.length !== event.interestSnapshot.length) return null;
@@ -48,6 +51,7 @@ export function validateMissionEvent(value: unknown): MissionEvent | null {
     anonymousUserId: event.anonymousUserId as string,
     recommendationSessionId: event.recommendationSessionId as string,
     missionId: event.missionId as string,
+    missionTitle: event.missionTitle as string | undefined,
     eventType: event.eventType as MissionEventType,
     interestSnapshot,
     sequenceNumber: event.sequenceNumber as number,
@@ -85,7 +89,7 @@ export async function appendMissionEvent(event: MissionEvent): Promise<"created"
 }
 
 export function buildMissionStats(events: MissionEvent[]): MissionStats[] {
-  const rows = new Map<string, { missionId: string; interestId: InterestId | "general"; events: FunnelCounts; users: Map<MissionEventType, Set<string>> }>();
+  const rows = new Map<string, { missionId: string; missionTitle?: string; interestId: InterestId | "general"; events: FunnelCounts; users: Map<MissionEventType, Set<string>> }>();
 
   for (const event of events) {
     if (event.eventType === "session_end") continue;
@@ -94,6 +98,7 @@ export function buildMissionStats(events: MissionEvent[]): MissionStats[] {
       const key = `${interestId}::${event.missionId}`;
       const row = rows.get(key) ?? {
         missionId: event.missionId,
+        missionTitle: event.missionTitle,
         interestId,
         events: emptyCounts(),
         users: new Map(countedEventTypes.map((type) => [type, new Set<string>()])),
@@ -110,6 +115,7 @@ export function buildMissionStats(events: MissionEvent[]): MissionStats[] {
     const rate = (numerator: number, denominator: number) => denominator ? numerator / denominator : 0;
     return {
       missionId: row.missionId,
+      missionTitle: row.missionTitle,
       interestId: row.interestId,
       events: row.events,
       users,

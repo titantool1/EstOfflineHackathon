@@ -2,10 +2,11 @@
 
 `eco-jupjup-vector-v2.full.jsonl.gz`는 챗봇에서 사용하는 `eco-jupjup-vector-v2` 인덱스의 휴대용 백업이다.
 
-- 문서: 17,828건
-- 구성: 정책 39건, 행동·혜택 188건, 장소 17,601건
+- 문서: 17,850건
+- 구성: 정책 61건, 행동·혜택 188건, 장소 17,601건
 - 임베딩: 모든 문서에 `intfloat/multilingual-e5-small` 384차원 벡터 포함
-- 압축 파일 SHA-256: `4add71e8c19544a4805b53829fcdea26db21eb6644dc7e0063e0d631d823073a`
+- 관심사: 모든 문서에 `interest_ids`가 1개 이상 매핑됨(중복 관심사 허용)
+- 압축 파일 SHA-256: `973e4c7db2cf1dad7e54178c38a9467f7d8ae23bdeb153e4f3249a04a79f21ea`
 - 사용자 계정·대화·미션 이벤트·API 키는 포함하지 않음
 
 ## 새 환경에 복원
@@ -50,13 +51,13 @@ AI_SERVER_PORT=18000 ./run-ai.sh
 
 ## 백업 재생성
 
-현재 `.env`가 가리키는 Elasticsearch의 인덱스에서 매핑, 문서와 임베딩을 다시 추출한다.
+혜택 원본과 관심사 규칙을 동기화한 뒤 현재 `.env`가 가리키는 Elasticsearch의 인덱스에서 매핑, 문서와 임베딩을 다시 추출한다.
 
 ```bash
+.venv/bin/python scripts/sync-interest-mapping.py
 .venv/bin/python scripts/export-search-index.py \
   --index eco-jupjup-vector-v2 \
   --output search-data/eco-jupjup-vector-v2.full.jsonl.gz
 ```
 
 재생성하면 문서 수, 검색 결과와 SHA-256을 다시 검증한 뒤 변경을 커밋한다.
-

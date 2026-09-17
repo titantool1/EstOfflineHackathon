@@ -95,7 +95,7 @@ function StatsRow({ row }: { row: MissionStats }) {
   const interest = row.interestId === "general" ? null : findInterest(row.interestId);
   return (
     <tr>
-      <td className="px-3 py-4"><p className="text-xs font-bold text-[#559151]">{interest ? `${interest.icon} ${interest.title}` : "🌿 미선택"}</p><p className="mt-1 font-semibold text-[#30482f]">{mission?.title ?? row.missionId}</p></td>
+      <td className="px-3 py-4"><p className="text-xs font-bold text-[#559151]">{interest ? `${interest.icon} ${interest.title}` : "🌿 미선택"}</p><p className="mt-1 font-semibold text-[#30482f]">{mission?.title ?? row.missionTitle ?? row.missionId}</p></td>
       <td className="px-3 py-4 font-semibold">{row.users.impression}</td>
       <td className="px-3 py-4">{row.users.view} <span className="text-xs text-[#7b8c79]">({percent(row.viewRate)})</span></td>
       <td className="px-3 py-4">{row.users.accept} <span className="text-xs text-[#7b8c79]">({percent(row.acceptRate)})</span></td>

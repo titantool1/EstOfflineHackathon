@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { MissionEventType, RecommendationResponse } from "@/features/missions/analytics";
 import { findInterest, isInterestId, type InterestId, type Mission } from "@/features/missions/catalog";
 
-const interestStorageKey = "eco_interests_v1";
+const interestStorageKey = "eco_interests_v2";
 const userStorageKey = "eco_anonymous_user_v1";
 
 function makeId() {
@@ -42,6 +42,7 @@ export default function MissionsPage() {
           anonymousUserId: profileRef.current.userId,
           recommendationSessionId: profileRef.current.sessionId,
           missionId: targetMission.id,
+          missionTitle: targetMission.title,
           eventType,
           interestSnapshot: profileRef.current.interestIds,
           sequenceNumber: sequenceRef.current,
@@ -200,6 +201,8 @@ export default function MissionsPage() {
                     <div className="mt-5 border-t border-[#e3ebdf] pt-4">
                       <p className="text-xs font-bold text-[#5b9d51]">연결 혜택</p>
                       <p className="mt-1 text-sm leading-6 text-[#576d56]">{mission.benefit}</p>
+                      {mission.sourceDocId && <p className="mt-3 text-xs text-[#70806e]">데이터 ID · {mission.sourceDocId}</p>}
+                      {mission.sourceUrl && <a href={mission.sourceUrl} target="_blank" rel="noreferrer" className="mt-2 inline-flex text-xs font-bold text-[#3f8245] underline underline-offset-4">공식·원본 출처 확인 ↗</a>}
                       {mission.verificationStatus === "needs-review" && <p className="mt-2 text-xs text-[#9a7627]">※ MVP 임시 매핑입니다. 실제 제공처·조건은 최종 데이터 확인이 필요해요.</p>}
                     </div>
                   </div>
