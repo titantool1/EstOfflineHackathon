@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { EcoPlace, RoutePoint } from "@/features/map/contract";
+export type { EcoPlace, RoutePoint } from "@/features/map/contract";
 
 type KakaoMapInstance = {
   panTo: (position: unknown) => void;
@@ -23,8 +25,6 @@ type KakaoMapsApi = {
 
 declare global { interface Window { kakao?: { maps: KakaoMapsApi; }; } }
 
-export type EcoPlace = { id: string; name: string; latitude: number; longitude: number; benefit?: string; };
-export type RoutePoint = { latitude: number; longitude: number; };
 
 type KakaoMapProps = {
   places: EcoPlace[];
@@ -49,29 +49,47 @@ export default function KakaoMap({ places, selectedId, onSelect, routePath = [],
   const mapRef = useRef<KakaoMapInstance | null>(null);
   const infoWindowRef = useRef<KakaoInfoWindow | null>(null);
   const [isReady, setIsReady] = useState(false);
+  const [failed, setFailed] = useState(false);
   const key = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
 
   useEffect(() => {
     if (!key || !containerRef.current) return;
-
-    const initialize = () => {
-      const maps = window.kakao?.maps;
-      if (!maps || !containerRef.current) return;
-      mapRef.current = new maps.Map(containerRef.current, {
-        center: new maps.LatLng(37.5563, 126.9018),
-        level: 5,
-      });
-      setIsReady(true);
+    let active = true;
+    let completed = false;
+    let script: HTMLScriptElement | undefined;
+    const fail = () => {
+      if (!active || completed) return;
+      completed = true; setFailed(true); clearTimeout(timer);
     };
-
-    if (window.kakao?.maps) { window.kakao.maps.load(initialize); return; }
-
-    const script = document.createElement("script");
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${key}&autoload=false`;
-    script.async = true;
-    script.onload = () => window.kakao?.maps.load(initialize);
-    document.head.appendChild(script);
-    return () => script.remove();
+    const timer = setTimeout(fail, 10_000);
+    const initialize = () => {
+      if (!active || completed) return;
+      try {
+        const maps = window.kakao?.maps;
+        if (!maps || !containerRef.current) { fail(); return; }
+        mapRef.current = new maps.Map(containerRef.current, { center: new maps.LatLng(37.5563, 126.9018), level: 5 });
+        completed = true; clearTimeout(timer); setIsReady(true);
+      } catch { fail(); }
+    };
+    const load = () => {
+      if (!active || completed) return;
+      try {
+        if (!window.kakao?.maps?.load) { fail(); return; }
+        window.kakao.maps.load(initialize);
+      } catch { fail(); }
+    };
+    if (window.kakao?.maps) load();
+    else {
+      script = document.createElement("script");
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${encodeURIComponent(key)}&autoload=false`;
+      script.async = true; script.onload = load; script.onerror = fail;
+      document.head.appendChild(script);
+    }
+    return () => {
+      active = false; clearTimeout(timer);
+      if (script) { script.onload = null; script.onerror = null; script.remove(); }
+      infoWindowRef.current?.close(); mapRef.current = null;
+    };
   }, [key]);
 
   useEffect(() => {
@@ -93,7 +111,7 @@ export default function KakaoMap({ places, selectedId, onSelect, routePath = [],
     });
     const selected = places.find((place) => place.id === selectedId);
     if (selected) map.panTo(new maps.LatLng(selected.latitude, selected.longitude));
-    return () => markers.forEach((marker) => marker.setMap(null));
+    return () => { markers.forEach((marker) => marker.setMap(null)); infoWindowRef.current?.close(); };
   }, [isReady, places, selectedId, onSelect]);
 
   useEffect(() => {
@@ -129,6 +147,11 @@ export default function KakaoMap({ places, selectedId, onSelect, routePath = [],
     return () => marker.setMap(null);
   }, [isReady, userLocation]);
 
-  if (!key) return <div className="flex h-full items-center justify-center bg-[#edf3e9] text-sm text-[#597457]">카카오 지도 키를 설정해주세요.</div>;
-  return <div ref={containerRef} className="h-full w-full" aria-label="에코 실천 장소 지도" />;
+  return <div className="relative h-full min-h-[520px] w-full">
+    <div ref={containerRef} className="absolute inset-0" aria-label="에코 실천 장소 지도" />
+    {(!key || failed || !isReady) && <p role={failed || !key ? "alert" : "status"}
+      className="absolute left-5 right-5 top-5 rounded-xl bg-white/95 p-4 text-sm text-[#597457]">
+      {!key || failed ? "지도를 불러오지 못했어요. 장소 목록과 외부 지도 링크는 계속 사용할 수 있어요." : "지도를 불러오는 중…"}
+    </p>}
+  </div>;
 }

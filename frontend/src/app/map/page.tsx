@@ -1,113 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
-import KakaoMap, { type EcoPlace, type RoutePoint } from "./KakaoMap";
-
-type Place = EcoPlace & {
-  category: string;
-  address: string;
-  benefit: string;
-  sourceUrl: string | null;
-  distanceKm: number | null;
-};
-
-type PlaceResult = {
-  docId: string;
-  title: string;
-  category: string | null;
-  summary: string;
-  address: string | null;
-  sourceUrl: string | null;
-  latitude: number | null;
-  longitude: number | null;
-  distanceKm?: number | null;
-};
-
-type PlacesResponse = {
-  results: PlaceResult[];
-  meta: { resultCount: number; tookMs: number };
-  error?: string;
-};
-
-type RouteResponse = {
-  path?: RoutePoint[];
-  distanceMeters?: number | null;
-  durationSeconds?: number | null;
-  error?: string;
-  code?: string;
-};
-
-const SEOUL_CENTER = { latitude: 37.5665, longitude: 126.978 };
-
-function toPlaces(results: PlaceResult[]): Place[] {
-  return results.flatMap((result) => {
-    if (typeof result.latitude !== "number" || typeof result.longitude !== "number") return [];
-    return [{
-      id: result.docId,
-      name: result.title,
-      category: result.category ?? "친환경 실천 장소",
-      address: result.address ?? "주소 정보 없음",
-      benefit: result.summary,
-      sourceUrl: result.sourceUrl,
-      distanceKm: typeof result.distanceKm === "number" ? result.distanceKm : null,
-      latitude: result.latitude,
-      longitude: result.longitude,
-    }];
-  });
-}
-
-async function requestPlaces(query: string) {
-  const response = await fetch("/api/places", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, region: "서울특별시", ...SEOUL_CENTER, distanceKm: 30 }),
-  });
-  const payload = (await response.json()) as PlacesResponse;
-  if (!response.ok) throw new Error(payload.error ?? "장소를 불러오지 못했어요.");
-  return { places: toPlaces(payload.results), tookMs: payload.meta.tookMs };
-}
-
-function currentLocation() {
-  return new Promise<RoutePoint>((resolve, reject) => {
-    if (!navigator.geolocation) {
-      reject(new Error("이 브라우저에서는 현재 위치를 사용할 수 없어요."));
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (position) => resolve({ latitude: position.coords.latitude, longitude: position.coords.longitude }),
-      () => reject(new Error("현재 위치 권한을 허용해야 경로를 표시할 수 있어요.")),
-      { enableHighAccuracy: true, timeout: 10_000, maximumAge: 60_000 },
-    );
-  });
-}
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import KakaoMap from "./KakaoMap";
+import { currentLocation, requestPlaces, requestRoute, targetFromSearch, type Place, type RoutePoint } from "@/features/map/api";
+import { mapErrorMessage } from "@/features/map/contract";
 
 function formatRoute(distanceMeters: number | null, durationSeconds: number | null) {
-  const distance = distanceMeters === null
-    ? null
-    : distanceMeters >= 1000 ? `${(distanceMeters / 1000).toFixed(1)}km` : `${distanceMeters}m`;
+  const distance = distanceMeters === null ? null : distanceMeters >= 1000 ? `${(distanceMeters / 1000).toFixed(1)}km` : `${distanceMeters}m`;
   const duration = durationSeconds === null ? null : `약 ${Math.max(1, Math.round(durationSeconds / 60))}분`;
   return [distance, duration].filter(Boolean).join(" · ");
-}
-
-function targetFromUrl(): Place | null {
-  const params = new URLSearchParams(window.location.search);
-  const latitude = Number(params.get("lat"));
-  const longitude = Number(params.get("lng"));
-  const id = params.get("placeId");
-  const name = params.get("name");
-  if (!id || !name || !Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
-  return {
-    id,
-    name,
-    address: params.get("address") ?? "주소 정보 없음",
-    category: params.get("category") ?? "친환경 실천 장소",
-    benefit: "줍줍이 챗봇이 검색한 친환경 실천 장소예요.",
-    sourceUrl: null,
-    distanceKm: null,
-    latitude,
-    longitude,
-  };
 }
 
 export default function MapPage() {
@@ -123,108 +25,75 @@ export default function MapPage() {
   const [routeSummary, setRouteSummary] = useState("");
   const [routeError, setRouteError] = useState<string | null>(null);
   const [isRouting, setIsRouting] = useState(false);
+  const locationRef = useRef<RoutePoint | null>(null);
+  const placesRequest = useRef<AbortController | null>(null);
+  const routeRequest = useRef<AbortController | null>(null);
 
-  const loadRoute = useCallback(async (origin: RoutePoint, destination: Place) => {
-    setIsRouting(true);
-    setRouteError(null);
-    try {
-      const response = await fetch("/api/route", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ origin, destination }),
-      });
-      const payload = (await response.json()) as RouteResponse;
-      if (!response.ok || !payload.path) throw new Error(payload.error ?? "경로를 불러오지 못했어요.");
-      setRoutePath(payload.path);
-      setRouteSummary(formatRoute(payload.distanceMeters ?? null, payload.durationSeconds ?? null));
-    } catch (routeRequestError) {
-      setRoutePath([]);
-      setRouteSummary("");
-      setRouteError(routeRequestError instanceof Error ? routeRequestError.message : "경로를 불러오지 못했어요.");
-    } finally {
-      setIsRouting(false);
-    }
+  const clearRoute = useCallback(() => {
+    routeRequest.current?.abort();
+    setRoutePath([]); setRouteSummary(""); setRouteError(null); setIsRouting(false);
   }, []);
 
   const startRoute = useCallback(async (destination: Place) => {
+    clearRoute();
+    const controller = new AbortController(); routeRequest.current = controller;
     setIsRouting(true);
-    setRouteError(null);
     try {
-      const origin = userLocation ?? await currentLocation();
-      setUserLocation(origin);
-      await loadRoute(origin, destination);
-    } catch (locationError) {
-      setRouteError(locationError instanceof Error ? locationError.message : "현재 위치를 확인하지 못했어요.");
-      setIsRouting(false);
-    }
-  }, [loadRoute, userLocation]);
-
-  const loadPlaces = useCallback(async (query: string) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const { places: nextPlaces, tookMs: nextTookMs } = await requestPlaces(query);
-      setPlaces(nextPlaces);
-      setActiveId(nextPlaces[0]?.id ?? null);
-      setActiveCategory("전체");
-      setTookMs(nextTookMs);
-      setRoutePath([]);
-      setRouteSummary("");
-    } catch (requestError) {
-      setPlaces([]);
-      setActiveId(null);
-      setError(requestError instanceof Error ? requestError.message : "잠시 후 다시 시도해 주세요.");
+      const origin = locationRef.current ?? await currentLocation();
+      // Geolocation cannot be aborted; its result still belongs to this selection.
+      if (controller.signal.aborted) return;
+      locationRef.current = origin; setUserLocation(origin);
+      const result = await requestRoute(origin, destination, { signal: controller.signal });
+      if (controller.signal.aborted) return;
+      setRoutePath(result.path);
+      setRouteSummary(formatRoute(result.distanceMeters, result.durationSeconds));
+    } catch (caught) {
+      if (!controller.signal.aborted) setRouteError(mapErrorMessage(caught));
     } finally {
-      setIsLoading(false);
+      if (!controller.signal.aborted) setIsRouting(false);
     }
-  }, []);
+  }, [clearRoute]);
+
+  const loadPlaces = useCallback((query: string, initial = false) => {
+    placesRequest.current?.abort();
+    const controller = new AbortController(); placesRequest.current = controller;
+    const target = initial ? targetFromSearch(window.location.search) : null;
+    return requestPlaces(query, { signal: controller.signal }).then(result => {
+      if (controller.signal.aborted) return;
+      const nextPlaces = target ? [target, ...result.places.filter(place => place.id !== target.id)] : result.places;
+      setPlaces(nextPlaces); setActiveId(target?.id ?? nextPlaces[0]?.id ?? null); setTookMs(result.tookMs);
+    }).catch((caught: unknown) => {
+      if (controller.signal.aborted) return;
+      setPlaces(target ? [target] : []); setActiveId(target?.id ?? null); setError(mapErrorMessage(caught));
+    }).finally(() => {
+      if (!controller.signal.aborted) {
+        setIsLoading(false);
+        if (target && new URLSearchParams(window.location.search).get("route") === "1") void startRoute(target);
+      }
+    });
+  }, [startRoute]);
 
   useEffect(() => {
-    let cancelled = false;
-    requestPlaces("").then(({ places: nextPlaces, tookMs: nextTookMs }) => {
-      if (cancelled) return;
-      const target = targetFromUrl();
-      const mergedPlaces = target
-        ? [target, ...nextPlaces.filter((place) => place.id !== target.id)]
-        : nextPlaces;
-      setPlaces(mergedPlaces);
-      setActiveId(target?.id ?? nextPlaces[0]?.id ?? null);
-      setTookMs(nextTookMs);
-      if (target && new URLSearchParams(window.location.search).get("route") === "1") {
-        currentLocation().then((origin) => {
-          if (cancelled) return;
-          setUserLocation(origin);
-          void loadRoute(origin, target);
-        }).catch((locationError: unknown) => {
-          if (!cancelled) setRouteError(locationError instanceof Error ? locationError.message : "현재 위치를 확인하지 못했어요.");
-        });
-      }
-    }).catch((requestError: unknown) => {
-      if (!cancelled) setError(requestError instanceof Error ? requestError.message : "잠시 후 다시 시도해 주세요.");
-    }).finally(() => {
-      if (!cancelled) setIsLoading(false);
-    });
-    return () => { cancelled = true; };
-  }, [loadRoute]);
+    void loadPlaces("", true);
+    return () => { placesRequest.current?.abort(); routeRequest.current?.abort(); };
+  }, [loadPlaces]);
 
-  const categories = useMemo(
-    () => ["전체", ...Array.from(new Set(places.map((place) => place.category))).slice(0, 4)],
-    [places],
-  );
-  const visiblePlaces = useMemo(
-    () => activeCategory === "전체" ? places : places.filter((place) => place.category === activeCategory),
-    [activeCategory, places],
-  );
-  const activePlace = visiblePlaces.find((place) => place.id === activeId) ?? visiblePlaces[0] ?? null;
+  const categories = useMemo(() => ["전체", ...Array.from(new Set(places.map(place => place.category))).slice(0, 4)], [places]);
+  const visiblePlaces = useMemo(() => activeCategory === "전체" ? places : places.filter(place => place.category === activeCategory), [activeCategory, places]);
+  const activePlace = visiblePlaces.find(place => place.id === activeId) ?? visiblePlaces[0] ?? null;
 
   const selectPlace = useCallback((id: string) => {
-    setActiveId(id);
-    const destination = places.find((place) => place.id === id);
-    if (destination && userLocation) void loadRoute(userLocation, destination);
-  }, [loadRoute, places, userLocation]);
-
+    clearRoute(); setActiveId(id);
+    const destination = places.find(place => place.id === id);
+    if (destination && locationRef.current) void startRoute(destination);
+  }, [clearRoute, places, startRoute]);
+  const selectCategory = (category: string) => {
+    clearRoute(); setActiveCategory(category);
+    setActiveId(places.find(place => category === "전체" || place.category === category)?.id ?? null);
+  };
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault(); clearRoute();
+    setIsLoading(true); setError(null); setTookMs(null); setPlaces([]); setActiveId(null); setActiveCategory("전체");
     void loadPlaces(input.trim());
   };
 
@@ -255,14 +124,14 @@ export default function MapPage() {
               </form>
               <div className="mt-4 flex gap-2 overflow-x-auto">
                 {categories.map((category) => (
-                  <button key={category} type="button" onClick={() => setActiveCategory(category)} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold ${activeCategory === category ? "bg-[#2f843d] text-white" : "bg-[#edf5e9] text-[#527650]"}`}>{category}</button>
+                  <button key={category} type="button" onClick={() => selectCategory(category)} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold ${activeCategory === category ? "bg-[#2f843d] text-white" : "bg-[#edf5e9] text-[#527650]"}`}>{category}</button>
                 ))}
               </div>
               <p className="mt-3 text-[11px] text-[#839080]">{isLoading ? "장소를 불러오는 중…" : `${visiblePlaces.length}개 표시${tookMs !== null ? ` · ${tookMs.toLocaleString()}ms` : ""}`}</p>
             </div>
 
             <div className="max-h-[520px] overflow-y-auto p-3">
-              {error && <p className="rounded-2xl bg-[#fff5f0] p-4 text-sm text-[#8c4934]">{error}</p>}
+              {error && <p role="alert" className="rounded-2xl bg-[#fff5f0] p-4 text-sm text-[#8c4934]">{error}</p>}
               {!isLoading && !error && visiblePlaces.length === 0 && <p className="p-5 text-center text-sm text-[#778575]">조건에 맞는 좌표 장소를 찾지 못했어요.</p>}
               {visiblePlaces.map((place) => (
                 <button key={place.id} type="button" onClick={() => selectPlace(place.id)} className={`mb-2 w-full rounded-2xl p-4 text-left transition ${activePlace?.id === place.id ? "bg-[#edf8e8] ring-1 ring-[#75b966]" : "hover:bg-[#f7faf5]"}`}>
@@ -286,7 +155,7 @@ export default function MapPage() {
                 <div className="mt-4 rounded-xl bg-[#f1f8ed] p-3 text-xs font-medium leading-5 text-[#387c3f]">🌱 {activePlace.benefit}</div>
                 <button type="button" onClick={() => void startRoute(activePlace)} disabled={isRouting} className="mt-4 w-full rounded-xl bg-[#2f843d] py-3 text-sm font-bold text-white disabled:bg-[#a7bea4]">{isRouting ? "경로 계산 중…" : userLocation ? "현재 위치에서 경로 다시 보기" : "현재 위치에서 경로 보기"}</button>
                 {routeSummary && <p className="mt-2 text-center text-xs font-bold text-[#347d40]">🚗 {routeSummary}</p>}
-                {routeError && <p className="mt-2 rounded-lg bg-[#fff5f0] px-3 py-2 text-[11px] leading-4 text-[#8c4934]">{routeError}</p>}
+                {routeError && <p role="alert" className="mt-2 rounded-lg bg-[#fff5f0] px-3 py-2 text-[11px] leading-4 text-[#8c4934]">{routeError}</p>}
                 <div className="mt-3 flex items-center justify-center gap-3 text-[11px] font-semibold">
                   <a href={`https://map.kakao.com/link/to/${encodeURIComponent(activePlace.name)},${activePlace.latitude},${activePlace.longitude}`} target="_blank" rel="noreferrer" className="text-[#347d40] hover:underline">카카오맵에서 열기 ↗</a>
                   {activePlace.sourceUrl && <a href={activePlace.sourceUrl} target="_blank" rel="noreferrer" className="text-[#6d806b] hover:underline">공식 출처 ↗</a>}
