@@ -2,7 +2,7 @@ import "server-only";
 import { AiError } from "../contracts.ts";
 import type { ConditionMemory } from "./condition-memory.ts";
 import { createConditionMemory } from "./condition-memory.ts";
-import type { ConversationProvider, ConversationSession, ConversationTurn } from "../conversation-contracts.ts";
+import type { ConversationEventSink, ConversationProvider, ConversationSession, ConversationTurn } from "../conversation-contracts.ts";
 import type { createCatalogTools } from "../tools/catalog-tools.ts";
 import type { createUserConditionLoader } from "../adapters/user-condition-context.ts";
 import { createConversationTools } from "../tools/conversation-tools.ts";
@@ -28,7 +28,7 @@ export function createConversationRunner(ports: {
     },
     async runTurn(session: ConversationSession, turn: ConversationTurn, options: {
       // The caller persists/accepts the completed answer before local memory is committed.
-      commit: (result: ConversationResult) => Promise<void>; signal?: AbortSignal;
+      commit: (result: ConversationResult) => Promise<void>; signal?: AbortSignal; onEvent?: ConversationEventSink;
     }): Promise<ConversationResult> {
       if (closed.has(session)) throw new AiError("CONVERSATION_CLOSED");
       if (session.userId !== turn.authenticatedUserId || session.memory.userId !== session.userId) throw new AiError("CONDITION_MEMORY_OWNER_MISMATCH");
@@ -44,6 +44,7 @@ export function createConversationRunner(ports: {
         const reply = await run({ conversation: session.provider, text: turn.text, turnId: turn.turnId,
           tools: tools.definitions, execute: tools.execute,
           instructions: () => createConversationContext({ memory: tools.memory(), tools: tools.definitions }),
+          onEvent: options.onEvent,
         }, signal);
         signal.throwIfAborted();
         const result = { ...reply, memory: tools.memory() };

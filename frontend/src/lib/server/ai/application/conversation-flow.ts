@@ -1,6 +1,7 @@
 import "server-only";
 import { Annotation, END, START, StateGraph } from "@langchain/langgraph";
 import { AiError } from "../contracts.ts";
+import { endsToolUseForTurn, toolFailureCompletion } from "./tool-failure-policy.ts";
 import type {
   ConversationHandle,
   ConversationProvider,
@@ -8,6 +9,7 @@ import type {
   FunctionDefinition,
   ModelInput,
   ModelReply,
+  ConversationEventSink,
 } from "../conversation-contracts.ts";
 
 const MODEL_CALL_LIMIT = 6;
@@ -21,6 +23,7 @@ type RunInput = {
   instructions: string | (() => string);
   tools: FunctionDefinition[];
   execute: (name: string, args: unknown, signal: AbortSignal) => Promise<unknown>;
+  onEvent?: ConversationEventSink;
 };
 
 const State = Annotation.Root({
@@ -30,6 +33,7 @@ const State = Annotation.Root({
   modelCalls: Annotation<number>(),
   toolCalls: Annotation<number>(),
   seenCallIds: Annotation<string[]>(),
+  finishAfterToolFailure: Annotation<boolean>(),
 });
 
 function cancelled(signal: AbortSignal): never {
@@ -60,8 +64,8 @@ function validateReply(value: unknown): ModelReply {
   return reply as ModelReply;
 }
 
-function toolFailure(code: string) {
-  return JSON.stringify({ status: "error", error: { code } });
+function toolFailure(code: string, stopRetry = false) {
+  return JSON.stringify({ status: "error", error: { code }, ...(stopRetry ? { retryable_in_turn: false } : {}) });
 }
 
 function failureCode(error: unknown) {
@@ -101,6 +105,14 @@ function currentInstructions(value: RunInput["instructions"]) {
   return instructions;
 }
 
+function toolProgress(name: string) {
+  if (name === "search_catalog") return "searching" as const;
+  if (name === "get_catalog_action") return "reading" as const;
+  if (name === "load_user_conditions") return "checking_conditions" as const;
+  if (name === "update_conditions") return "updating_conditions" as const;
+  return "thinking" as const;
+}
+
 export function createConversationGraph(provider: Pick<ConversationProvider, "respond">) {
   return async function run(input: RunInput, signal: AbortSignal) {
     const offeredTools = validateInput(input);
@@ -110,16 +122,34 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
       .addNode("model", async (state) => {
         if (signal.aborted) cancelled(signal);
         if (state.modelCalls >= MODEL_CALL_LIMIT) throw new AiError("MODEL_CALL_LIMIT");
+        input.onEvent?.({ type: "reset" });
+        input.onEvent?.({ type: "progress", stage: "thinking" });
         let reply: ModelReply;
         try {
-          const instructions = currentInstructions(input.instructions);
+          const instructions = currentInstructions(input.instructions)
+            + (state.finishAfterToolFailure ? "\n\n" + toolFailureCompletion : "");
+          let streamedLength = 0, answering = false;
+          const onEvent = input.onEvent;
+          const onTextDelta = onEvent ? (text: string) => {
+            if (typeof text !== "string") throw new AiError("INVALID_MODEL_OUTPUT");
+            streamedLength += text.length;
+            if (streamedLength > 6000) throw new AiError("INVALID_MODEL_OUTPUT");
+            if (!text) return;
+            if (!answering) {
+              onEvent({ type: "progress", stage: "answering" });
+              answering = true;
+            }
+            onEvent({ type: "delta", text });
+          } : undefined;
           reply = validateReply(await provider.respond(input.conversation, state.nextInput,
-            input.tools, instructions, signal));
+            state.finishAfterToolFailure ? [] : input.tools, instructions, signal, onTextDelta));
+          if (state.finishAfterToolFailure && reply.calls.length) throw new AiError("INVALID_MODEL_OUTPUT");
         } catch (error) {
           if (isAbort(error, signal)) cancelled(signal);
           throw error instanceof AiError ? error : new AiError("MODEL_FAILED");
         }
         if (signal.aborted) cancelled(signal);
+        if (reply.calls.length) input.onEvent?.({ type: "reset" });
         return {
           reply,
           text: reply.calls.length ? "" : reply.text!.trim(),
@@ -134,6 +164,7 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
         if (state.toolCalls >= TOOL_CALL_LIMIT) throw new AiError("TOOL_CALL_LIMIT");
 
         let output: string | undefined;
+        let finishAfterToolFailure = false;
         let args: unknown;
         try {
           args = JSON.parse(call.arguments);
@@ -141,11 +172,13 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
           output = toolFailure("INVALID_TOOL_ARGUMENTS");
         }
         if (output === undefined) {
+          input.onEvent?.({ type: "progress", stage: toolProgress(call.name) });
           try {
             output = toolOutput(await input.execute(call.name, args, signal));
           } catch (error) {
             if (isAbort(error, signal)) cancelled(signal);
-            output = toolFailure(failureCode(error));
+            finishAfterToolFailure = endsToolUseForTurn(error);
+            output = toolFailure(failureCode(error), finishAfterToolFailure);
           }
         }
         if (signal.aborted) cancelled(signal);
@@ -154,6 +187,7 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
           reply: null,
           toolCalls: state.toolCalls + 1,
           seenCallIds: [...state.seenCallIds, call.callId],
+          finishAfterToolFailure,
         };
       })
       .addEdge(START, "model")
@@ -170,6 +204,7 @@ export function createConversationGraph(provider: Pick<ConversationProvider, "re
           modelCalls: 0,
           toolCalls: 0,
           seenCallIds: [],
+          finishAfterToolFailure: false,
         }, { signal, recursionLimit: 20 });
       } catch (error) {
         if (isAbort(error, signal)) cancelled(signal);
