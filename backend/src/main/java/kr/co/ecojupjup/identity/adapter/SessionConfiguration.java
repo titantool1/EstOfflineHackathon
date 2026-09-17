@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import kr.co.ecojupjup.common.api.ApiResponse;
 import kr.co.ecojupjup.common.api.RequestIdFilter;
-import kr.co.ecojupjup.profile.api.ConditionContextController;
+import kr.co.ecojupjup.identity.application.MemberRequestContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -72,10 +72,10 @@ public class SessionConfiguration {
     static class MemberContextFilter extends OncePerRequestFilter {
         @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
                 throws ServletException,IOException {
-            request.removeAttribute(ConditionContextController.CURRENT_USER_ID);
+            request.removeAttribute(MemberRequestContext.ATTRIBUTE);
             var auth=SecurityContextHolder.getContext().getAuthentication();
             if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof MemberPrincipal member)
-                request.setAttribute(ConditionContextController.CURRENT_USER_ID,member.userId());
+                request.setAttribute(MemberRequestContext.ATTRIBUTE,member.userId());
             chain.doFilter(request,response);
         }
     }

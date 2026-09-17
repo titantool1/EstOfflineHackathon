@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 import kr.co.ecojupjup.common.api.ApiResponse;
 import kr.co.ecojupjup.common.api.RequestIdFilter;
+import kr.co.ecojupjup.identity.application.MemberRequestContext;
 import kr.co.ecojupjup.profile.application.ConditionContextService;
 import kr.co.ecojupjup.profile.application.ConditionContextService.Selection;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ConditionContextController {
     // Populated by the existing member/session adapter from its stored user ID.
-    public static final String CURRENT_USER_ID = "eco.currentUserId";
     private final ConditionContextService service;
     public ConditionContextController(ConditionContextService service) { this.service = service; }
 
@@ -26,7 +26,8 @@ public class ConditionContextController {
             @RequestParam(required = false) UUID vehicleId) {
         String requestId = (String) request.getAttribute(RequestIdFilter.ATTRIBUTE);
         // A servlet attribute is server-side context, not a browser header or query parameter.
-        if (!(request.getAttribute(CURRENT_USER_ID) instanceof UUID owner)) {
+        UUID owner = MemberRequestContext.owner(request);
+        if (owner == null) {
             return failure(401, "AUTHENTICATION_REQUIRED", "사용자 정보를 확인해 주세요.", requestId);
         }
         Selection selection;

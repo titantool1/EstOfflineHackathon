@@ -1,9 +1,9 @@
 # 대화 기능의 구현 위치
 
-메시지 표시·입력·전송 상태를 둔다. LangGraph·모델·키·도구 조립은 src/lib/server/ai에 둔다. 기존 /api/chat은 아직 FastAPI 경로이며 새 그래프 연결 완료로 간주하지 않는다.
+메시지 표시·입력·전송 상태를 둔다. LangGraph·모델·키·도구 조립은 `src/lib/server/ai`에 둔다. `/api/chat`은 기존 회원 세션을 확인하고 새 대화 runtime을 호출한다.
 
-현재 화면: `src/app/chat/page.tsx`. 이번에는 기존 화면 코드를 이동하지 않았다. 기능 구현 때 라우트에 몰린 UI·상태·클라이언트 요청을 필요한 만큼 이 폴더로 옮기고 라우트는 화면 진입점으로 둔다. 빈 컴포넌트·훅·저장소를 먼저 생성하지 않는다.
+`src/app/chat/page.tsx`는 화면 진입점이고 `ChatPanel.tsx`와 `chat-client.ts`가 표시·입력·전송을 맡는다. 생성 중에는 입력과 새 상담 전환을 잠그고, 실패하면 입력을 보존한 채 새 상담을 안내한다.
 
-DB와 외부 서비스 접근은 브라우저에서 직접 하지 않는다. 서버 호출은 `src/app/api` → `src/lib/server` → Spring 모듈 또는 AI 실행부를 거친다. 구체적인 API 필드와 저장 계약은 후속 구현에서 정한다.
+브라우저는 `{conversationId?, clientRequestId, message}`만 같은 출처 JSON으로 보내고 `{conversationId, message}`를 공통 envelope로 받는다. DB와 외부 서비스에 직접 접근하지 않는다. 현재 상담은 Next 프로세스 메모리에서 회원별로 분리되며 서버 재시작 뒤 이어가기, 장기 저장, 응답 유실 복구는 지원하지 않는다.
 
 [전체 구조와 담당 경계](../../../../docs/architecture.md).
