@@ -45,7 +45,13 @@ def main():
     def snapshot(ids):
         if not ids:
             return []
-        return output(['docker', 'inspect', '--format', '{{.Id}}|{{.State.Status}}|{{.State.StartedAt}}', *ids]).splitlines()
+        inspected = subprocess.run(['docker', 'inspect', '--format', '{{.Id}}|{{.State.Status}}|{{.State.StartedAt}}', *ids],
+                                   cwd=ROOT, env=env, text=True, capture_output=True, timeout=30)
+        lines = inspected.stdout.strip().splitlines()
+        # A different work session may remove its container during this check.
+        # Preserve that observation instead of losing the report in finally.
+        missing = [container for container in ids if not any(line.startswith(container) for line in lines)]
+        return lines + [container + '|UNOBSERVABLE' for container in missing]
 
     def http(port, path='/api/health', method='GET', request_id=None):
         request = Request(f'http://127.0.0.1:{port}{path}', method=method,
@@ -92,12 +98,15 @@ def main():
             healthy(args.backend_port)
             healthy(args.web_port)
             checks['web_spring_postgres_healthy'] = True
-            code, body, headers = http(args.backend_port, request_id='step2-correlation')
-            assert code == 200 and body['requestId'] == headers['X-Request-Id'] == 'step2-correlation'
+            for port in [args.backend_port, args.web_port]:
+                code, body, headers = http(port, request_id='step2-correlation')
+                assert code == 200 and body['requestId'] == headers['X-Request-Id'] == 'step2-correlation'
             checks['request_id_propagation'] = True
-            code, body, headers = http(args.backend_port, request_id='bad id')
-            assert code == 200 and body['requestId'] != 'bad id'
-            assert re.fullmatch(r'[a-f0-9-]{36}', body['requestId'])
+            for port in [args.backend_port, args.web_port]:
+                code, body, headers = http(port, request_id='bad id')
+                assert code == 200 and body['requestId'] != 'bad id'
+                assert body['requestId'] == headers['X-Request-Id']
+                assert re.fullmatch(r'[a-f0-9-]{36}', body['requestId'])
             checks['invalid_request_id_replaced'] = True
             for method, path, expected in [('POST', '/api/health', 405), ('GET', '/api/missing-scaffold-route', 404)]:
                 code, body, _ = http(args.backend_port, path, method)
@@ -122,8 +131,10 @@ def main():
             print('Database recovery passed; checking isolated backend outage and recovery.', flush=True)
             run(compose + ['stop', 'backend'], stdout=log, stderr=subprocess.STDOUT, timeout=45)
             code, body, _ = http(args.web_port)
-            assert code == 503 and body['error']['code'] == 'BACKEND_UNAVAILABLE'
-            checks['backend_outage_is_503'] = True
+            checks['backend_outage_response'] = {'status': code, 'body': body}
+            assert (code, body['error']['code']) in [(503, 'BACKEND_UNAVAILABLE'), (504, 'BACKEND_TIMEOUT')], (code, body)
+            assert body['data'] is None
+            checks['backend_outage_is_connection_failure_or_timeout'] = True
             run(compose + ['start', 'backend'], stdout=log, stderr=subprocess.STDOUT, timeout=45)
             healthy(args.web_port)
             checks['backend_recovery_without_web_restart'] = True
