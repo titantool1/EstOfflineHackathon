@@ -7,7 +7,7 @@ import re
 import secrets
 
 ROOT = Path(__file__).resolve().parents[1]
-API_KEYS = {"OPENAI_API_KEY", "KAKAO_REST_API_KEY", "NEXT_PUBLIC_KAKAO_MAP_KEY"}
+API_KEYS = {"OPENAI_API_KEY", "KAKAO_REST_API_KEY", "NEXT_PUBLIC_KAKAO_MAP_KEY", "GOV24_API_KEY"}
 ASSIGNMENT = re.compile(r"^([A-Z][A-Z0-9_]*)=(.*)$")
 
 
@@ -82,6 +82,10 @@ def main() -> int:
                     output.write(merged)
             print(f"Ready: {target.relative_to(ROOT)} (values hidden)")
         (ROOT / ".local").mkdir(exist_ok=True, mode=0o700)
+        internal_token = ROOT / ".local/ai-internal-token"
+        if not internal_token.exists():
+            with os.fdopen(os.open(internal_token, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "w") as output:
+                output.write(secrets.token_hex(32) + "\n")
         if keys:
             print("Imported key names: " + ", ".join(sorted(keys)))
         else:

@@ -7,7 +7,7 @@ COPY . .
 # Only the public JavaScript map key is a build argument.
 ARG NEXT_PUBLIC_KAKAO_MAP_KEY=""
 ENV NEXT_PUBLIC_KAKAO_MAP_KEY=$NEXT_PUBLIC_KAKAO_MAP_KEY
-RUN npx eslint src/app/api/health/route.ts src/lib/server/spring-client.ts && npm run build
+RUN npm run test:ai && npx eslint src/app/api/health/route.ts src/app/api/ai src/lib/server && npm run build
 
 FROM node:24.14.1-bookworm-slim AS runtime
 WORKDIR /app

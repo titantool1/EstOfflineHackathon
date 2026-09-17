@@ -5,4 +5,4 @@ set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "${SCRIPT_DIR}"
-docker compose --profile app --profile tools stop
+docker compose --profile app --profile tools --profile ai stop

@@ -1,6 +1,6 @@
 # 에코줍줍 통합 개발 환경
 
-우리 사전 실험의 Next.js·Spring·PostgreSQL·ES/Nori·LangGraph·BGE-M3 구성을 팀 개발의 기준으로 준비한다. 현재 구현 범위는 **2단계: Next → Spring → PostgreSQL 연결과 공통 API 골격**까지다. LangGraph·임베딩 실행부와 실제 기능 API는 후속 단계다.
+우리 사전 실험의 Next.js·Spring·PostgreSQL·ES/Nori·LangGraph·BGE-M3 구성을 팀 개발의 기준으로 준비한다. 현재 구현 범위는 **3단계: 웹·Spring·PG 연결, 서버 전용 LangGraph·모델 어댑터·BGE 실행 골격**까지다. 실제 검색 도구·인증·업무 API와 기존 챗 화면 연결은 후속 단계다.
 
 main에 있던 프론트·FastAPI 검색 코드는 그대로 보존했다. 웹 화면은 Compose로 실행한다. 기존 FastAPI 검색 서버·검색 인덱스·실험 데이터는 아직 연결하거나 이식하지 않았다. 기존 FastAPI의 인덱스·필드 계약은 다음 단계에서 새 구조와 맞춘다. `run-ai.sh`는 기존 코드용이므로 아직 통합 환경 실행 명령으로 사용하지 않는다.
 
@@ -35,6 +35,8 @@ docker compose ps
 OPENAI_API_KEY=
 KAKAO_REST_API_KEY=
 NEXT_PUBLIC_KAKAO_MAP_KEY=
+# 선택: 정부24 API를 사용하는 경우
+GOV24_API_KEY=
 ```
 
 ```bash
@@ -42,17 +44,17 @@ python3 scripts/setup-local.py --api-keys .local/api-keys.txt
 # 또는 --api-keys /path/to/shared-keys.txt
 ```
 
-UTF-8 TXT(BOM/Windows 줄바꿈 포함), 빈 줄·주석·값 양옆 따옴표를 지원한다. 알려진 세 이름만 읽고 파일을 셸로 실행하지 않는다. 빈 값은 기존 키를 지우지 않는다. 잘못된 이름·중복·값 형식은 가져오기 전에 거부하며 값을 출력하지 않는다.
+UTF-8 TXT(BOM/Windows 줄바꿈 포함), 빈 줄·주석·값 양옆 따옴표를 지원한다. 위 네 이름만 읽고 파일을 셸로 실행하지 않는다. 빈 값은 기존 키를 지우지 않는다. 잘못된 이름·중복·값 형식은 가져오기 전에 거부하며 값을 출력하지 않는다.
 
-가져오기는 루트 `.env`와 `frontend/.env.local`에 세 키를 반영한다. 서버용 키는 웹 컨테이너 실행 시 전달하며 Docker 빌드 인자로 전달하지 않는다. JavaScript 지도 키만 `NEXT_PUBLIC_`로 웹 빌드에 전달해 브라우저에 공개한다. 실제 TXT·생성된 환경 파일·`.local/`은 Git 제외 대상이다. 키 없이도 기반 환경·웹·Spring 상태 조회는 실행된다. 가져오기 후 `./start.sh`로 다시 빌드·생성한다. 특히 공개 지도 키는 빌드 시 고정되므로 컨테이너 재시작만으로 바뀌지 않는다.
+가져오기는 루트 `.env`와 `frontend/.env.local`에 입력한 키를 반영한다. 서버용 키는 웹 컨테이너 실행 시 전달하며 Docker 빌드 인자로 전달하지 않는다. JavaScript 지도 키만 `NEXT_PUBLIC_`로 웹 빌드에 전달해 브라우저에 공개한다. 실제 TXT·생성된 환경 파일·`.local/`은 Git 제외 대상이다. 키 없이도 기반 환경·웹·Spring 상태 조회는 실행된다. 가져오기 후 `./start.sh`로 다시 빌드·생성한다. 특히 공개 지도 키는 빌드 시 고정되므로 컨테이너 재시작만으로 바뀌지 않는다.
 
 ## 3. 다음 단계
 
 1. 완료 범위 확인: 웹 → Spring → PG 상태 조회와 공통 응답·오류·요청 ID. 실제 기능 API와 인증은 아직 없음.
-2. 서버 전용 LangGraph·모델·BGE 임베딩 실행과 도구 경계.
+2. LangGraph·모델·BGE 실행 골격 준비. AI를 켜려면 아래3단계 문서대로 모델 다운로드 후 ai 프로필 실행.
 3. 사용자·카탈로그·추천·대화·장소·실천 기록 모듈 자리.
 4. 각 단계의 검증이 끝나면 main에 반영하고, 이후 단계에서 전체 기동·키 전달·기존 화면 보존을 확인.
 
-기본 추천은 코드, 자연어 해석·질문·답변은 AI 흐름에 둔다. 이번 단계에서는 실제 모델 호출·카탈로그 적재·개별 기능 구현을 하지 않는다.
+기본 추천은 코드, 자연어 해석·질문·답변은 AI 흐름에 둔다. 현재 상태 검사는 외부 모델 API를 호출하지 않는다. 카탈로그 적재·실제 검색 도구·개별 기능 구현은 후속이다.
 
-[1단계 실제 검사와 확인 한계](docs/environment-step1.md) · [2단계 구조·API 계약·검사](docs/environment-step2.md).
+[1단계 실제 검사와 확인 한계](docs/environment-step1.md) · [2단계 구조·API 계약·검사](docs/environment-step2.md) · [3단계 AI 실행·키 전달·검사](docs/environment-step3.md).

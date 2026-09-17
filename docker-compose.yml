@@ -82,6 +82,10 @@ services:
       - ./frontend/.env.local
     environment:
       SPRING_BASE_URL: http://backend:8080
+      EMBEDDING_BASE_URL: http://embedding:8090
+      AI_INTERNAL_TOKEN_FILE: /run/secrets/ai_internal_token
+    secrets:
+      - ai_internal_token
     ports:
       - "127.0.0.1:${FRONTEND_PORT:-3300}:3000"
     healthcheck:
@@ -91,6 +95,35 @@ services:
       retries: 12
       start_period: 20s
     mem_limit: 768m
+
+  embedding:
+    profiles: [ai]
+    build: ./embedding-service
+    restart: unless-stopped
+    environment:
+      AI_INTERNAL_TOKEN_FILE: /run/secrets/ai_internal_token
+    secrets:
+      - ai_internal_token
+    volumes:
+      - bge-model-cache:/models:ro
+    healthcheck:
+      test: ["CMD", "python", "/app/healthcheck.py"]
+      interval: 10s
+      timeout: 5s
+      retries: 18
+      start_period: 60s
+    mem_limit: 4g
+
+  embedding-download:
+    profiles: [setup-ai]
+    build: ./embedding-service
+    restart: "no"
+    environment:
+      HF_HUB_OFFLINE: "0"
+      TRANSFORMERS_OFFLINE: "0"
+    volumes:
+      - bge-model-cache:/models
+    command: ["python", "/app/download.py"]
 
   kibana_settings:
     profiles: [tools]
@@ -136,3 +169,9 @@ volumes:
   postgres-data:
   dev-elasticsearch:
   dev-kibana:
+
+  bge-model-cache:
+
+secrets:
+  ai_internal_token:
+    file: ./.local/ai-internal-token

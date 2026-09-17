@@ -38,9 +38,18 @@ class LocalSetupTests(unittest.TestCase):
         self.assertEqual(self.run_setup().returncode, 0)
         self.assertEqual(self.configs(), before)
 
+    def test_internal_token_is_generated_once_and_not_printed(self):
+        first = self.run_setup()
+        token_file = self.root / ".local/ai-internal-token"
+        token = token_file.read_text().strip()
+        self.assertEqual(len(token), 64)
+        self.assertNotIn(token, first.stdout + first.stderr)
+        self.assertEqual(self.run_setup().returncode, 0)
+        self.assertEqual(token_file.read_text().strip(), token)
+
     def test_import_bom_crlf_and_preserve_blank_keys_without_echoing_values(self):
         keys = self.root / "keys.txt"
-        keys.write_bytes(b'\xef\xbb\xbf# team keys\r\nOPENAI_API_KEY="test-only-openai"\r\nKAKAO_REST_API_KEY=test-only-rest\r\nNEXT_PUBLIC_KAKAO_MAP_KEY=test-only-map\r\n')
+        keys.write_bytes(b'\xef\xbb\xbf# team keys\r\nOPENAI_API_KEY="test-only-openai"\r\nKAKAO_REST_API_KEY=test-only-rest\r\nNEXT_PUBLIC_KAKAO_MAP_KEY=test-only-map\r\nGOV24_API_KEY=test-only-gov\r\n')
         result = self.run_setup("--api-keys", keys)
         self.assertEqual(result.returncode, 0, result.stdout)
         root_config, frontend = self.configs()
@@ -49,7 +58,9 @@ class LocalSetupTests(unittest.TestCase):
         self.assertIn("NEXT_PUBLIC_KAKAO_MAP_KEY=test-only-map", root_config)
         self.assertIn("NEXT_PUBLIC_KAKAO_MAP_KEY=test-only-map", frontend)
         self.assertNotIn("NEXT_PUBLIC_OPENAI", frontend)
-        for value in ["test-only-openai", "test-only-rest", "test-only-map"]:
+        self.assertIn("GOV24_API_KEY=test-only-gov", root_config)
+        self.assertIn("GOV24_API_KEY=test-only-gov", frontend)
+        for value in ["test-only-openai", "test-only-rest", "test-only-map", "test-only-gov"]:
             self.assertNotIn(value, result.stdout + result.stderr)
         before = self.configs()
         keys.write_text("OPENAI_API_KEY=\nKAKAO_REST_API_KEY=\n")

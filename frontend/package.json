@@ -6,12 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:ai": "node --conditions=react-server --experimental-strip-types --test tests/ai-runtime.test.ts",
+    "check:embedding": "node --conditions=react-server --experimental-strip-types scripts/check-embedding.ts"
   },
   "dependencies": {
     "next": "16.3.5",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "@langchain/core": "1.2.11",
+    "@langchain/langgraph": "1.4.15",
+    "openai": "7.15.0",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
