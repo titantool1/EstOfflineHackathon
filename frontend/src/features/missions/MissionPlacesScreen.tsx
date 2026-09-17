@@ -13,7 +13,7 @@ export function MissionPlacesScreen({ batchId, itemId }: { batchId: string; item
     returnHref={returnHref} retry={state.retryDetail} />;
 
   const detail = state.detail.detail;
-  return <main className="mx-auto max-w-5xl px-5 py-8 md:py-12">
+  return <main className="[overflow-wrap:anywhere] mx-auto max-w-5xl px-5 py-8 md:py-12">
     <Link href={returnHref} aria-label="원래 미션 카드로 돌아가기"
       className="text-sm font-bold text-[#397d3e] hover:underline">← 미션 카드로 돌아가기</Link>
     <header className="mt-5 rounded-3xl bg-[#eaf5e5] p-6 md:p-8">
@@ -31,8 +31,8 @@ export function MissionPlacesScreen({ batchId, itemId }: { batchId: string; item
         const searchHref = kakaoAddressSearchHref(place.address);
         return <article key={`${place.place_id}:${place.service_key}`}
           className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#dfe9da]">
-          <div className="flex items-start justify-between gap-3">
-            <h2 className="text-lg font-bold text-[#29452a]">{place.title}</h2>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <h2 className="min-w-0 text-lg font-bold text-[#29452a]">{place.title}</h2>
             <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-bold ${place.status === "closed"
               ? "bg-[#f4e5e2] text-[#8a493f]" : "bg-[#f2f1e8] text-[#756c43]"}`}>
               {place.status === "closed" ? "자료상 종료" : "운영 상태 미확인"}
@@ -74,9 +74,9 @@ export function MissionPlacesScreen({ batchId, itemId }: { batchId: string; item
 }
 
 function PlaceStatus({ title, returnHref, retry }: { title: string; returnHref: string; retry?: () => void }) {
-  return <main className="mx-auto max-w-2xl px-5 py-16 text-center">
+  return <main className="[overflow-wrap:anywhere] mx-auto max-w-2xl px-5 py-16 text-center">
     <h1 className="text-xl font-bold text-[#29452a]">{title}</h1>
-    <div className="mt-6 flex justify-center gap-3">
+    <div className="mt-6 flex flex-wrap justify-center gap-3">
       {retry && <button type="button" onClick={retry} aria-label="미션 관련 장소 다시 불러오기"
         className="rounded-xl bg-[#2f843d] px-5 py-3 font-bold text-white">다시 시도</button>}
       <Link href={returnHref} aria-label="원래 미션 카드로 돌아가기"

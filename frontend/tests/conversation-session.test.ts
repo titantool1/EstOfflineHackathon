@@ -1,5 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { AiError } from "../src/lib/server/ai/contracts.ts";
 import { createConversationRunner } from "../src/lib/server/ai/application/conversation-session.ts";
 import { createConversationTools } from "../src/lib/server/ai/tools/conversation-tools.ts";
 import { createCatalogTools } from "../src/lib/server/ai/tools/catalog-tools.ts";
@@ -104,7 +105,12 @@ test("failed answer commit keeps memory/history and recreates provider from comp
   const runner = createConversationRunner({ ...api, provider: model.provider }), session = runner.createSession(owner);
   session.history = [{ role: "user", content: "이전 질문" }, { role: "assistant", content: "완료된 답변" }];
   const before = structuredClone({ memory: session.memory, history: session.history });
-  await assert.rejects(runner.runTurn(session, turn, { commit: async () => { throw new Error("save failed"); } }), /save failed/);
+  const events: unknown[] = [];
+  await assert.rejects(runner.runTurn(session, turn, {
+    onEvent: event => events.push(event),
+    commit: async () => { throw new Error("save failed"); },
+  }), /save failed/);
+  assert.ok(events.some(event => JSON.stringify(event) === JSON.stringify({ type: "progress", stage: "updating_conditions" })));
   assert.match(model.instructions[4], /\"value\":true/);
   assert.deepEqual({ memory: session.memory, history: session.history }, before);
   assert.equal(session.provider, null); assert.deepEqual(model.closed, ["conv-1"]);
@@ -149,4 +155,42 @@ test("detail and personal tools require this turn's catalog IDs; bad quote never
   await assert.rejects(tools.execute("load_user_conditions", { ...selected, userId: "other" }, signal), /INVALID_TOOL_ARGUMENTS/);
   await assert.rejects(tools.execute("update_conditions", { changes: [{ slotId, status: "known", value: true, quote: "없는말" }] }, signal), /INVALID_CONDITION_UPDATE/);
   assert.deepEqual(tools.memory(), memory); assert.equal(api.requests.length, 0);
+});
+
+test("service failure completes its tool result and preserves corrections for the next turn", async () => {
+  const model = scripted([...personalTurn(),
+    call("search_catalog", { query: "에코마일리지", limit: 10, offset: 0 }, 5),
+    { text: "조회 서비스 문제로 이번에는 조건을 재확인하지 못했어요.", calls: [] },
+    call("search_catalog", { query: "에코마일리지", limit: 10, offset: 0 }, 6),
+    call("get_catalog_action", selected, 7), call("load_user_conditions", selected, 8),
+    { text: "다시 조회했고 상담의 정정값을 유지했어요.", calls: [] },
+  ]), api = ports();
+  let offline = false, searches = 0;
+  const execute = api.catalog.execute;
+  api.catalog.execute = async (...args) => {
+    if (args[0] === "search_catalog") {
+      searches++;
+      if (offline) throw new AiError("CATALOG_SEARCH_UPSTREAM_FAILED");
+    }
+    return execute(...args);
+  };
+  const respond = model.provider.respond;
+  let completionOnly = 0;
+  model.provider.respond = async (...args) => {
+    if (offline && completionOnly++ === 1) assert.deepEqual(args[2], []);
+    else assert.ok(args[2].length > 0);
+    return respond(...args);
+  };
+  const runner = createConversationRunner({ ...api, provider: model.provider }), session = runner.createSession(owner);
+  await runner.runTurn(session, turn, { commit: async () => {} });
+  const before = structuredClone(session.memory);
+  offline = true;
+  const failedLookup = await runner.runTurn(session, { ...turn, turnId: "turn-2", text: "조건 다시 확인해줘" }, { commit: async () => {} });
+  assert.equal(failedLookup.modelCalls, 2); assert.equal(failedLookup.toolCalls, 1);
+  assert.deepEqual(session.memory, before); assert.deepEqual(model.closed, []);
+  offline = false;
+  await runner.runTurn(session, { ...turn, turnId: "turn-3", text: "조건 다시 확인해줘" }, { commit: async () => {} });
+  assert.equal(searches, 3);
+  assert.equal(readConditionFact(session.memory, slotId).value, true);
+  assert.equal(session.history.length, 6);
 });

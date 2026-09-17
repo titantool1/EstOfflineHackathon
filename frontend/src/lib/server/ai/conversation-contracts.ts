@@ -1,4 +1,5 @@
 import type { ConditionMemory } from "./application/condition-memory.ts";
+import type { ChatTurnEvent } from "../../chat-stream.ts";
 
 export type HistoryMessage = { role: "user" | "assistant"; content: string };
 export type ConversationHandle = { id: string; responseIds: string[] };
@@ -12,9 +13,10 @@ export type ModelReply = { text: string | null; calls: FunctionCall[] };
 export type ConversationProvider = {
   create(history: HistoryMessage[], signal: AbortSignal): Promise<ConversationHandle>;
   respond(handle: ConversationHandle, input: ModelInput[], tools: FunctionDefinition[], instructions: string,
-    signal: AbortSignal): Promise<ModelReply>;
+    signal: AbortSignal, onTextDelta?: (text: string) => void): Promise<ModelReply>;
   close(handle: ConversationHandle, signal: AbortSignal): Promise<void>;
 };
+export type ConversationEventSink = (event: ChatTurnEvent) => void;
 // Server-owned state. Never reconstruct it from a browser request body.
 export type ConversationSession = {
   userId: string;

@@ -1,23 +1,86 @@
-export type ChatAnswer = { conversationId: string; message: { role: "assistant"; text: string } };
+import type { ChatAnswer, ChatProgress, ChatTurnEvent } from "../../lib/chat-stream.ts";
+export type { ChatAnswer } from "../../lib/chat-stream.ts";
 type Envelope<T> = { data: T | null; error: { code: string; message: string } | null; requestId: string };
+type SendOptions = { signal?: AbortSignal; onEvent?: (event: ChatTurnEvent) => void };
+const stages: ChatProgress[] = ["thinking", "searching", "reading", "checking_conditions", "updating_conditions", "answering"];
 export class ChatClientError extends Error {
   readonly status: number;
   readonly code: string;
   constructor(status: number, code: string, message: string) { super(message); this.status = status; this.code = code; }
 }
+function invalid(): never {
+  throw new ChatClientError(502, "CHAT_INVALID_RESPONSE", "답변 연결이 끊겼어요. 새 상담에서 다시 질문해 주세요.");
+}
+async function readAnswer(response: Response, options: SendOptions): Promise<ChatAnswer> {
+  if (!response.body) invalid();
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder("utf-8", { fatal: true });
+  let buffer = "", draftLength = 0;
+  try {
+    while (true) {
+      options.signal?.throwIfAborted();
+      const { value, done } = await reader.read();
+      buffer += decoder.decode(value, { stream: !done });
+      let newline: number;
+      while ((newline = buffer.indexOf("\n")) >= 0) {
+        const line = buffer.slice(0, newline);
+        buffer = buffer.slice(newline + 1);
+        if (!line || line.length > 64_000) invalid();
+        const event = JSON.parse(line);
+        if (!event || typeof event !== "object") invalid();
+        if (event.type === "done") {
+          const data = event.data;
+          if (!data || typeof data.conversationId !== "string" || !data.conversationId
+            || data.message?.role !== "assistant" || typeof data.message.text !== "string"
+            || !data.message.text.trim() || data.message.text.length > 6000) invalid();
+          return data;
+        }
+        if (event.type === "error") {
+          if (typeof event.error?.code !== "string" || typeof event.error?.message !== "string") invalid();
+          throw new ChatClientError(503, event.error.code, event.error.message);
+        }
+        if (event.type === "reset") {
+          draftLength = 0; options.onEvent?.({ type: "reset" });
+        } else if (event.type === "delta" && typeof event.text === "string") {
+          draftLength += event.text.length;
+          if (draftLength > 6000) invalid();
+          options.onEvent?.({ type: "delta", text: event.text });
+        } else if (event.type === "progress" && stages.includes(event.stage)) {
+          options.onEvent?.({ type: "progress", stage: event.stage });
+        } else invalid();
+      }
+      if (buffer.length > 64_000 || done) invalid();
+    }
+  } catch (error) {
+    if (error instanceof ChatClientError || options.signal?.aborted) throw error;
+    invalid();
+  } finally {
+    await reader.cancel().catch(() => {});
+    reader.releaseLock();
+  }
+}
 export function createChatClient(fetcher: typeof fetch = fetch) {
-  async function request<T>(method: "POST" | "DELETE", body: unknown): Promise<T> {
-    const response = await fetcher("/api/chat", { method, headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body), cache: "no-store", credentials: "same-origin" });
-    const envelope = await response.json() as Envelope<T>;
-    if (!response.ok || envelope.error || !envelope.data)
-      throw new ChatClientError(response.status, envelope.error?.code ?? "CHAT_INVALID_RESPONSE",
-        envelope.error?.message ?? "답변을 받지 못했습니다.");
-    return envelope.data;
+  async function envelope<T>(response: Response): Promise<T> {
+    const value = await response.json() as Envelope<T>;
+    if (!response.ok || value.error || !value.data)
+      throw new ChatClientError(response.status, value.error?.code ?? "CHAT_INVALID_RESPONSE",
+        value.error?.message ?? "답변을 받지 못했습니다.");
+    return value.data;
   }
   return {
-    send: (message: string, conversationId?: string) => request<ChatAnswer>("POST",
-      { message, conversationId, clientRequestId: crypto.randomUUID() }),
-    close: (conversationId: string) => request<{ closed: true }>("DELETE", { conversationId }),
+    async send(message: string, conversationId?: string, options: SendOptions = {}): Promise<ChatAnswer> {
+      const response = await fetcher("/api/chat", { method: "POST", headers: {
+        "Content-Type": "application/json", Accept: "application/x-ndjson",
+      }, body: JSON.stringify({ message, conversationId, clientRequestId: crypto.randomUUID() }),
+      cache: "no-store", credentials: "same-origin", signal: options.signal });
+      if (!response.ok || !response.headers.get("Content-Type")?.includes("application/x-ndjson"))
+        return envelope<ChatAnswer>(response);
+      return readAnswer(response, options);
+    },
+    async close(conversationId: string) {
+      return envelope<{ closed: true }>(await fetcher("/api/chat", { method: "DELETE",
+        headers: { "Content-Type": "application/json" }, body: JSON.stringify({ conversationId }),
+        cache: "no-store", credentials: "same-origin" }));
+    },
   };
 }

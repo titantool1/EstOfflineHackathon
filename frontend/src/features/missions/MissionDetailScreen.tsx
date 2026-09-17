@@ -18,7 +18,7 @@ export function MissionDetailScreen({ batchId, itemId }: { batchId: string; item
     returnHref={returnHref} retry={state.retryDetail} />;
 
   const detail = state.detail.detail;
-  return <main className="mx-auto max-w-4xl px-5 py-8 md:py-12">
+  return <main className="[overflow-wrap:anywhere] mx-auto max-w-4xl px-5 py-8 md:py-12">
     <Link href={returnHref} aria-label="원래 미션 카드로 돌아가기"
       className="text-sm font-bold text-[#397d3e] hover:underline">← 미션 카드로 돌아가기</Link>
     <section className="mt-5 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#dfe9da] md:p-8">
@@ -79,9 +79,9 @@ function Info({ label, value }: { label: string; value: string | null }) {
 }
 
 function Status({ title, returnHref, retry }: { title: string; returnHref: string; retry?: () => void }) {
-  return <main className="mx-auto max-w-2xl px-5 py-16 text-center">
+  return <main className="[overflow-wrap:anywhere] mx-auto max-w-2xl px-5 py-16 text-center">
     <h1 className="text-xl font-bold text-[#29452a]">{title}</h1>
-    <div className="mt-6 flex justify-center gap-3">
+    <div className="mt-6 flex flex-wrap justify-center gap-3">
       {retry && <button type="button" onClick={retry} aria-label="미션 상세 다시 불러오기"
         className="rounded-xl bg-[#2f843d] px-5 py-3 font-bold text-white">다시 시도</button>}
       <Link href={returnHref} aria-label="원래 미션 카드로 돌아가기"

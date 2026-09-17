@@ -147,7 +147,7 @@ export default function KakaoMap({ places, selectedId, onSelect, routePath = [],
     return () => marker.setMap(null);
   }, [isReady, userLocation]);
 
-  return <div className="relative h-full min-h-[520px] w-full">
+  return <div className="relative h-full w-full">
     <div ref={containerRef} className="absolute inset-0" aria-label="에코 실천 장소 지도" />
     {(!key || failed || !isReady) && <p role={failed || !key ? "alert" : "status"}
       className="absolute left-5 right-5 top-5 rounded-xl bg-white/95 p-4 text-sm text-[#597457]">
