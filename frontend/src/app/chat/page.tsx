@@ -27,6 +27,9 @@ type ChatResponse = {
   results: SearchResult[];
   meta: {
     resultCount: number;
+    candidateCount?: number;
+    filteredOutCount?: number;
+    filterMode?: "llm" | "rrf" | "rrf_fallback";
     tookMs: number;
     region: string | null;
     answerMode: "llm" | "template";
@@ -177,7 +180,7 @@ export default function ChatPage() {
               <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#e7f5e1] text-xl">🌿</span>
               <div><h1 className="font-bold">줍줍이</h1><p className="mt-0.5 text-xs text-[#5f9a55]">● Elasticsearch 친환경 검색 도우미</p></div>
             </div>
-            <span className="hidden rounded-full bg-[#f0f6ed] px-3 py-1.5 text-[11px] font-semibold text-[#668064] sm:inline">BM25 + 벡터 검색</span>
+            <span className="hidden rounded-full bg-[#f0f6ed] px-3 py-1.5 text-[11px] font-semibold text-[#668064] sm:inline">BM25 + 벡터 + RRF</span>
           </div>
           <div className="flex-1 space-y-5 overflow-y-auto bg-[#fafcf8] p-5" aria-live="polite">
             {messages.map((message) => (
@@ -188,7 +191,7 @@ export default function ChatPage() {
                   {message.results && message.results.length > 0 && (
                     <div className="mt-3 space-y-2.5">
                       {message.results.map((result) => <ResultCard key={result.docId} result={result} />)}
-                      {message.meta && <p className="px-1 text-right text-[10px] text-[#8a9688]">{message.meta.answerMode === "llm" ? `${message.meta.model ?? "LLM"} 답변 · ` : "검색 요약 · "}{message.meta.resultCount}건 · {message.meta.tookMs.toLocaleString()}ms</p>}
+                      {message.meta && <p className="px-1 text-right text-[10px] text-[#8a9688]">{message.meta.answerMode === "llm" ? `${message.meta.model ?? "LLM"} 답변 · ` : "검색 요약 · "}{message.meta.filterMode === "llm" ? `질문 필터 ${message.meta.filteredOutCount ?? 0}건 제외 · ` : message.meta.filterMode === "rrf_fallback" ? "RRF 대체 결과 · " : "RRF 정렬 · "}{message.meta.resultCount}건 · {message.meta.tookMs.toLocaleString()}ms</p>}
                     </div>
                   )}
                 </div>
@@ -206,13 +209,19 @@ export default function ChatPage() {
           </form>
         </section>
         <aside className="space-y-5">
+          <section className="rounded-3xl bg-[#2f843d] p-5 text-white">
+            <p className="text-sm font-bold text-[#dff3d7]">챗봇에서 실천으로</p>
+            <h2 className="mt-2 text-lg font-bold">내 관심사에 맞는 미션을<br />하나씩 추천받아 보세요</h2>
+            <p className="mt-3 text-xs leading-5 text-[#d8ecd2]">미션 노출·상세 확인·선택·완료를 기록해 다음 추천을 개선해요.</p>
+            <Link href="/onboarding" className="mt-4 flex w-full items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-bold text-[#2f783b]">맞춤 미션 시작하기 →</Link>
+          </section>
           <section className="rounded-3xl bg-[#e9f6e4] p-5">
             <p className="text-sm font-bold text-[#347d3d]">이렇게 물어보세요</p>
             <div className="mt-4 space-y-2">{suggestedQuestions.map((question) => <button key={question} type="button" onClick={() => void sendMessage(question)} disabled={isThinking} className="w-full rounded-xl bg-white px-3 py-3 text-left text-sm leading-5 text-[#577256] shadow-sm hover:bg-[#fafff7] disabled:opacity-50">{question}</button>)}</div>
           </section>
           <section className="rounded-3xl bg-white p-5 shadow-sm ring-1 ring-[#e2ebdc]">
             <p className="text-sm font-bold">검색 결과 안내</p>
-            <p className="mt-3 text-xs leading-5 text-[#728170]">정책·행동·장소 17,828건에서 키워드와 의미를 함께 검색해요. 장소 등록이 실제 포인트 지급을 보장하지는 않아요.</p>
+            <p className="mt-3 text-xs leading-5 text-[#728170]">정책·행동·장소 17,828건에서 키워드와 의미를 각각 검색한 뒤 RRF로 합치고, 지역·문서유형·질문 적합도를 다시 확인해요. 장소 등록이 실제 포인트 지급을 보장하지는 않아요.</p>
             <div className="mt-4 border-t border-[#e8eee3] pt-4 text-[11px] leading-5 text-[#849081]">기준일과 공식 출처를 확인한 뒤 참여해 주세요.</div>
           </section>
         </aside>

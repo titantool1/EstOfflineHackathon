@@ -1,6 +1,6 @@
 # 에코줍줍 프론트엔드
 
-Next.js 16 기반 화면이며 `/chat`의 줍줍이 챗봇과 `/map`의 에코실천지도는 같은 출처의 Route Handler를 통해 로컬 FastAPI 검색 서버에 연결됩니다. Elasticsearch 및 OpenAI API 키는 브라우저로 전달되지 않습니다.
+Next.js 16 기반 화면이며 `/chat`의 줍줍이 챗봇과 `/map`의 에코실천지도는 같은 출처의 Route Handler를 통해 로컬 FastAPI 검색 서버에 연결됩니다. `/onboarding`과 `/missions`에서는 관심사를 고르고 미션을 한 개씩 추천받으며, `/missions/insights`에서 관심사별 노출·확인·선택·완료 퍼널을 확인합니다. Elasticsearch 및 OpenAI API 키는 브라우저로 전달되지 않습니다.
 
 ## Getting Started
 
@@ -14,16 +14,21 @@ Next.js 16 기반 화면이며 `/chat`의 줍줍이 챗봇과 `/map`의 에코�
 다른 터미널에서 프론트엔드를 실행합니다.
 
 ```bash
+cd frontend
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-브라우저에서 [http://localhost:3000/chat](http://localhost:3000/chat) 또는 [http://localhost:3000/map](http://localhost:3000/map)을 엽니다.
+브라우저에서 [http://localhost:3000/chat](http://localhost:3000/chat), [http://localhost:3000/onboarding](http://localhost:3000/onboarding) 또는 [http://localhost:3000/map](http://localhost:3000/map)을 엽니다. 기본 `npm run dev`는 `localhost:3000`을 사용하므로 개발 중에는 주소의 호스트를 `127.0.0.1`과 섞지 않습니다.
+
+프로덕션 방식으로 확인할 때는 실행 중인 개발 서버를 먼저 종료한 뒤 아래 순서로 실행합니다. 같은 `.next` 디렉터리를 쓰므로 `next dev`와 `next build`를 동시에 실행하지 않습니다.
+
+```bash
+cd frontend
+npm run build
+npm start
+```
+
+미션 이벤트는 해커톤 MVP 동안 `frontend/.local/mission-events.jsonl`에 익명으로 저장되며 Git에는 포함되지 않습니다. 정식 서비스에서는 이 저장소를 PostgreSQL 이벤트 테이블로 교체합니다.
 
 검색 인덱스 기본값은 `eco-jupjup-vector-v2`, 임베딩 모델은 `intfloat/multilingual-e5-small`입니다. AI 서버 주소를 바꾸려면 프론트엔드 루트의 `.env.local`에 `AI_SERVER_URL=http://127.0.0.1:8000`을 지정합니다.
 
