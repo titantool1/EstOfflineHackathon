@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createInterestClient, InterestClientError } from "@/features/profile/interests-client";
 import { createMissionClient, MissionClientError } from "./client.ts";
 import { MissionCards } from "./MissionCards";
+import { MissionProgressPanel } from "./MissionProgressPanel";
 import {
   missionBoardHref,
   hasActualInterests,
@@ -38,6 +39,8 @@ export function MissionBoard({ initialContext, legacy }: {
   const [locations, setLocations] = useState<MissionReturnContext>(initialContext);
   const [attempt, setAttempt] = useState(0);
   const request = useRef(0);
+  const [progressRevision, setProgressRevision] = useState(0);
+  const refreshProgress = useCallback(() => setProgressRevision(value => value + 1), []);
 
   useEffect(() => {
     const current = ++request.current;
@@ -99,16 +102,17 @@ export function MissionBoard({ initialContext, legacy }: {
       <h1 className="mt-2 text-3xl font-bold text-[#284527]">익숙한 관심사와 새로운 실천을 함께 살펴보세요</h1>
       <p className="mt-3 text-sm leading-6 text-[#61745f]">각 영역은 따로 이동하고 새 묶음을 받을 수 있어요.</p>
     </header>
+    <MissionProgressPanel revision={progressRevision} />
     <div data-mission-layout={view.hasInterests ? "dual" : "general-only"}
       className={`grid items-start gap-6 ${view.hasInterests ? "lg:grid-cols-2" : "mx-auto max-w-3xl"}`}>
       {view.hasInterests && <MissionCards pane="interests" mode="interests" title="내 관심사 미션"
         description="저장한 관심사와 연결된 프로그램을 모았어요."
         initialPosition={locations.interests} returnHref={returnHref}
-        onLocationChange={updateInterests} />}
+        onLocationChange={updateInterests} onCompleted={refreshProgress} />}
       <MissionCards pane="general" mode="general" title="새롭게 둘러보는 미션"
         description="관심사와 관계없이 여러 분야의 프로그램을 둘러보세요."
         initialPosition={locations.general} returnHref={returnHref}
-        onLocationChange={updateGeneral} />
+        onLocationChange={updateGeneral} onCompleted={refreshProgress} />
     </div>
   </main>;
 }

@@ -117,7 +117,7 @@ function MissionCard({ item, batchId, position, total, paneTitle, returnHref, st
   </article>;
 }
 
-export function MissionCards({ pane, mode, title, description, initialPosition, returnHref, onLocationChange }: {
+export function MissionCards({ pane, mode, title, description, initialPosition, returnHref, onLocationChange, onCompleted }: {
   pane: MissionPane;
   mode: "interests" | "general";
   title: string;
@@ -125,6 +125,7 @@ export function MissionCards({ pane, mode, title, description, initialPosition, 
   initialPosition?: MissionPosition;
   returnHref: string;
   onLocationChange: (position?: MissionPosition) => void;
+  onCompleted?: () => void;
 }) {
   const client = useMemo(() => createMissionClient(), []);
   const [source, setSource] = useState<Source>(() => initialPosition
@@ -181,6 +182,7 @@ export function MissionCards({ pane, mode, title, description, initialPosition, 
     client.recordEvent(input).then(() => {
       eventRecorded.current.add(key);
       setEventStatuses(current => ({ ...current, [key]: { kind: "recorded" } }));
+      if (type === "self_reported_completed") onCompleted?.();
     }).catch(error => {
       if (type === "impression" && error instanceof MissionClientError
           && error.status === 409 && error.code === "IMPRESSION_ALREADY_RECORDED") {
@@ -190,7 +192,7 @@ export function MissionCards({ pane, mode, title, description, initialPosition, 
       }
       setEventStatuses(current => ({ ...current, [key]: { kind: "failed", message: loadMessage(error) } }));
     }).finally(() => eventInFlight.current.delete(key));
-  }, [active, client, state]);
+  }, [active, client, onCompleted, state]);
 
   const status = useCallback((type: MissionEventInput["eventType"]) => {
     if (!active || state.kind !== "ready") return undefined;

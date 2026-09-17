@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 public class MissionEventController {
     private final MissionEventService service;
     public MissionEventController(MissionEventService service) { this.service=service; }
+    @GetMapping("/progress") public ResponseEntity<?> progress(HttpServletRequest request) {
+        UUID owner=MemberRequestContext.owner(request); String id=(String)request.getAttribute(RequestIdFilter.ATTRIBUTE);
+        if (owner==null) return failure(401,"AUTHENTICATION_REQUIRED",id);
+        return ResponseEntity.ok().header("Cache-Control","no-store").body(ApiResponse.success(service.progress(owner),id));
+    }
     @PostMapping public ResponseEntity<?> post(@RequestBody Input input,HttpServletRequest request) {
         UUID owner=MemberRequestContext.owner(request); String id=(String)request.getAttribute(RequestIdFilter.ATTRIBUTE);
         if (owner==null) return failure(401,"AUTHENTICATION_REQUIRED",id);

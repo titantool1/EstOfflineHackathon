@@ -12,6 +12,15 @@ import org.springframework.stereotype.Repository;
 public class JdbcMissionEventStore implements MissionEventStore {
     private final JdbcTemplate jdbc;
     public JdbcMissionEventStore(JdbcTemplate jdbc) { this.jdbc=jdbc; }
+    @Override public long completedMissionCount(UUID owner) {
+        return jdbc.queryForObject("""
+            SELECT count(DISTINCT (item.program_key, item.action_id))
+            FROM app.mission_event event
+            JOIN app.recommendation_item item
+              ON item.batch_id=event.batch_id AND item.item_id=event.item_id AND item.user_id=event.user_id
+            WHERE event.user_id=? AND event.event_type='self_reported_completed'
+            """, Long.class, owner);
+    }
     @Override public void lockOwner(UUID owner) { jdbc.queryForObject("SELECT id FROM app.users WHERE id=? FOR UPDATE",UUID.class,owner); }
     @Override public Optional<MissionEvent> findByClientEvent(UUID owner,UUID clientEventId) {
         return jdbc.query("""

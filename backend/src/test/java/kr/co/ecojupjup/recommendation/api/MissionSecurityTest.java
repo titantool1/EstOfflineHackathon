@@ -45,6 +45,18 @@ class MissionSecurityTest {
         when(context.getBean(RecommendationService.class).create(eq(OWNER),any(),any(),any())).thenReturn(new RecommendationBatch(BATCH,"interest-mapped-catalog-order-v1","catalog_exploration",OffsetDateTime.now(),List.of()));
         when(context.getBean(MissionEventService.class).record(eq(OWNER),any(),any(),any(),any(),any())).thenReturn(new MissionEvent(UUID.randomUUID(),KEY,BATCH,ITEM,"accepted",OffsetDateTime.now(),OffsetDateTime.now()));}
     @AfterEach void close(){context.close();}
+    @Test void progressUsesOnlyAuthenticatedOwnerAndIsNotCached() throws Exception {
+        var service=context.getBean(MissionEventService.class);
+        when(service.progress(OWNER)).thenReturn(new MissionEventService.Progress(3));
+        mvc.perform(get("/api/missions/events/progress")).andExpect(status().isUnauthorized());
+        var principal=new MemberPrincipal(OWNER,"a@example.test","hash","초록이");
+        var auth=UsernamePasswordAuthenticationToken.authenticated(principal,null,List.of());
+        mvc.perform(get("/api/missions/events/progress?userId="+UUID.randomUUID())
+                .header("X-User-Id",UUID.randomUUID()).with(authentication(auth)))
+            .andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store"))
+            .andExpect(jsonPath("$.data.completedMissionCount").value(3));
+        verify(service).progress(OWNER);
+    }
     @Test void missionWritesRequireAuthenticationAndCsrf() throws Exception {
         String recommendation="{\"clientRequestId\":\""+KEY+"\",\"mode\":\"general\"}";var principal=new MemberPrincipal(OWNER,"a@example.test","hash","초록이");var auth=UsernamePasswordAuthenticationToken.authenticated(principal,null,List.of());
         mvc.perform(get("/api/missions/recommendations/"+BATCH)).andExpect(status().isUnauthorized());
