@@ -4,10 +4,10 @@
 
 ## 조건 저장 담당 접점
 
-`profile.facts.PrivateFactsStore`는 Spring 내부 포트다. 새로운 모델 도구나 직접 호출 가능한 HTTP API가 아니다. owner는 인증 세션으로 확정한 UUID만 전달한다. 요청 body/모델의 사용자 ID를 여기에 전달하면 안 된다.
+`profile.facts`는 기존 소비자를 위한 공유 저장 계약(types/port)이며 JDBC 구현은 포함하지 않는다. `profile.facts.PrivateFactsStore`는 Spring 내부 포트다. 새로운 모델 도구나 직접 호출 가능한 HTTP API가 아니다. owner는 인증 세션으로 확정한 UUID만 전달한다. 요청 body/모델의 사용자 ID를 여기에 전달하면 안 된다.
 
 - `list(owner, table)`, `find(owner, key)`로 현재 행과 revision을 받는다. 선택 가구의 `listMembers`, `listWelfare`는 SQL에서 owner/대상을 먼저 제한한다.
-- `applyChanges(owner, changes)`는 한 트랜잭션에서 profile anchor를 잠그고 모든 부분 변경을 검증·저장한다. Spring 주입 bean을 호출해야 한다. 직접 `new`한 구현체는 트랜잭션을 직접 제공해야 한다.
+- `applyChanges(owner, changes)`는 한 트랜잭션에서 profile anchor를 잠그고 모든 부분 변경을 검증·저장한다. Spring이 기본 주입하는 `profile.application.PrivateFactsService`를 호출해야 한다. 서비스가 트랜잭션을 열고 `profile.adapter.JdbcPrivateFactsStore`에 원자적 병합/검증/암호화 저장을 맡긴다. JDBC 구현을 직접 호출할 때 트랜잭션이 없으면 쓰기 전에 거절한다.
 - `FactChange(FactKey key, ObjectNode patch, Long expectedRevision, boolean delete)`. patch는 표의 snake_case 필드만 가능하며 생략 필드는 유지한다. null은 nullable 필드의 명시적 제거다. 모델의 추측/미응답을 null이나 false로 바꾸면 안 된다. 필수 필드 제거는 행 삭제 또는 별도의 사용자 결정이 필요하다.
 - revision `0`은 신규 행 생성(빈 profile anchor에도 사용), 양수는 정확한 기존 revision 확인, `null`은 기존 행의 최신 값에 부분 병합이다. 일반 동네 저장만 현재 UI에 맞춰 `null`을 사용한다. 상담의 충돌 정책은 별도 담당이 정한다.
 - 행 삭제는 `delete=true`, 비어 있거나 null인 patch다. profile 삭제는 anchor를 보존하고 `{}`를 증가한 revision으로 암호화한다. 참조된 가구/구성원 삭제는 의존 행도 같은 요청에서 제거해야 한다.
@@ -27,7 +27,7 @@
 
 명시적 false를 보존한다. 미확인은 nullable 값/행 없음으로 유지하며 `0`과 동일 취급하지 않는다. 기존 `seating_capacity>0` 제약상 좌석 수 0은 유효한 입력이 아니다. birth_date와 observed_at/source_kind는 함께 기록/제거한다. 관심 동네는 주민등록 거주지 증거가 아니다. `source_kind`는 현재 `user_statement`만 허용한다.
 
-`update_conditions`는 계속 대화 메모리만 변경한다. 대화 종료 시점의 명시적 변경 묶음을 이 포트에 전달하는 연결, 종료 정의·모름/거절 처리·동일 사실 충돌은 별도 작업이다. 새 대화의 기존 `ConditionContext` JSON 계약은 유지한다. 공개 조건 매핑을 먼저 읽고 필요한 소스/선택 대상만 복호화하며 조회 전체는 REPEATABLE_READ snapshot이다.
+`update_conditions`는 계속 대화 메모리만 변경한다. 대화 종료 시점의 명시적 변경 묶음을 이 포트에 전달하는 연결, 종료 정의·모름/거절 처리·동일 사실 충돌은 별도 작업이다. 새 대화의 기존 `ConditionContext` JSON 계약은 유지한다. 공개 조건 매핑을 먼저 읽고 필요한 소스/선택 대상만 복호화하며 조회 전체는 `ConditionContextService.load`가 여는 REPEATABLE_READ snapshot이다.
 
 공개 참조 코드 `app.regions.region_id`, `app.services.service_code`, `app.welfare_types.welfare_code`는 추가만 허용한다. 암호화된 참조에는 DB FK를 걸 수 없으므로 코드 삭제·이름 변경은 전체 암호화 참조를 조사·변환·검증하는 유지보수 이관으로만 한다. 일반 카탈로그 작업에서 이 코드들을 삭제/교체하면 기존 회원 사실이 고아 참조가 될 수 있다.
 

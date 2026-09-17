@@ -116,8 +116,11 @@ public final class PrivateFactPayloadCodec {
         String sido = requiredText(value, names[1]);
         String sigungu = text(value, names[2], true);
         String dong = requiredText(value, names[3]);
-        if (!code.matches("[0-9]{10}") || sido.length() > 40 || sigungu.length() > 80 || dong.length() > 80
-                || !sido.equals(sido.trim()) || !sigungu.equals(sigungu.trim()) || !dong.equals(dong.trim())) fail();
+        try {
+            new kr.co.ecojupjup.profile.application.Neighborhood(code, sido, sigungu, dong);
+        } catch (IllegalArgumentException error) {
+            fail();
+        }
     }
 
     private static void member(ObjectNode value) {

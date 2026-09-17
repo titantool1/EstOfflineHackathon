@@ -52,6 +52,12 @@ flowchart LR
 
 현재 `health/api/HealthController` → `health/application/HealthService`·`DatabaseProbe` → `health/adapter/JdbcDatabaseProbe`가 실행 가능한 참조 구조다. health에는 업무 판단 규칙이 없으므로 빈 domain 계층을 추가하지 않는다. 챗 도구와 일반 화면에서 필요한 같은 기능은 Spring의 같은 응용 서비스로 연결한다.
 
+### 암호화 사용자 사실 저장
+
+공유 `profile.facts` 패키지는 다른 저장 담당과 맞춘 포트/값 계약을 유지한다. 기본 주입되는 `application.PrivateFactsService`가 쓰기 트랜잭션을 열고, 같은 포트의 내부 persistence 구현인 `adapter.JdbcPrivateFactsStore`에 저장을 맡긴다. JDBC 구현은 잠금·암호화 행 병합·제약/참조 확인·SQL을 담당하며 트랜잭션 없는 직접 쓰기를 거절한다. 외부 호출자는 persistence qualifier를 사용하지 않는다.
+
+기존 `application.ConditionContextService`가 조건 조회 전체의 read-only REPEATABLE_READ 경계를 열고 `adapter.JdbcConditionContextLookup`이 공개 매핑과 필요한 개인 사실을 읽는다. 암호 연산/키링과 유지보수 migration은 기술 경계 안에 남는다. [계약·이관 설명](private-facts-storage.md).
+
 ## Next 기능 위치
 
 | 위치 | 현재 또는 예정 역할 |

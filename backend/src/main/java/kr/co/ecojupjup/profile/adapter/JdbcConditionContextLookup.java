@@ -10,8 +10,6 @@ import kr.co.ecojupjup.profile.facts.FactTable;
 import kr.co.ecojupjup.profile.facts.FactKey;
 import kr.co.ecojupjup.profile.facts.PrivateFactsStore;
 import kr.co.ecojupjup.profile.facts.StoredFact;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.annotation.Isolation;
 import kr.co.ecojupjup.profile.application.ConditionContext.*;
 import kr.co.ecojupjup.profile.application.ConditionContextService;
 import kr.co.ecojupjup.profile.application.ConditionContextService.Selection;
@@ -30,8 +28,6 @@ public class JdbcConditionContextLookup implements ConditionContextService.Looku
         this.jdbc=jdbc; this.mapper=mapper; this.facts=facts;
     }
     @Override
-    @Transactional(readOnly=true,
-        isolation=Isolation.REPEATABLE_READ)
     public ConditionContext load(UUID owner, Selection selection) {
         if (!Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM app.users WHERE id=?)",Boolean.class,owner))
             || !Boolean.TRUE.equals(jdbc.queryForObject("SELECT EXISTS(SELECT 1 FROM app.catalog_action WHERE program_key=? AND action_id=?)",

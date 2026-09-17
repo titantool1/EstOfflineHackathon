@@ -1,4 +1,6 @@
-package kr.co.ecojupjup.profile.facts;
+package kr.co.ecojupjup.profile.adapter;
+
+import kr.co.ecojupjup.profile.facts.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,6 +25,14 @@ class JdbcPrivateFactsStoreTest {
     private final JdbcTemplate jdbc = mock(JdbcTemplate.class);
     private final JdbcPrivateFactsStore store = new JdbcPrivateFactsStore(jdbc, new ObjectMapper(),
             new PrivateFactsCrypto("test", Map.of("test", new byte[32])));
+
+    @Test
+    void directWriteWithoutApplicationTransactionFailsBeforeJdbc() {
+        IllegalStateException error = assertThrows(IllegalStateException.class,
+                () -> store.applyChanges(UUID.randomUUID(), List.of()));
+        assertEquals("PRIVATE_FACTS_TRANSACTION_REQUIRED", error.getMessage());
+        verifyNoInteractions(jdbc);
+    }
 
     @Test
     void memberSelectionFiltersByHouseholdBeforeAnyRowsCanBeDecrypted() {

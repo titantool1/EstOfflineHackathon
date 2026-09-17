@@ -75,6 +75,18 @@ class PrivateFactPayloadCodecTest {
                 """)));
     }
 
+    @Test
+    void rejectsNeighborhoodValuesThatTheExistingReaderCannotConstruct() {
+        for (String invalid : new String[] {"서\n울", "\u2003서울"}) {
+            ObjectNode profile = mapper.createObjectNode().put("neighborhood_code", "1111010100")
+                    .put("neighborhood_sido", invalid).put("neighborhood_sigungu", "종로구")
+                    .put("neighborhood_dong", "청운동");
+            assertThrows(IllegalArgumentException.class,
+                    () -> new kr.co.ecojupjup.profile.application.Neighborhood("1111010100", invalid, "종로구", "청운동"));
+            assertThrows(PrivateFactsException.class, () -> codec.validate(FactTable.PROFILE, profile));
+        }
+    }
+
     private void assertInvalid(FactTable table, String json) {
         PrivateFactsException error = assertThrows(PrivateFactsException.class,
                 () -> codec.validate(table, object(json)));

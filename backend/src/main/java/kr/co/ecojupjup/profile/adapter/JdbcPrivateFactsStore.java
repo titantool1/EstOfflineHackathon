@@ -1,4 +1,6 @@
-package kr.co.ecojupjup.profile.facts;
+package kr.co.ecojupjup.profile.adapter;
+
+import kr.co.ecojupjup.profile.facts.*;
 
 import static kr.co.ecojupjup.profile.facts.PrivateFactsException.Code.BROKEN_REFERENCE;
 import static kr.co.ecojupjup.profile.facts.PrivateFactsException.Code.CONSTRAINT_VIOLATION;
@@ -24,13 +26,13 @@ import kr.co.ecojupjup.profile.crypto.PrivateFactsCrypto;
 import kr.co.ecojupjup.profile.crypto.PrivateFactsCrypto.Envelope;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 /** JDBC implementation of the owner-serialized encrypted facts protocol. */
-@Repository
+@Repository("privateFactsPersistence")
 public class JdbcPrivateFactsStore implements PrivateFactsStore {
     private static final String ENVELOPE_COLUMNS = "payload_version,key_id,nonce,ciphertext,revision";
 
@@ -76,10 +78,11 @@ public class JdbcPrivateFactsStore implements PrivateFactsStore {
         return query(owner, key.table(), keyPredicate(key), keyArguments(owner, key)).stream().findFirst();
     }
 
-    /** Must execute through the Spring proxy, or inside a caller-provided transaction in direct tests. */
+    /** Called by the transactional application service, or inside an explicit transaction in tests. */
     @Override
-    @Transactional
     public List<StoredFact> applyChanges(UUID owner, List<FactChange> changes) {
+        if (!TransactionSynchronizationManager.isActualTransactionActive())
+            throw new IllegalStateException("PRIVATE_FACTS_TRANSACTION_REQUIRED");
         Objects.requireNonNull(owner, "owner");
         if (changes == null) throw new PrivateFactsException(INVALID_PAYLOAD);
         lockAnchor(owner);

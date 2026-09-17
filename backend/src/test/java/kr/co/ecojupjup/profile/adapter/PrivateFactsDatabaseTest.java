@@ -150,7 +150,7 @@ class PrivateFactsDatabaseTest {
                         "--PRIVATE_FACTS_MIGRATION_ENABLED=true")) {
                 PrivateFactsStore injected=context.getBean(PrivateFactsStore.class);
                 assertThat(org.springframework.aop.support.AopUtils.isAopProxy(injected)).isTrue();
-                assertThat(org.springframework.aop.support.AopUtils.isAopProxy(context.getBean(ConditionContextService.Lookup.class))).isTrue();
+                assertThat(org.springframework.aop.support.AopUtils.isAopProxy(context.getBean(ConditionContextService.class))).isTrue();
                 JdbcTemplate db=context.getBean(JdbcTemplate.class);
                 assertThat(db.queryForObject("SELECT type FROM app.flyway_schema_history WHERE version='9'",String.class)).isEqualTo("JDBC");
                 UUID fresh=UUID.randomUUID(); db.update("INSERT INTO app.users(id) VALUES (?)",fresh);
