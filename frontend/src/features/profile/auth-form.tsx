@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
-import { createAccountClient } from "./account-client";
+import { useRef, useState, type FormEvent } from "react";
+import { AccountError, accountErrorMessage, createAccountClient } from "./account-client";
 
 export function AuthForm({ mode }: { mode: "signup" | "login" }) {
   const signup = mode === "signup";
@@ -13,23 +13,37 @@ export function AuthForm({ mode }: { mode: "signup" | "login" }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [created, setCreated] = useState(false);
+  const [outcomeUnknown, setOutcomeUnknown] = useState(false);
+  const submitting = useRef(false);
   async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setError(""); setBusy(true);
+    event.preventDefault();
+    if (submitting.current) return;
+    submitting.current = true; setError(""); setBusy(true);
     const accounts = createAccountClient();
+    let signupConfirmed = false;
     try {
-      if (signup) { await accounts.signup(email, password, nickname); setCreated(true); }
+      if (signup) {
+        await accounts.signup(email, password, nickname);
+        signupConfirmed = true; setCreated(true);
+      }
       await accounts.login(email, password);
-      setPassword(""); router.replace("/profile"); router.refresh();
+      router.replace("/profile"); router.refresh();
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "요청을 완료하지 못했습니다.");
-    } finally { setBusy(false); }
+      if (signup && !signupConfirmed && caught instanceof AccountError && caught.outcomeUnknown) {
+        setOutcomeUnknown(true);
+        setError("가입 결과를 확인하지 못했어요. 다시 가입하기 전에 로그인해 확인해 주세요.");
+      } else setError(accountErrorMessage(caught));
+    } finally {
+      setPassword(""); setBusy(false); submitting.current = false;
+    }
   }
   const field = "w-full rounded-xl border border-[#cfddc8] p-3 text-base";
   return <main className="min-h-screen bg-[#f5f8f1] px-5 py-12">
     <section className="mx-auto max-w-md rounded-3xl bg-white p-7 shadow-sm">
       <Link href="/" className="font-bold text-[#267a38]">에코줍줍</Link>
       <h1 className="my-6 text-2xl font-bold">{signup ? "회원가입" : "로그인"}</h1>
-      {created ? <p role="status">회원가입 완료. <Link href="/login" className="underline">로그인하기</Link></p> :
+      {created ? <p role="status">회원가입이 완료됐어요. <Link href="/login" className="underline">로그인하기</Link></p> : outcomeUnknown ?
+      <p><Link href="/login" className="underline">로그인해서 가입 여부 확인하기</Link></p> :
       <form onSubmit={submit} className="space-y-4">
         {signup && <div><label htmlFor="nickname">닉네임 (선택)</label>
           <input id="nickname" name="nickname" autoComplete="nickname" className={field}
