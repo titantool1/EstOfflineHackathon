@@ -7,7 +7,7 @@ export type CatalogCandidate = {
   program_status: string | null; catalog_district: string | null; condition_labels: string[];
 };
 export type CatalogSearch = {
-  query: string; match_mode: "all_keywords_literal"; offset: number; limit: number;
+  query: string; match_mode: "hybrid_rrf"; offset: number; limit: number;
   has_more: boolean; items: CatalogCandidate[];
 };
 export type CatalogSource = JsonObject & { id: string; url: string; title: string };
@@ -33,7 +33,7 @@ function candidate(v: unknown): v is CatalogCandidate {
     && Array.isArray(v.condition_labels) && v.condition_labels.every(text);
 }
 export function isCatalogSearch(v: unknown): v is CatalogSearch {
-  if (!object(v) || !text(v.query) || v.match_mode !== "all_keywords_literal"
+  if (!object(v) || !text(v.query) || v.match_mode !== "hybrid_rrf"
       || !Number.isInteger(v.offset) || !Number.isInteger(v.limit) || typeof v.has_more !== "boolean"
       || !Array.isArray(v.items) || !v.items.every(candidate)) return false;
   return new Set(v.items.map(x => JSON.stringify([x.program_key, x.action_id]))).size === v.items.length;
@@ -53,9 +53,9 @@ export function isCatalogDetail(v: unknown): v is CatalogDetail {
 
 export function createCatalogClient(client: ReturnType<typeof createSpringClient>) {
   return {
-    search(query: string, limit: number, offset: number, requestId?: string, signal?: AbortSignal) {
-      return client.request<CatalogSearch>("/api/catalog/actions", {
-        query: { query, limit, offset }, requestId, signal,
+    search(query: string, embedding: number[], limit: number, offset: number, requestId?: string, signal?: AbortSignal) {
+      return client.request<CatalogSearch>("/api/catalog/actions/search", {
+        method: "POST", body: { query, embedding, limit, offset }, requestId, signal, csrf: true,
         validate: (v): v is CatalogSearch => isCatalogSearch(v) && v.query === query
           && v.limit === limit && v.offset === offset && v.items.length <= limit,
       });

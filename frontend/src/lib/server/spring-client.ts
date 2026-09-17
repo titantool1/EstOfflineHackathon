@@ -15,6 +15,7 @@ export type SpringRequest<T> = {
   body?: unknown;
   requestId?: string | null;
   signal?: AbortSignal;
+  csrf?: boolean;
   // Explicit server-selected headers only; do not forward all browser headers.
   headers?: HeadersInit;
 };
@@ -78,6 +79,29 @@ export function createSpringClient(config: { baseUrl: string; timeoutMs?: number
       const timeout = AbortSignal.timeout(timeoutMs);
       const signal = options.signal ? AbortSignal.any([timeout, options.signal]) : timeout;
       try {
+        if (options.csrf) {
+          const csrfHeaders = new Headers({ Accept: "application/json", "X-Request-Id": requestId });
+          const existingCookie = headers.get("Cookie");
+          if (existingCookie) csrfHeaders.set("Cookie", existingCookie);
+          const csrfResponse = await fetcher(new URL("/api/auth/csrf", base), {
+            method: "GET", headers: csrfHeaders, signal, cache: "no-store", redirect: "error",
+          });
+          const csrfEnvelope: unknown = await csrfResponse.json();
+          const sessionCookie = csrfResponse.headers.getSetCookie()
+            .map(value => value.split(";", 1)[0])
+            .find(value => /^ECOTEAMSESSION=[^;,\s]+$/.test(value));
+          const cookies = (existingCookie ?? "").split(";").map(value => value.trim()).filter(Boolean);
+          const cookie = sessionCookie
+            ? [...cookies.filter(value => !value.startsWith("ECOTEAMSESSION=")), sessionCookie].join("; ")
+            : existingCookie;
+          if (!csrfResponse.ok || !record(csrfEnvelope) || csrfEnvelope.requestId !== requestId
+              || csrfResponse.headers.get("X-Request-Id") !== requestId || !record(csrfEnvelope.data)
+              || csrfEnvelope.error !== null || csrfEnvelope.data.headerName !== "X-CSRF-TOKEN"
+              || typeof csrfEnvelope.data.token !== "string" || !csrfEnvelope.data.token
+              || !cookie || !cookie.split(";").some(value => /^ECOTEAMSESSION=[^;,\s]+$/.test(value.trim()))) return invalid();
+          headers.set("X-CSRF-TOKEN", csrfEnvelope.data.token);
+          headers.set("Cookie", cookie);
+        }
         const response = await fetcher(url, { method, headers, body, signal, cache: "no-store", redirect: "error" });
         const contentType = response.headers.get("Content-Type")?.split(";")[0].trim().toLowerCase();
         if (!contentType || !/^application\/(?:json|[\w.+-]+\+json)$/.test(contentType)) return invalid();

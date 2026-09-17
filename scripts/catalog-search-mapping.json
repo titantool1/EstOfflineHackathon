@@ -1,0 +1,52 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  },
+  "mappings": {
+    "dynamic": false,
+    "_meta": {
+      "projection": "legacy-58-text-vector-current-canonical-v1",
+      "search_scope": "existing-58-actions",
+      "vector_source": "reused-no-generation",
+      "embedding_model": "BAAI/bge-m3",
+      "embedding_revision": "5617a9f61b028005a4858fdac845db406aefb181",
+      "embedding_dimension": 1024,
+      "embedding_normalized": true,
+      "embedding_max_sequence_length": 512
+    },
+    "properties": {
+      "doc_id": { "type": "keyword" },
+      "program_key": { "type": "keyword" },
+      "action_id": { "type": "keyword" },
+      "identity_basis": { "type": "keyword" },
+      "title": {
+        "type": "text",
+        "fields": { "ko": { "type": "text", "analyzer": "nori" } }
+      },
+      "program_title": {
+        "type": "text",
+        "fields": { "ko": { "type": "text", "analyzer": "nori" } }
+      },
+      "program_status": { "type": "keyword", "ignore_above": 2048 },
+      "catalog_district": { "type": "keyword", "ignore_above": 256 },
+      "condition_labels": {
+        "type": "text",
+        "fields": { "ko": { "type": "text", "analyzer": "nori" } }
+      },
+      "condition_ids": { "type": "keyword" },
+      "conditions": { "type": "object", "enabled": false },
+      "program_context": { "type": "object", "enabled": false },
+      "search_text": {
+        "type": "text",
+        "fields": { "ko": { "type": "text", "analyzer": "nori" } }
+      },
+      "embedding": {
+        "type": "dense_vector",
+        "dims": 1024,
+        "index": true,
+        "similarity": "cosine"
+      }
+    }
+  }
+}

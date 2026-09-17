@@ -37,7 +37,10 @@ export async function createConversationRuntime() {
   const baseUrl = process.env.SPRING_BASE_URL ?? "http://127.0.0.1:18080";
   return createConversationRunner({
     provider: createConversationProvider({ apiKey: process.env.OPENAI_API_KEY ?? "", model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini-2026-03-17" }),
-    catalog: createCatalogTools(createSpringClient({ baseUrl })),
+    catalog: createCatalogTools(createSpringClient({ baseUrl }), async (query, signal) => {
+      const embedding = await configuredEmbedding();
+      return embedding.embed(query, signal);
+    }),
     load: createUserConditionLoader({ baseUrl }),
   });
 }

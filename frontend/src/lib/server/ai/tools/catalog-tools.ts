@@ -6,7 +6,7 @@ import type { SpringResult } from "../../spring-client.ts";
 export const catalogToolDefinitions = [
   {
     type: "function", name: "search_catalog", strict: true,
-    description: "등록된 공개 제도·행동 후보를 찾는다. 자연어 문장 대신 핵심 검색어 1~8개를 공백으로 구분한다. 모든 검색어의 문자 포함 검색이며 동의어/의미 검색이 아니다. 다른 목적의 검색어로 치환하지 않는다. 결과의 program_key와 action_id로 상세를 조회한다. 후보는 개인 적격성·현재 운영 확인을 뜻하지 않는다.",
+    description: "등록된 공개 제도·행동 후보를 찾는다. 사용자의 친환경 행동·혜택 목적을 보존한 짧고 구체적인 검색 문구를 사용한다. Nori 키워드와 의미 벡터 결과를 함께 순위화한다. 결과의 program_key와 action_id로 상세를 조회한다. 후보는 개인 적격성·현재 운영 확인을 뜻하지 않는다.",
     parameters: { type: "object", additionalProperties: false, properties: {
       query: { type: "string", minLength: 1, maxLength: 200 },
       limit: { type: "integer", minimum: 1, maximum: 20 },
@@ -48,7 +48,7 @@ function unwrap<T>(result: SpringResult<T>): T {
 type CallContext = { requestId?: string; signal?: AbortSignal };
 export function createCatalogTools(client = createSpringClient({
   baseUrl: process.env.SPRING_BASE_URL ?? "http://127.0.0.1:18080",
-})) {
+}), embed?: (query: string, signal: AbortSignal) => Promise<number[]>) {
   const catalog = createCatalogClient(client);
   return {
     definitions: catalogToolDefinitions,
@@ -57,11 +57,13 @@ export function createCatalogTools(client = createSpringClient({
         exact(input, ["query", "limit", "offset"]);
         const { query, limit, offset } = input;
         if (typeof query !== "string" || !query.trim() || query.length > 200
-            || new Set(query.trim().split(/\s+/)).size > 8
             || typeof limit !== "number" || !Number.isInteger(limit) || limit < 1 || limit > 20
             || typeof offset !== "number" || !Number.isInteger(offset) || offset < 0 || offset > 1000)
           throw new CatalogToolError("INVALID_TOOL_ARGUMENTS");
-        const result = await catalog.search(query.trim(), limit, offset, context.requestId, context.signal);
+        if (!embed) throw new CatalogToolError("EMBEDDING_NOT_CONFIGURED", 503);
+        const signal = context.signal ?? AbortSignal.timeout(60_000);
+        const embedding = await embed(query.trim(), signal);
+        const result = await catalog.search(query.trim(), embedding, limit, offset, context.requestId, signal);
         const data = unwrap(result);
         return { status: data.items.length ? "ok" : "no_results", data, requestId: result.body.requestId,
           message: data.items.length ? null : offset === 0 ? "검색 조건에 맞는 등록자료가 없어요." : "이 페이지에 추가 등록자료가 없어요." };

@@ -1,51 +1,38 @@
-# 공개 카탈로그 조회 도구
+# 챗봇 카탈로그 검색 도구
 
-현재 팀 DB의 공개 제도·행동을 Spring HTTP API를 통해 조회한다. Next가 SQL을 직접 실행하지 않는다. 사용자 DB/조건 메모리·자격 판정과 별도이며 회원 식별값을 입력받지 않는다.
+현재 챗봇 `/api/chat`의 `createConversationRuntime`에 공개 카탈로그 도구가 연결된다. Next는 SQL/ES를 직접 조회하지 않고 Spring API를 사용한다.
 
-## HTTP 계약
+## 검색과 상세 조회
 
-공통 응답 `{data,error,requestId}`와 `X-Request-Id`를 따른다.
+1. 모델이 `search_catalog(query, limit, offset)`를 선택한다. 자연어 검색어는 1~200자, limit 1~20, offset 0~1000이다.
+2. Next가 검색어만 고정 BGE-M3 계약으로 임베딩한다. 일반 대화와 상세 조회에서는 BGE를 초기화하지 않는다.
+3. Spring `POST /api/catalog/actions/search`에 `{query, embedding, limit, offset}`을 보낸다. 공통 클라이언트는 `/api/auth/csrf`에서 받은 토큰과 세션을 함께 전송한다.
+4. Spring은 ES의 Nori 키워드와 벡터 순위를 RRF로 합친다. 페이지마다 같은 1021개 후보 창을 사용한다. 반환은 `query, match_mode=hybrid_rrf, offset, limit, has_more, items[]`이다.
+5. 선택한 후보의 `program_key + action_id`로 `get_catalog_action`을 호출한다. Spring `GET /api/catalog/actions/detail`은 **현재 PostgreSQL**의 상세·조건·출처·연결 장소를 조회한다.
+6. 기존 대화 도구의 선택 ID 검사와 사용자 조건 조회/메모리 처리를 유지한다. 검색 후보 자체는 이용 자격 판정이 아니다.
 
-- `GET /api/catalog/actions?query=기후행동&limit=10&offset=0`: 제도·행동 후보 목록. 검색어는 공백으로 구분한 핵심어 1~8개, 전체 200자 이하다. 모든 단어가 관련 텍스트에 문자 그대로 포함되는 후보를 찾는다. limit 1~20, offset 0~1000. 기본값10/0. `%`·`_`·따옴표는 SQL 검색 연산자로 해석하지 않는다.
-- `GET /api/catalog/actions/detail?programKey=scheme:G002&actionId=G002-A01`: 정확한 복합 ID로 행동 상세 조회. 한 프로그램의 ID로 다른 프로그램의 행동을 가져오지 않는다.
+기존 `GET /api/catalog/actions` 문자 검색 API도 남아 있지만 챗봇 검색 도구는 위 POST 경로를 사용한다. API는 `{data,error,requestId}`와 `X-Request-Id`를 따른다. 검색 실패·부분 실패·BGE 장애를 검색 결과 0건으로 바꾸지 않는다. 정확한 `CATALOG_ACTION_NOT_FOUND`만 상세 없음으로 처리한다.
 
-검색 대상은 프로그램 제목·대상·혜택, 행동 ID, 행동에 연결된 조건의 분류·요건·상세·적용 대상과 카탈로그 구다. URL·출처 상태 문자열 자체로 매칭하지 않는다. 순서는 program_key/action_id로 고정되며 관련성/거리/추천 순위가 아니다. `has_more`로 다음 페이지 존재를 알린다. 전체 카탈로그가 작다는 현재 전제의 PG 문자 검색이며 ES·벡터·동의어 검색은 포함하지 않는다. 자연어 문장을 그대로 넘기면 조사/표현 차이 때문에0건일 수 있으므로 도구 설명에 핵심어 입력을 명시했다. 카탈로그 구는 이용자 거주 요건이 아니다.
+`catalog-tools.ts`의 팩토리는 `createCatalogTools(springClient, embedQuery)`다. `runtime.ts`가 두 의존성을 연결한다. BGE 주입 없는 팩토리는 상세 조회만 가능하며 검색 시 `EMBEDDING_NOT_CONFIGURED`를 반환한다. 도구 인수에 회원 ID나 벡터를 모델이 직접 넣지 않는다.
 
-검색 응답: `query, match_mode=all_keywords_literal, offset, limit, has_more, items[]`. 후보에는 `program_key,action_id,title,identity_basis,program_status,catalog_district,condition_labels`가 있다. 프로그램 공통 설명 때문에 여러 행동이 후보가 될 수 있으며 행동 상세로 실제 적용 범위를 확인한다.
+## 기존 자료 범위
 
-상세 응답은 기존 `benefit_lookup`의 조건·출처·공통 조건 그룹·장소를 보존한다. 여기에 `program` 개요와 `overview_sources`, `eligibility_status=not_evaluated`를 추가한다. 프로그램 개요를 행동별 보상/조건으로 자동 확대하지 않는다. `closed`·`unknown`, 날짜·스케줄·미확인·출처 확인 수준을 바꾸지 않는다. 장소는 등록된 연결 예시이며 최신 운영·전체 장소 목록을 보증하지 않는다.
+인덱스 기본값은 `eco-team-catalog-actions-v1-20260917`이다. 기존 58개 행동의 검색 본문/벡터 쌍을 재사용한다. 문서 추가·재임베딩은 하지 않는다. 현재 DB 106개 행동 전체를 검색하는 것은 아니며 미포함 48개는 추가 작업 범위에서 제외했다.
 
-## Next 도구 호출
+모델은 `BAAI/bge-m3`, revision `5617a9f61b028005a4858fdac845db406aefb181`, 정규화 1024차원, 최대 길이 512다. 다섯 행동의 기존 검색 요약에는 최신 상세의 추가 문구가 없으므로 해당 문구의 검색 누락 가능성이 있다. 후보를 찾은 뒤에는 현재 DB 상세를 기준으로 답한다. 인덱스 조건 라벨은 후보 정보이며 회원 조건/관심사 관계의 원본이 아니다.
 
-`src/lib/server/ai/tools/catalog-tools.ts`는 서버 전용 팩토리, 함수 정의, 인수 검사와 실행을 제공한다.
+## 실행 연결
 
-```ts
-import { createCatalogTools } from "@/lib/server/ai/tools/catalog-tools";
+- Spring: `CATALOG_ELASTICSEARCH_URL`, `CATALOG_ELASTICSEARCH_INDEX`, `CATALOG_ELASTICSEARCH_USERNAME`, `CATALOG_ELASTICSEARCH_PASSWORD`.
+- Next: `SPRING_BASE_URL`, `EMBEDDING_BASE_URL`, `AI_INTERNAL_TOKEN_FILE`. 서버 전용 설정이다.
+- Compose의 BGE 서비스는 `ai` 프로필이다. `./start.sh`의 `app` 프로필만으로 BGE가 시작되지는 않는다. 배포 담당자는 검증된 모델 snapshot이 `bge-model-cache`에 있는지 먼저 확인하고 `docker compose --profile ai up -d --wait embedding`을 실행한 뒤 앱을 반영해야 한다. 캐시 준비가 모델 다운로드이고, 문서 임베딩 생성과는 별개다.
+- 예전 BGE 서비스는 응답 metadata가 부족할 수 있다. 주소만 교체하지 말고 현재 `embedding-service`와 Next의 계약 일치를 확인한다.
+- 새 환경의 ES에는 이 인덱스가 자동 생성되지 않는다. 기존 재사용 산출물의 범위·모델·ID를 확인하고 `scripts/catalog-search-index.py`의 `verify`로 점검한다. 이 통합은 인덱서를 자동 실행하지 않는다.
 
-const catalog = createCatalogTools(); // SPRING_BASE_URL 또는 http://127.0.0.1:18080
-const result = await catalog.execute("search_catalog", {
-  query: "기후행동", limit: 10, offset: 0,
-}, { requestId: "catalog-example", signal: AbortSignal.timeout(5000) });
+소스 통합과 운영 반영은 별개다. 공유 Next/Spring/BGE 서비스를 교체하지 않고 격리 환경에서 검사한다. 하이퍼링크·지도 표시·회원 조건 저장은 별도 작업이다.
 
-// 반환된 후보의 복합 ID를 선택한 뒤 호출한다.
-const detail = await catalog.execute("get_catalog_action", {
-  programKey: "scheme:G002", actionId: "G002-A01",
-});
-```
+## 검사
 
-도구 이름은 `search_catalog`, `get_catalog_action`이다. `catalog.definitions`는 모델에 제공할 function 스키마이고 `execute`는 허용된 두 이름만 실행한다. 취소 신호·요청 ID를 공통 Spring 클라이언트에 전달하며 인자/응답/복합 ID를 확인한다. 필요한 경우 `createCatalogTools(createSpringClient(...))`로 서버 설정과 검사 transport를 주입한다.
-
-- 정상 검색0건: `status=no_results`, 등록자료 없음 안내. offset>0의 빈 페이지는 추가 자료 없음으로 한정한다.
-- 없는 복합 ID: HTTP404 `CATALOG_ACTION_NOT_FOUND`를 `status=not_found`로 변환한다.
-- 나머지 잘못된 요청·DB/HTTP 장애·잘못된 응답은 `CatalogToolError(code,status,requestId)`다.0건으로 바꾸거나 자동 재시도하지 않는다.
-
-`createAiRuntime`의 임시 `SearchTool(query,vector)`와는 다른 업무 도구다. 기존 `/api/chat`의 FastAPI 경로와 모델→도구 대화 루프에는 아직 등록하지 않았다. 이후 A의 도구 선택을 연결할 때 이 팩토리를 사용한다. 실제 모델의 검색어 선택·대화 수락/정정·개인화는 이번 구현의 완료 범위가 아니다.
-
-## 확인
-
-- Java: backend의 `mvn verify`에 catalog API8검사와 기존 health4검사 포함.
-- Next: frontend에서 `node --conditions=react-server --experimental-strip-types --test tests/catalog-tools.test.ts tests/spring-client.test.ts`.
-- 타입: `npx next typegen` 후 `npx tsc --noEmit --incremental false`.
-- 실제 팀 DB를 읽기 전용으로 연결한 격리 Spring 서버에 Next 도구로 요청했다. 검색·페이지·복수 검색어·0건·없는/교차 ID·잘못된 입력, 행동 상세5건의 기존 SQL 결과와의 일치를 확인했다. 실제 모델 호출·DB 쓰기는 없다.
-
-새 API를 실행 환경에 쓰려면 Spring을 이 소스로 빌드·교체해야 한다. 소스 반영과 실행 서비스 반영을 구분한다. 이번 작업은 소스 구현·검사이며 기존 실행 서비스·QA를 교체하지 않았다.
+- backend Docker 빌드의 `mvn verify`: 기존 회원/조건/카탈로그 검사와 ES 순위·페이지·오류 계약.
+- frontend: `npm run test:catalog`, `npm run test:server`, `npm run test:conversation`, `npm run test:ai`; 변경부 ESLint와 production build.
+- 실제 연결: 격리 BGE/Spring에 Next 도구로 질의하여 기존 ES 후보와 현재 PG 상세 복합 ID 일치를 확인한다. OpenAI 호출과 추천 품질 전수 검증은 별도다.

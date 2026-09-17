@@ -18,6 +18,7 @@ const slotId = conditionSlotId(input);
 const otherInput: ConditionInput = { inputKey: "household.member_count", selector: {},
   target: { kind: "self", id: owner }, scope: { kind: "user" }, valueType: "integer" };
 const otherSlotId = conditionSlotId(otherInput);
+const vector = [1, ...Array(1023).fill(0)];
 const call = (name: string, args: unknown, n: number): ModelReply => ({ text: null, calls: [{ callId: `call-${n}`, name, arguments: JSON.stringify(args) }] });
 function ports() {
   const requests: string[] = [];
@@ -25,7 +26,10 @@ function ports() {
     const address = new URL(String(url)); requests.push(address.pathname);
     const id = new Headers(init?.headers).get("X-Request-Id");
     let data: unknown;
-    if (address.pathname.endsWith("condition-context")) {
+    if (address.pathname === "/api/auth/csrf") {
+      return Response.json({ data: { token: "csrf-token", headerName: "X-CSRF-TOKEN" }, error: null, requestId: id },
+        { headers: { "X-Request-Id": id!, "Set-Cookie": "ECOTEAMSESSION=test-session; Path=/; HttpOnly" } });
+    } else if (address.pathname.endsWith("condition-context")) {
       assert.equal(new Headers(init?.headers).get("Cookie"), "ECOTEAMSESSION=synthetic");
       assert.equal(address.searchParams.has("userId"), false);
       data = { userId: owner, ...selected, eligibilityStatus: "not_evaluated", unselectedInputs: [], unmappedConditionIds: ["unmapped"], households: [],
@@ -37,12 +41,13 @@ function ports() {
       data = { program_key: "P", action_id: "A", title: "에코마일리지", identity_basis: "explicit", program_status: null,
         program: {}, overview_sources: [], conditions: [], places: [], eligibility_status: "not_evaluated" };
     } else {
-      data = { query: address.searchParams.get("query"), match_mode: "all_keywords_literal", limit: 10, offset: 0, has_more: false,
+      const body = JSON.parse(String(init?.body));
+      data = { query: body.query, match_mode: "hybrid_rrf", limit: 10, offset: 0, has_more: false,
         items: [{ program_key: "P", action_id: "A", title: "에코마일리지", identity_basis: "explicit", program_status: null, catalog_district: null, condition_labels: [] }] };
     }
     return Response.json({ data, error: null, requestId: id }, { headers: { "X-Request-Id": id! } });
   } };
-  return { catalog: createCatalogTools(createSpringClient(config)), load: createUserConditionLoader(config), requests };
+  return { catalog: createCatalogTools(createSpringClient(config), async () => vector), load: createUserConditionLoader(config), requests };
 }
 function scripted(replies: ModelReply[]) {
   const restored: HistoryMessage[][] = [], closed: string[] = [], instructions: string[] = [];
@@ -89,8 +94,8 @@ test("catalog→details→DB seeds→quoted correction commit only after answer 
   assert.equal(readConditionFact(session.memory, slotId).value, true);
   assert.equal(readConditionFact(session.memory, otherSlotId).value, 3);
   assert.deepEqual(api.requests, [
-    "/api/catalog/actions", "/api/catalog/actions/detail", "/api/profile/condition-context",
-    "/api/catalog/actions", "/api/catalog/actions/detail", "/api/profile/condition-context",
+    "/api/auth/csrf", "/api/catalog/actions/search", "/api/catalog/actions/detail", "/api/profile/condition-context",
+    "/api/auth/csrf", "/api/catalog/actions/search", "/api/catalog/actions/detail", "/api/profile/condition-context",
   ]);
 });
 

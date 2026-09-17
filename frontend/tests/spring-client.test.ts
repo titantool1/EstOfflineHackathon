@@ -201,3 +201,43 @@ test("real HTTP redirect is not followed", async t => {
   assert.equal(result.body.error?.code, "BACKEND_UNAVAILABLE");
   assert.equal(calls, 1);
 });
+
+
+test("CSRF bootstrap preserves an existing session and accepts a rotated session", async () => {
+  for (const [existing, issued, expected] of [
+    [undefined, "ECOTEAMSESSION=new", "ECOTEAMSESSION=new"],
+    ["ECOTEAMSESSION=member; preference=x", undefined, "ECOTEAMSESSION=member; preference=x"],
+    ["ECOTEAMSESSION=member; preference=x", "ECOTEAMSESSION=rotated", "preference=x; ECOTEAMSESSION=rotated"],
+  ]) {
+    let calls = 0;
+    const result = await client(async (input, init) => {
+      calls++;
+      const headers = new Headers(init?.headers);
+      if (new URL(String(input)).pathname === "/api/auth/csrf") {
+        assert.equal(headers.get("Cookie"), existing ?? null);
+        const response = reply(envelope({ token: "token", headerName: "X-CSRF-TOKEN" }));
+        if (issued) response.headers.append("Set-Cookie", issued + "; Path=/; HttpOnly");
+        return response;
+      }
+      assert.equal(headers.get("Cookie"), expected);
+      assert.equal(headers.get("X-CSRF-TOKEN"), "token");
+      return reply(envelope());
+    }).request("/api/example", { ...options, method: "POST", csrf: true,
+      headers: existing ? { Cookie: existing } : undefined });
+    assert.equal(result.status, 200);
+    assert.equal(calls, 2);
+  }
+});
+
+test("missing session or invalid CSRF response never sends the protected request", async () => {
+  for (const data of [{ token: "token", headerName: "X-CSRF-TOKEN" }, { token: "token", headerName: "wrong" }, null]) {
+    let calls = 0;
+    const result = await client(async input => {
+      calls++;
+      assert.equal(new URL(String(input)).pathname, "/api/auth/csrf");
+      return reply(envelope(data));
+    }).request("/api/example", { ...options, method: "POST", csrf: true });
+    assert.equal(result.body.error?.code, "BACKEND_INVALID_RESPONSE");
+    assert.equal(calls, 1);
+  }
+});
