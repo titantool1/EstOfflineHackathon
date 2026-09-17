@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import kr.co.ecojupjup.recommendation.application.RecommendationBatch;
+import kr.co.ecojupjup.recommendation.application.RecommendationMode;
 import kr.co.ecojupjup.recommendation.application.RecommendationStore;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -22,11 +23,12 @@ public class JdbcRecommendationStore implements RecommendationStore {
     }
 
     @Override public Optional<StoredBatch> findByRequest(UUID owner, UUID clientRequestId) {
-        var rows=jdbc.query("SELECT batch_id,requested_limit FROM app.recommendation_batch WHERE user_id=? AND client_request_id=?",
-                (row,index) -> new Object[]{row.getObject(1,UUID.class),row.getInt(2)},owner,clientRequestId);
+        var rows=jdbc.query("SELECT batch_id,requested_limit,request_mode FROM app.recommendation_batch WHERE user_id=? AND client_request_id=?",
+                (row,index) -> new Object[]{row.getObject(1,UUID.class),row.getInt(2),row.getString(3)},owner,clientRequestId);
         if (rows.isEmpty()) return Optional.empty();
         var row=rows.getFirst();
-        return Optional.of(new StoredBatch((Integer)row[1],find(owner,(UUID)row[0]).orElseThrow()));
+        return Optional.of(new StoredBatch((Integer)row[1],RecommendationMode.parse((String)row[2]),
+                find(owner,(UUID)row[0]).orElseThrow()));
     }
 
     @Override public Optional<RecommendationBatch> find(UUID owner, UUID batchId) {
@@ -48,12 +50,14 @@ public class JdbcRecommendationStore implements RecommendationStore {
                 strings(row.getArray(10)),"not_evaluated","unknown",row.getInt(11)),owner,batchId);
     }
 
-    @Override public void save(UUID owner,UUID clientRequestId,int requestedLimit,RecommendationBatch batch) {
+    @Override public void save(UUID owner,UUID clientRequestId,int requestedLimit,RecommendationMode requestMode,
+            RecommendationBatch batch) {
         jdbc.update("""
             INSERT INTO app.recommendation_batch
-              (batch_id,user_id,client_request_id,requested_limit,algorithm_version,selection_basis,created_at)
-            VALUES (?,?,?,?,?,?,?)
-            """,batch.batchId(),owner,clientRequestId,requestedLimit,batch.algorithmVersion(),batch.selectionBasis(),batch.createdAt());
+              (batch_id,user_id,client_request_id,requested_limit,request_mode,algorithm_version,selection_basis,created_at)
+            VALUES (?,?,?,?,?,?,?,?)
+            """,batch.batchId(),owner,clientRequestId,requestedLimit,requestMode.value(),batch.algorithmVersion(),
+                batch.selectionBasis(),batch.createdAt());
         for (var item:batch.items()) jdbc.update(connection -> {
             var statement=connection.prepareStatement("""
                 INSERT INTO app.recommendation_item

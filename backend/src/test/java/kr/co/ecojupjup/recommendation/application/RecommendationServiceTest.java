@@ -24,8 +24,11 @@ class RecommendationServiceTest {
         var created=service.create(OWNER,KEY,2);
         assertEquals("selected_interests",created.selectionBasis());assertEquals(123456000,created.createdAt().getNano());
         assertEquals("not_evaluated",created.items().getFirst().eligibilityStatus());
-        when(store.findByRequest(OWNER,KEY)).thenReturn(Optional.of(new RecommendationStore.StoredBatch(2,created)));
-        assertSame(created,service.create(OWNER,KEY,2));
+        when(store.findByRequest(OWNER,KEY)).thenReturn(Optional.of(
+                new RecommendationStore.StoredBatch(2,RecommendationMode.INTERESTS,created)));
+        when(interests.get(OWNER)).thenReturn(new InterestProfile(List.of(),List.of("cleanup")));
+        assertSame(created,service.create(OWNER,KEY,2,"interests"));
+        verify(interests,times(1)).get(OWNER);
         verify(candidates,times(1)).find(anyList(),anyInt());
     }
     @Test void unsureExploresCatalogAndChangedLimitConflicts() {
@@ -33,7 +36,53 @@ class RecommendationServiceTest {
         when(interests.get(OWNER)).thenReturn(new InterestProfile(List.of(),List.of("unsure")));
         var service=new RecommendationService(store,candidates,interests,Clock.systemUTC(),5);
         var created=service.create(OWNER,KEY,null);assertEquals("catalog_exploration",created.selectionBasis());verify(candidates).find(List.of("unsure"),5);
-        when(store.findByRequest(OWNER,KEY)).thenReturn(Optional.of(new RecommendationStore.StoredBatch(5,created)));
+        when(store.findByRequest(OWNER,KEY)).thenReturn(Optional.of(
+                new RecommendationStore.StoredBatch(5,RecommendationMode.INTERESTS,created)));
         var error=assertThrows(RecommendationException.class,()->service.create(OWNER,KEY,4));assertEquals("IDEMPOTENCY_CONFLICT",error.code);
+    }
+
+    @Test void generalModeExploresWithoutReadingOrChangingInterests() {
+        var store=mock(RecommendationStore.class);
+        var candidates=mock(MissionCandidateReader.class);
+        var interests=mock(InterestService.class);
+        when(candidates.find(List.of(),3)).thenReturn(List.of(new MissionCandidateReader.Candidate(
+                "P","A","basis","title","summary","raw",0,List.of(),0)));
+        var service=new RecommendationService(store,candidates,interests,Clock.systemUTC(),5);
+
+        var created=service.create(OWNER,KEY,3,"general");
+
+        assertEquals("catalog_exploration",created.selectionBasis());
+        assertEquals(List.of(),created.items().getFirst().matchedInterestIds());
+        verifyNoInteractions(interests);
+        verify(candidates).find(List.of(),3);
+        verify(store).save(OWNER,KEY,3,RecommendationMode.GENERAL,created);
+    }
+
+    @Test void changingModeConflictsBeforeReadingEvenAnEmptyInterestProfile() {
+        var store=mock(RecommendationStore.class);
+        var candidates=mock(MissionCandidateReader.class);
+        var interests=mock(InterestService.class);
+        var saved=new RecommendationBatch(UUID.randomUUID(),RecommendationService.ALGORITHM,
+                "catalog_exploration",java.time.OffsetDateTime.now(),List.of());
+        when(store.findByRequest(OWNER,KEY)).thenReturn(Optional.of(
+                new RecommendationStore.StoredBatch(5,RecommendationMode.INTERESTS,saved)));
+        var service=new RecommendationService(store,candidates,interests,Clock.systemUTC(),5);
+
+        var error=assertThrows(RecommendationException.class,()->service.create(OWNER,KEY,null,"general"));
+
+        assertEquals("IDEMPOTENCY_CONFLICT",error.code);
+        verifyNoInteractions(interests,candidates);
+    }
+
+    @Test void invalidModeIsRejectedWithoutLockingOrReading() {
+        var store=mock(RecommendationStore.class);
+        var candidates=mock(MissionCandidateReader.class);
+        var interests=mock(InterestService.class);
+        var service=new RecommendationService(store,candidates,interests,Clock.systemUTC(),5);
+
+        var error=assertThrows(RecommendationException.class,()->service.create(OWNER,KEY,5,"nearby"));
+
+        assertEquals(400,error.status);
+        verifyNoInteractions(store,candidates,interests);
     }
 }

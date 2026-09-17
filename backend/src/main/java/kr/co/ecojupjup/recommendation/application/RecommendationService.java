@@ -35,17 +35,30 @@ public class RecommendationService {
 
     @Transactional
     public RecommendationBatch create(UUID owner, UUID clientRequestId, Integer requestedLimit) {
+        return create(owner, clientRequestId, requestedLimit, RecommendationMode.INTERESTS);
+    }
+
+    @Transactional
+    public RecommendationBatch create(UUID owner, UUID clientRequestId, Integer requestedLimit, String requestedMode) {
+        return create(owner, clientRequestId, requestedLimit, RecommendationMode.parse(requestedMode));
+    }
+
+    private RecommendationBatch create(UUID owner, UUID clientRequestId, Integer requestedLimit,
+            RecommendationMode requestMode) {
         Objects.requireNonNull(owner); Objects.requireNonNull(clientRequestId);
         int limit=requestedLimit == null ? defaultSize : requestedLimit;
         if (limit < 1 || limit > 20) throw new RecommendationException(400,"INVALID_RECOMMENDATION_REQUEST");
         store.lockOwner(owner);
         var prior=store.findByRequest(owner,clientRequestId);
         if (prior.isPresent()) {
-            if (prior.get().requestedLimit()!=limit) throw new RecommendationException(409,"IDEMPOTENCY_CONFLICT");
+            if (prior.get().requestedLimit()!=limit || prior.get().requestMode()!=requestMode)
+                throw new RecommendationException(409,"IDEMPOTENCY_CONFLICT");
             return prior.get().batch();
         }
-        List<String> selected=interests.get(owner).interestIds();
-        boolean exploration=selected.isEmpty() || selected.contains("unsure");
+        List<String> selected=requestMode == RecommendationMode.GENERAL
+                ? List.of() : interests.get(owner).interestIds();
+        boolean exploration=requestMode == RecommendationMode.GENERAL
+                || selected.isEmpty() || selected.contains("unsure");
         var source=candidates.find(selected,limit);
         UUID batchId=UUID.randomUUID();
         var items=java.util.stream.IntStream.range(0,source.size()).mapToObj(position -> {
@@ -56,7 +69,7 @@ public class RecommendationService {
         }).toList();
         var result=new RecommendationBatch(batchId,ALGORITHM,exploration?"catalog_exploration":"selected_interests",
                 OffsetDateTime.now(clock).withOffsetSameInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS),items);
-        store.save(owner,clientRequestId,limit,result);
+        store.save(owner,clientRequestId,limit,requestMode,result);
         return result;
     }
 

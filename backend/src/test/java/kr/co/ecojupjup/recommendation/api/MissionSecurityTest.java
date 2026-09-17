@@ -42,14 +42,14 @@ class MissionSecurityTest {
         @Bean ObjectMapper mapper(){return new ObjectMapper();}
     }
     @BeforeEach void setup(){context=new AnnotationConfigWebApplicationContext();context.setServletContext(new MockServletContext());context.register(Config.class);context.refresh();mvc=MockMvcBuilders.webAppContextSetup(context).addFilters(new RequestIdFilter()).apply(springSecurity()).build();
-        when(context.getBean(RecommendationService.class).create(eq(OWNER),any(),any())).thenReturn(new RecommendationBatch(BATCH,"interest-mapped-catalog-order-v1","catalog_exploration",OffsetDateTime.now(),List.of()));
+        when(context.getBean(RecommendationService.class).create(eq(OWNER),any(),any(),any())).thenReturn(new RecommendationBatch(BATCH,"interest-mapped-catalog-order-v1","catalog_exploration",OffsetDateTime.now(),List.of()));
         when(context.getBean(MissionEventService.class).record(eq(OWNER),any(),any(),any(),any(),any())).thenReturn(new MissionEvent(UUID.randomUUID(),KEY,BATCH,ITEM,"accepted",OffsetDateTime.now(),OffsetDateTime.now()));}
     @AfterEach void close(){context.close();}
     @Test void missionWritesRequireAuthenticationAndCsrf() throws Exception {
-        String recommendation="{\"clientRequestId\":\""+KEY+"\"}";var principal=new MemberPrincipal(OWNER,"a@example.test","hash","초록이");var auth=UsernamePasswordAuthenticationToken.authenticated(principal,null,List.of());
+        String recommendation="{\"clientRequestId\":\""+KEY+"\",\"mode\":\"general\"}";var principal=new MemberPrincipal(OWNER,"a@example.test","hash","초록이");var auth=UsernamePasswordAuthenticationToken.authenticated(principal,null,List.of());
         mvc.perform(get("/api/missions/recommendations/"+BATCH)).andExpect(status().isUnauthorized());
         mvc.perform(post("/api/missions/recommendations").with(authentication(auth)).contentType("application/json").content(recommendation)).andExpect(status().isForbidden()).andExpect(jsonPath("$.error.code").value("CSRF_INVALID"));
         mvc.perform(post("/api/missions/recommendations").with(authentication(auth)).with(csrf()).contentType("application/json").content(recommendation)).andExpect(status().isOk()).andExpect(header().string("Cache-Control","no-store"));
-        verify(context.getBean(RecommendationService.class)).create(OWNER,KEY,null);
+        verify(context.getBean(RecommendationService.class)).create(OWNER,KEY,null,"general");
     }
 }
