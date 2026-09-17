@@ -58,6 +58,7 @@ services:
       DATABASE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-eco}?connectTimeout=2&socketTimeout=3
       DATABASE_USER: ${POSTGRES_USER:-eco}
       DATABASE_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/setup-local.py first}
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
     ports:
       - "127.0.0.1:${BACKEND_PORT:-18080}:8080"
     healthcheck:

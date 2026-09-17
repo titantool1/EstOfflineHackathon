@@ -49,7 +49,7 @@ readConditionFact(candidate, conditionSlotId(input)); // known/true, source.kind
 
 ## 기존 DB와의 연결 경계
 
-팀 `database/user-storage.sql`의 `user_benefit_context`와 `detail-storage.sql`의 `user_detail_context`를 확인해 정규화 입력 계약을 만들었다. 현재 모듈이 SQL 반환 JSON을 직접 파싱하는 것은 아니다. 실제 조회 어댑터가 연결될 때 다음 변환을 수행한다.
+팀 `database/user-storage.sql`의 `user_benefit_context`와 `detail-storage.sql`의 `user_detail_context`를 확인해 정규화 입력 계약을 만들었다. 현재 모듈이 SQL 반환 JSON을 직접 파싱하는 것은 아니다. [사용자 조건 조회 어댑터](user-condition-context.md)가 다음 변환을 수행한다. 기존 회원 세션 전달은 연결했고 실제 채팅 연결은 후속이다.
 
 | DB 조회값 | 메모리 입력 |
 |---|---|
@@ -68,4 +68,4 @@ API 소유권 검사는 Spring이 담당한다. 이 모듈의 userId 일치 검�
 
 `frontend`에서 `npm run test:memory`. 합성 입력으로 초기화·정정·미확인/거절·대상/서비스 분리·새 건·실패 시 불변성과 DB 값 형태를 검사한다. 기존 시험의 공통 정보 유지·정정·건 경계를 사용했으며, 특정 단어 정규식과 옛 혜택 필드는 이식하지 않았다.
 
-다음은 Spring 조회 결과를 이 계약으로 변환하는 함수와 LangGraph에서 candidate를 채택하는 지점을 연결하는 일이다. 실제 DB/API·자연어 해석 품질·영구 저장·운영 상담 저장소는 아직 구현/검증하지 않았다.
+Spring 조회 결과 변환과 Next 초기화 함수는 구현했다. 다음은 LangGraph에서 candidate를 채택하는 지점의 연결이다. 실제 DB/API 통합·자연어 해석 품질·영구 저장·운영 상담 저장소는 이번에 검증하지 않았다.

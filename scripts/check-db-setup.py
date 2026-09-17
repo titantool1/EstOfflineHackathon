@@ -24,9 +24,9 @@ def main():
     counts = json.loads(sql(f"SELECT jsonb_build_object({pairs});"))
     if counts != expected: raise SystemExit(f"Imported counts differ: {counts}")
     migrations = json.loads(sql("SELECT jsonb_agg(jsonb_build_object('version',version,'success',success,'checksum',checksum) ORDER BY installed_rank) FROM app.flyway_schema_history WHERE version IS NOT NULL;"))
-    if [(m['version'], m['success']) for m in migrations] != [('1', True), ('2', True)]:
+    if [(m['version'], m['success']) for m in migrations] != [('1', True), ('2', True), ('3', True)]:
         raise SystemExit(f"Unexpected migration history: {migrations}")
-    user_tables = ['user_profiles', 'user_regions', 'user_memberships', 'user_households',
+    user_tables = ['user_accounts', 'user_profiles', 'user_regions', 'user_memberships', 'user_households',
         'household_members', 'user_welfare_statuses', 'user_homes', 'user_vehicles']
     for table in user_tables:
         if sql(f"SELECT to_regclass('app.{table}') IS NOT NULL;") != 't':

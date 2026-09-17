@@ -10,7 +10,9 @@
     "test:ai": "node --conditions=react-server --experimental-strip-types --test tests/ai-runtime.test.ts",
     "test:server": "node --conditions=react-server --experimental-strip-types --test tests/spring-client.test.ts",
     "check:embedding": "node --conditions=react-server --experimental-strip-types scripts/check-embedding.ts",
-    "test:memory": "node --experimental-strip-types --test --test-isolation=none tests/condition-memory.test.ts"
+    "test:memory": "node --experimental-strip-types --test --test-isolation=none tests/condition-memory.test.ts",
+    "test:context": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/user-condition-context.test.ts",
+    "test:account": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/account.test.ts"
   },
   "dependencies": {
     "next": "16.3.5",
