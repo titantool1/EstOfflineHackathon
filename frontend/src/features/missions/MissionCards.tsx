@@ -188,7 +188,7 @@ export function MissionCards({ initialBatchId, initialItemId }: { initialBatchId
     window.history.replaceState(null, "", "/missions");
   }
 
-  return <main className="mx-auto max-w-3xl px-5 py-8 sm:py-12">
+  return <main className="[overflow-wrap:anywhere] mx-auto max-w-3xl px-5 py-8 sm:py-12">
     <section className="mb-6 rounded-3xl bg-[#e9f6e4] p-6 sm:p-8">
       <p className="text-sm font-bold text-[#40883f]">내 관심사 기반 미션</p>
       <h1 className="mt-2 text-3xl font-bold text-[#284527]">관심 있는 실천을 하나씩 살펴보세요</h1>
@@ -206,7 +206,7 @@ export function MissionCards({ initialBatchId, initialItemId }: { initialBatchId
     {state.kind === "empty" && <section className="rounded-2xl bg-white p-6 text-center">
       <h2 className="text-xl font-bold">추천할 미션을 찾지 못했어요</h2>
       <p className="mt-2 text-sm text-[#61745f]">관심사를 바꾸거나 새 묶음을 요청해 보세요.</p>
-      <div className="mt-5 flex justify-center gap-3"><Link href="/onboarding" className="rounded-xl border px-4 py-2 text-sm font-bold">관심사 설정</Link>
+      <div className="mt-5 flex flex-wrap justify-center gap-3"><Link href="/onboarding" className="rounded-xl border px-4 py-2 text-sm font-bold">관심사 설정</Link>
         <button type="button" onClick={newBatch} className="rounded-xl bg-[#2f843d] px-4 py-2 text-sm font-bold text-white">새 미션 묶음 받기</button></div>
     </section>}
     {state.kind === "ready" && active && <>

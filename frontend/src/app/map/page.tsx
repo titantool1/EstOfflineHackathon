@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { SiteHeader } from "@/features/navigation/SiteHeader";
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import KakaoMap from "./KakaoMap";
 import { currentLocation, requestPlaces, requestRoute, targetFromSearch, type Place, type RoutePoint } from "@/features/map/api";
@@ -99,44 +99,38 @@ export default function MapPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f8f1]">
-      <header className="border-b border-[#e5eddc] bg-white/90">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <Link href="/" className="flex items-center gap-2 font-bold text-[#267a38]"><span className="text-xl">🌱</span> 에코줍줍</Link>
-          <nav className="hidden gap-7 text-sm font-medium text-[#527051] md:flex"><Link href="/">홈</Link><Link href="/missions">에코 미션</Link><Link href="/map" className="font-bold text-[#287b39]">실천 지도</Link><Link href="/chat">줍줍이 챗봇</Link></nav>
-          <Link href="/chat" className="rounded-full bg-[#e9f5e2] px-4 py-2 text-xs font-semibold text-[#2d7938]">챗봇에 물어보기</Link>
-        </div>
-      </header>
+      <SiteHeader />
 
-      <main className="mx-auto max-w-6xl px-5 py-8">
+      <main className="[overflow-wrap:anywhere] mx-auto max-w-6xl px-5 py-8">
         <div className="mb-6">
           <p className="text-sm font-bold text-[#4b914e]">에코 실천 지도</p>
           <h1 className="mt-1 text-2xl font-bold sm:text-3xl">Elasticsearch에서 찾은 실천 장소</h1>
           <p className="mt-2 text-sm text-[#6b8069]">서울 중심 30km 안의 좌표 등록 장소를 가까운 순으로 보여드려요.</p>
         </div>
 
-        <div className="grid overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-[#e3ebdc] lg:grid-cols-[360px_1fr]">
-          <aside className="order-2 border-t border-[#e8eee3] lg:order-1 lg:border-t-0 lg:border-r">
+        <div className="grid overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-[#e3ebdc] lg:grid-cols-[360px_minmax(0,1fr)]">
+          <aside className="order-2 min-w-0 border-t border-[#e8eee3] lg:order-1 lg:border-t-0 lg:border-r">
             <div className="border-b border-[#e8eee3] p-5">
               <form onSubmit={handleSubmit} className="flex gap-2 rounded-xl bg-[#f3f7f0] p-2">
                 <label htmlFor="place-query" className="sr-only">장소 검색</label>
-                <input id="place-query" value={input} maxLength={200} onChange={(event) => setInput(event.target.value)} placeholder="예: 성동구 제로웨이스트" className="min-w-0 flex-1 bg-transparent px-2 text-sm outline-none placeholder:text-[#91a08e]" />
-                <button type="submit" disabled={isLoading} className="rounded-lg bg-[#2f843d] px-3 py-2 text-xs font-bold text-white disabled:bg-[#abc5a7]">검색</button>
+                <input id="place-query" value={input} maxLength={200} onChange={(event) => setInput(event.target.value)} placeholder="예: 성동구 제로웨이스트" className="min-w-0 flex-1 bg-transparent px-2 text-base outline-none placeholder:text-[#91a08e]" />
+                <button type="submit" disabled={isLoading} className="rounded-lg bg-[#2f843d] min-h-11 px-3 py-2 text-xs font-bold text-white disabled:bg-[#abc5a7]">검색</button>
               </form>
-              <div className="mt-4 flex gap-2 overflow-x-auto">
+              <div className="mt-4 flex flex-wrap gap-2">
                 {categories.map((category) => (
-                  <button key={category} type="button" onClick={() => selectCategory(category)} className={`whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold ${activeCategory === category ? "bg-[#2f843d] text-white" : "bg-[#edf5e9] text-[#527650]"}`}>{category}</button>
+                  <button key={category} type="button" onClick={() => selectCategory(category)} className={`min-h-11 max-w-full rounded-full px-3 py-2 text-xs font-bold ${activeCategory === category ? "bg-[#2f843d] text-white" : "bg-[#edf5e9] text-[#527650]"}`}>{category}</button>
                 ))}
               </div>
               <p className="mt-3 text-[11px] text-[#839080]">{isLoading ? "장소를 불러오는 중…" : `${visiblePlaces.length}개 표시${tookMs !== null ? ` · ${tookMs.toLocaleString()}ms` : ""}`}</p>
             </div>
 
-            <div className="max-h-[520px] overflow-y-auto p-3">
+            <div className="p-3 lg:max-h-[640px] lg:overflow-y-auto">
               {error && <p role="alert" className="rounded-2xl bg-[#fff5f0] p-4 text-sm text-[#8c4934]">{error}</p>}
               {!isLoading && !error && visiblePlaces.length === 0 && <p className="p-5 text-center text-sm text-[#778575]">조건에 맞는 좌표 장소를 찾지 못했어요.</p>}
               {visiblePlaces.map((place) => (
                 <button key={place.id} type="button" onClick={() => selectPlace(place.id)} className={`mb-2 w-full rounded-2xl p-4 text-left transition ${activePlace?.id === place.id ? "bg-[#edf8e8] ring-1 ring-[#75b966]" : "hover:bg-[#f7faf5]"}`}>
                   <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0"><p className="text-xs font-bold text-[#55944c]">{place.category}</p><h2 className="mt-1 truncate font-bold text-[#254626]">{place.name}</h2><p className="mt-2 text-xs leading-5 text-[#758473]">{place.address}</p></div>
+                    <div className="min-w-0"><p className="text-xs font-bold text-[#55944c]">{place.category}</p><h2 className="mt-1 font-bold text-[#254626]">{place.name}</h2><p className="mt-2 text-xs leading-5 text-[#758473]">{place.address}</p></div>
                     <span className="text-lg">📍</span>
                   </div>
                   <p className="mt-3 line-clamp-2 text-xs font-medium leading-5 text-[#3e7e40]">{place.distanceKm !== null ? `${place.distanceKm}km · ` : ""}{place.benefit}</p>
@@ -145,10 +139,10 @@ export default function MapPage() {
             </div>
           </aside>
 
-          <section className="order-1 relative min-h-[520px] overflow-hidden bg-[#e9f2e6] lg:order-2">
-            <KakaoMap places={visiblePlaces} selectedId={activePlace?.id ?? null} onSelect={selectPlace} routePath={routePath} userLocation={userLocation} />
+          <section className="order-1 relative min-w-0 overflow-hidden bg-[#e9f2e6] lg:order-2">
+            <div className="h-[min(50dvh,400px)] min-h-60 lg:h-full lg:min-h-[640px]"><KakaoMap places={visiblePlaces} selectedId={activePlace?.id ?? null} onSelect={selectPlace} routePath={routePath} userLocation={userLocation} /></div>
             {activePlace && (
-              <article className="absolute bottom-5 left-5 right-5 rounded-2xl bg-white p-5 shadow-lg sm:left-auto sm:w-80">
+              <article className="relative m-3 rounded-2xl bg-white p-4 shadow-lg lg:absolute lg:bottom-5 lg:right-5 lg:m-0 lg:max-h-[55%] lg:w-80 lg:overflow-y-auto lg:p-5">
                 <p className="text-xs font-bold text-[#54944f]">{activePlace.category}</p>
                 <h2 className="mt-1 text-lg font-bold">{activePlace.name}</h2>
                 <p className="mt-2 text-sm text-[#6d806b]">{activePlace.address}</p>
@@ -156,9 +150,9 @@ export default function MapPage() {
                 <button type="button" onClick={() => void startRoute(activePlace)} disabled={isRouting} className="mt-4 w-full rounded-xl bg-[#2f843d] py-3 text-sm font-bold text-white disabled:bg-[#a7bea4]">{isRouting ? "경로 계산 중…" : userLocation ? "현재 위치에서 경로 다시 보기" : "현재 위치에서 경로 보기"}</button>
                 {routeSummary && <p className="mt-2 text-center text-xs font-bold text-[#347d40]">🚗 {routeSummary}</p>}
                 {routeError && <p role="alert" className="mt-2 rounded-lg bg-[#fff5f0] px-3 py-2 text-[11px] leading-4 text-[#8c4934]">{routeError}</p>}
-                <div className="mt-3 flex items-center justify-center gap-3 text-[11px] font-semibold">
-                  <a href={`https://map.kakao.com/link/to/${encodeURIComponent(activePlace.name)},${activePlace.latitude},${activePlace.longitude}`} target="_blank" rel="noreferrer" className="text-[#347d40] hover:underline">카카오맵에서 열기 ↗</a>
-                  {activePlace.sourceUrl && <a href={activePlace.sourceUrl} target="_blank" rel="noreferrer" className="text-[#6d806b] hover:underline">공식 출처 ↗</a>}
+                <div className="mt-3 flex flex-wrap items-center justify-center gap-3 text-[11px] font-semibold">
+                  <a href={`https://map.kakao.com/link/to/${encodeURIComponent(activePlace.name)},${activePlace.latitude},${activePlace.longitude}`} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center text-[#347d40] underline">카카오맵에서 열기 ↗</a>
+                  {activePlace.sourceUrl && <a href={activePlace.sourceUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center text-[#6d806b] underline">공식 출처 ↗</a>}
                 </div>
                 {!activePlace.sourceUrl && !routeError && <p className="mt-3 text-center text-[10px] text-[#8a9688]">방문 전 운영 여부와 혜택을 확인해 주세요.</p>}
               </article>

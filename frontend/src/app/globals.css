@@ -2,3 +2,9 @@
 
 :root { --background: #f5f8f1; --foreground: #1e2c1d; }
 body { background: var(--background); color: var(--foreground); font-family: Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+
+.source-domain { display: none; }
+@media (hover: none), (pointer: coarse) {
+  .source-link { display: inline-block; min-height: 44px; max-width: 100%; padding-block: 10px; }
+  .source-domain { display: inline; font-size: 0.75rem; font-weight: normal; }
+}
