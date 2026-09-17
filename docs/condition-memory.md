@@ -1,6 +1,6 @@
 # 대화 중 조건 메모리
 
-`frontend/src/lib/server/ai/application/condition-memory.ts`는 DB 초기값과 대화 변경값을 분리하는 순수 상태 모듈이다. SDK·LangGraph·HTTP·DB에 의존하지 않으며 JSON으로 직렬화할 수 있다. 아직 실제 채팅 경로에는 연결하지 않았다.
+`frontend/src/lib/server/ai/application/condition-memory.ts`는 DB 초기값과 대화 변경값을 분리하는 순수 상태 모듈이다. SDK·LangGraph·HTTP·DB에 의존하지 않으며 JSON으로 직렬화할 수 있다. [대화 실행부](conversation-runtime.md)의 도구와 성공 턴 채택에 연결했으며 실제 채팅 API/화면 전환은 아직이다.
 
 ```text
 Spring 사용자 문맥 조회 → 입력 정의·초기값으로 변환 → createConditionMemory
@@ -68,4 +68,4 @@ API 소유권 검사는 Spring이 담당한다. 이 모듈의 userId 일치 검�
 
 `frontend`에서 `npm run test:memory`. 합성 입력으로 초기화·정정·미확인/거절·대상/서비스 분리·새 건·실패 시 불변성과 DB 값 형태를 검사한다. 기존 시험의 공통 정보 유지·정정·건 경계를 사용했으며, 특정 단어 정규식과 옛 혜택 필드는 이식하지 않았다.
 
-Spring 조회 결과 변환과 Next 초기화 함수는 구현했다. 다음은 LangGraph에서 candidate를 채택하는 지점의 연결이다. 실제 DB/API 통합·자연어 해석 품질·영구 저장·운영 상담 저장소는 이번에 검증하지 않았다.
+Spring 조회 결과 변환과 Next 초기화 함수는 구현했다. LangGraph 대화 실행부의 working memory와 성공 commit 경계까지 연결했고, 다음은 실제 채팅 API/화면 연결이다. 실제 DB/API 통합·자연어 해석 품질·영구 저장·운영 상담 저장소는 이번에 검증하지 않았다.

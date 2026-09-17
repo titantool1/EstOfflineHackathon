@@ -12,7 +12,8 @@
     "check:embedding": "node --conditions=react-server --experimental-strip-types scripts/check-embedding.ts",
     "test:memory": "node --experimental-strip-types --test --test-isolation=none tests/condition-memory.test.ts",
     "test:context": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/user-condition-context.test.ts",
-    "test:account": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/account.test.ts"
+    "test:account": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/account.test.ts",
+    "test:conversation": "node --conditions=react-server --experimental-strip-types --test --test-isolation=none tests/conversation-flow.test.ts tests/conversation-session.test.ts tests/conversation-provider.test.ts"
   },
   "dependencies": {
     "next": "16.3.5",

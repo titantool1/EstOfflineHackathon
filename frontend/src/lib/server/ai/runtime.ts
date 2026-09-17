@@ -1,3 +1,8 @@
+import { createConversationProvider } from "./adapters/openai-conversation.ts";
+import { createConversationRunner } from "./application/conversation-session.ts";
+import { createCatalogTools } from "./tools/catalog-tools.ts";
+import { createUserConditionLoader } from "./adapters/user-condition-context.ts";
+import { createSpringClient } from "../spring-client.ts";
 import "server-only";
 import { readFile } from "node:fs/promises";
 import { createSearchAnswerGraph } from "./application/search-answer-flow.ts";
@@ -24,5 +29,15 @@ export async function createAiRuntime(search: SearchTool) {
     embed: embedding.embed,
     search,
     answer: createAnswerModel({ apiKey: process.env.OPENAI_API_KEY ?? "", model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini-2026-03-17" }),
+  });
+}
+
+// New conversational path. The existing fixed search graph remains available during API migration.
+export async function createConversationRuntime() {
+  const baseUrl = process.env.SPRING_BASE_URL ?? "http://127.0.0.1:18080";
+  return createConversationRunner({
+    provider: createConversationProvider({ apiKey: process.env.OPENAI_API_KEY ?? "", model: process.env.OPENAI_MODEL ?? "gpt-5.4-mini-2026-03-17" }),
+    catalog: createCatalogTools(createSpringClient({ baseUrl })),
+    load: createUserConditionLoader({ baseUrl }),
   });
 }
