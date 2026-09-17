@@ -2,19 +2,20 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { MissionPhotoToggle } from "./photo/MissionPhotoToggle";
 import { SourceText } from "@/features/sources/SourceText";
 import { createMissionClient, MissionClientError } from "./client.ts";
 import type { MissionEventInput, MissionRecommendationItem } from "./contract.ts";
 import {
   initialMissionViewState,
-  missionCardUrl,
   missionEventInput,
   missionViewReducer,
 } from "./state.ts";
+import { matchesMissionPane, missionRouteHref, type MissionPane, type MissionPosition } from "./return-context.ts";
 
 type Source =
   | { kind: "batch"; batchId: string; itemId?: string }
-  | { kind: "recommend"; input: { clientRequestId: string } };
+  | { kind: "recommend"; input: { clientRequestId: string; mode: "interests" | "general" } };
 type EventStatus = { kind: "sending" | "recorded" | "failed"; message?: string };
 
 const newId = () => crypto.randomUUID();
@@ -41,11 +42,13 @@ function EventFailure({ label, retry }: { label: string; retry: () => void }) {
   </p>;
 }
 
-function MissionCard({ item, batchId, position, total, status, record }: {
+function MissionCard({ item, batchId, position, total, paneTitle, returnHref, status, record }: {
   item: MissionRecommendationItem;
   batchId: string;
   position: number;
   total: number;
+  paneTitle: string;
+  returnHref: string;
   status: (type: MissionEventInput["eventType"]) => EventStatus | undefined;
   record: (type: MissionEventInput["eventType"]) => void;
 }) {
@@ -75,8 +78,8 @@ function MissionCard({ item, batchId, position, total, status, record }: {
   const accepted = status("accepted");
   const completed = status("self_reported_completed");
   const impression = status("impression");
-  const query = { batchId, itemId: item.itemId };
-  return <article ref={articleRef} aria-label={`추천 미션 ${position + 1}: ${item.programTitle}`}
+  const missionPosition = { batchId, itemId: item.itemId };
+  return <article ref={articleRef} aria-label={`${paneTitle} 추천 미션 ${position + 1}: ${item.programTitle}`}
     className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#e0e9dc] sm:p-8">
     <div className="flex flex-wrap items-center justify-between gap-3">
       <p className="text-sm font-bold text-[#40883f]">추천 {position + 1} / {total}</p>
@@ -94,9 +97,9 @@ function MissionCard({ item, batchId, position, total, status, record }: {
     </dl>
     <p className="mt-4 text-xs leading-5 text-[#71816f]">현재 조건과 자격을 자동 판정하지 않아요. 참여 전 상세 화면의 현행 조건과 공식 출처를 확인해 주세요.</p>
     <div className="mt-6 grid gap-2 sm:grid-cols-2">
-      <Link href={{ pathname: "/missions/detail", query }} aria-label={`${item.programTitle} 상세 보기`}
+      <Link href={missionRouteHref("/missions/detail", missionPosition, returnHref)} aria-label={`${item.programTitle} 상세 보기`}
         className="rounded-xl bg-[#eaf5e5] px-4 py-3 text-center text-sm font-bold text-[#347b3d]">상세 보기</Link>
-      {item.relatedPlaceCount > 0 ? <Link href={{ pathname: "/map/mission", query }} aria-label={`${item.programTitle} 관련 장소 보기`}
+      {item.relatedPlaceCount > 0 ? <Link href={missionRouteHref("/map/mission", missionPosition, returnHref)} aria-label={`${item.programTitle} 관련 장소 보기`}
         className="rounded-xl bg-[#eaf5e5] px-4 py-3 text-center text-sm font-bold text-[#347b3d]">관련 장소 보기</Link>
         : <p className="rounded-xl bg-[#f4f6f2] px-4 py-3 text-center text-sm font-semibold text-[#71816f]">등록된 관련 장소 없음 · 상세에서 확인</p>}
       <button type="button" onClick={() => record("accepted")} disabled={accepted?.kind === "sending" || accepted?.kind === "recorded"}
@@ -109,17 +112,26 @@ function MissionCard({ item, batchId, position, total, status, record }: {
       </button>
     </div>
     <p className="mt-3 text-xs text-[#71816f]">실천 기록은 본인의 자기보고이며 프로그램의 공식 완료·포인트 지급을 뜻하지 않아요.</p>
+    <MissionPhotoToggle actionId={item.actionId} />
     {impression?.kind === "failed" && <EventFailure label={eventLabel.impression} retry={() => record("impression")} />}
     {accepted?.kind === "failed" && <EventFailure label={eventLabel.accepted} retry={() => record("accepted")} />}
     {completed?.kind === "failed" && <EventFailure label={eventLabel.self_reported_completed} retry={() => record("self_reported_completed")} />}
   </article>;
 }
 
-export function MissionCards({ initialBatchId, initialItemId }: { initialBatchId?: string; initialItemId?: string }) {
+export function MissionCards({ pane, mode, title, description, initialPosition, returnHref, onLocationChange }: {
+  pane: MissionPane;
+  mode: "interests" | "general";
+  title: string;
+  description: string;
+  initialPosition?: MissionPosition;
+  returnHref: string;
+  onLocationChange: (position?: MissionPosition) => void;
+}) {
   const client = useMemo(() => createMissionClient(), []);
-  const [source, setSource] = useState<Source>(() => initialBatchId
-    ? { kind: "batch", batchId: initialBatchId, itemId: initialItemId }
-    : { kind: "recommend", input: { clientRequestId: newId() } });
+  const [source, setSource] = useState<Source>(() => initialPosition
+    ? { kind: "batch", batchId: initialPosition.batchId, itemId: initialPosition.itemId }
+    : { kind: "recommend", input: { clientRequestId: newId(), mode } });
   const [state, dispatch] = useReducer(missionViewReducer, initialMissionViewState);
   const [retry, setRetry] = useState(0);
   const request = useRef(0);
@@ -136,21 +148,26 @@ export function MissionCards({ initialBatchId, initialItemId }: { initialBatchId
       ? client.getBatch(source.batchId, controller.signal)
       : client.recommend(source.input, controller.signal);
     task.then(batch => {
-      if (!controller.signal.aborted && current === request.current)
-        dispatch({ type: "loaded", request: current, batch, itemId: source.kind === "batch" ? source.itemId : undefined });
+      if (controller.signal.aborted || current !== request.current) return;
+      if (!matchesMissionPane(pane, batch.selectionBasis)) {
+        onLocationChange(undefined);
+        dispatch({ type: "failed", request: current, message: "이 주소의 추천 묶음이 현재 영역과 맞지 않아요." });
+        return;
+      }
+      dispatch({ type: "loaded", request: current, batch, itemId: source.kind === "batch" ? source.itemId : undefined });
     }).catch(error => {
       if (controller.signal.aborted || current !== request.current) return;
       dispatch({ type: "failed", request: current, message: loadMessage(error),
         status: error instanceof MissionClientError ? error.status : undefined });
     });
     return () => controller.abort();
-  }, [client, retry, source]);
+  }, [client, mode, onLocationChange, pane, retry, source]);
 
   const active = state.kind === "ready" ? state.batch.items[state.index] : null;
   useEffect(() => {
     if (!active || state.kind !== "ready") return;
-    window.history.replaceState(null, "", missionCardUrl(state.batch.batchId, active.itemId));
-  }, [active, state]);
+    onLocationChange({ batchId: state.batch.batchId, itemId: active.itemId });
+  }, [active, onLocationChange, state]);
 
   const record = useCallback((type: MissionEventInput["eventType"]) => {
     if (!active || state.kind !== "ready") return;
@@ -183,17 +200,16 @@ export function MissionCards({ initialBatchId, initialItemId }: { initialBatchId
   }, [active, eventStatuses, state]);
 
   function newBatch() {
-    const next: Source = { kind: "recommend", input: { clientRequestId: newId() } };
+    const next: Source = { kind: "recommend", input: { clientRequestId: newId(), mode } };
+    onLocationChange(undefined);
     setSource(next);
-    window.history.replaceState(null, "", "/missions");
   }
 
-  return <main className="[overflow-wrap:anywhere] mx-auto max-w-3xl px-5 py-8 sm:py-12">
-    <section className="mb-6 rounded-3xl bg-[#e9f6e4] p-6 sm:p-8">
-      <p className="text-sm font-bold text-[#40883f]">내 관심사 기반 미션</p>
-      <h1 className="mt-2 text-3xl font-bold text-[#284527]">관심 있는 실천을 하나씩 살펴보세요</h1>
-      <p className="mt-3 text-sm leading-6 text-[#61745f]">내 관심사를 바탕으로 찾은 프로그램과 실천 행동을 차례로 보여드려요.</p>
-    </section>
+  return <section aria-label={title} data-mission-pane={pane} className="[overflow-wrap:anywhere] min-w-0">
+    <header className="mb-5 rounded-3xl bg-white/70 p-5 ring-1 ring-[#dfe9da]">
+      <h2 className="text-xl font-bold text-[#284527]">{title}</h2>
+      <p className="mt-2 text-sm leading-6 text-[#61745f]">{description}</p>
+    </header>
     {state.kind === "loading" && <p role="status" className="rounded-2xl bg-white p-6">미션을 불러오는 중이에요.</p>}
     {state.kind === "failed" && <section className="rounded-2xl bg-white p-6">
       <p role="alert" className="text-[#8a3825]">{state.message}</p>
@@ -211,8 +227,8 @@ export function MissionCards({ initialBatchId, initialItemId }: { initialBatchId
     </section>}
     {state.kind === "ready" && active && <>
       <MissionCard key={active.itemId} item={active} batchId={state.batch.batchId} position={state.index}
-        total={state.batch.items.length} status={status} record={record} />
-      <nav aria-label="추천 카드 이동" className="mt-5 flex items-center justify-between gap-3">
+        total={state.batch.items.length} paneTitle={title} returnHref={returnHref} status={status} record={record} />
+      <nav aria-label={`${title} 카드 이동`} className="mt-5 flex items-center justify-between gap-3">
         <button type="button" onClick={() => dispatch({ type: "back" })} disabled={state.index === 0}
           className="rounded-xl border bg-white px-5 py-3 text-sm font-bold disabled:opacity-40">이전 미션</button>
         <button type="button" onClick={() => dispatch({ type: "next" })}
@@ -227,5 +243,5 @@ export function MissionCards({ initialBatchId, initialItemId }: { initialBatchId
         <button type="button" onClick={newBatch} className="rounded-xl bg-[#2f843d] px-5 py-3 text-sm font-bold text-white">새 미션 묶음 받기</button>
       </div>
     </section>}
-  </main>;
+  </section>;
 }

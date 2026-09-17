@@ -12,6 +12,10 @@ const post=(url:string,body:unknown,headers:Record<string,string>={})=>new Reque
 
 test("mission contracts reject extra owner fields, invalid bounds and malformed event kinds",()=>{
   assert.equal(isMissionRecommendationInput({clientRequestId}),true);assert.equal(isMissionRecommendationInput({clientRequestId,limit:20}),true);
+  assert.equal(isMissionRecommendationInput({clientRequestId,mode:"interests"}),true);
+  assert.equal(isMissionRecommendationInput({clientRequestId,limit:5,mode:"general"}),true);
+  assert.equal(isMissionRecommendationInput({clientRequestId,mode:"nearby"}),false);
+  assert.equal(isMissionRecommendationInput({clientRequestId,mode:null}),false);
   assert.equal(isMissionRecommendationInput({clientRequestId,limit:21}),false);assert.equal(isMissionRecommendationInput({clientRequestId,userId:itemId}),false);
   assert.equal(isMissionRecommendationBatch(batch),true);assert.equal(isMissionRecommendationBatch({...batch,items:[{...batch.items[0],position:1}]}),false);
   assert.equal(isMissionEventInput({...event,eventId:undefined,recordedAt:undefined}),false);assert.equal(isMissionEventInput({clientEventId:clientRequestId,batchId,itemId,eventType:"skip",occurredAt:event.occurredAt}),false);

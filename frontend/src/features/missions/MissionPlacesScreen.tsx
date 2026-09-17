@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { SourceLink } from "@/features/sources/SourceLink";
-import { displayValue, kakaoAddressSearchHref, missionReturnHref } from "./detail-contract.ts";
+import { displayValue, kakaoAddressSearchHref } from "./detail-contract.ts";
+import { missionRouteHref, safeMissionReturnHref } from "./return-context.ts";
 import { useMissionDetail } from "./use-mission-detail.ts";
 
-export function MissionPlacesScreen({ batchId, itemId }: { batchId: string; itemId: string }) {
+export function MissionPlacesScreen({ batchId, itemId, returnTo }: {
+  batchId: string; itemId: string; returnTo?: string;
+}) {
   const state = useMissionDetail(batchId, itemId, "map_open");
-  const returnHref = missionReturnHref(batchId, itemId);
+  const position = { batchId, itemId };
+  const returnHref = safeMissionReturnHref(returnTo, position);
   if (state.loading) return <PlaceStatus title="관련 장소를 불러오는 중이에요" returnHref={returnHref} />;
   if (state.error || !state.detail) return <PlaceStatus title={state.error ?? "관련 장소를 확인하지 못했어요."}
     returnHref={returnHref} retry={state.retryDetail} />;
@@ -60,7 +64,7 @@ export function MissionPlacesScreen({ batchId, itemId }: { batchId: string; item
     </section>}
 
     <div className="mt-6 flex flex-wrap gap-3">
-      <Link href={`/missions/detail?${new URLSearchParams({ batchId, itemId })}`}
+      <Link href={missionRouteHref("/missions/detail", position, returnHref)}
         aria-label="이 미션 상세로 돌아가기"
         className="rounded-xl bg-white px-5 py-3 font-bold text-[#347b3d] ring-1 ring-[#cfe0c9]">미션 상세 보기</Link>
       <Link href={returnHref} aria-label="원래 미션 카드로 돌아가기"

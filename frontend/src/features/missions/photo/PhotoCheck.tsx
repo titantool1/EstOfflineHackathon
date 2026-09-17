@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { MAX_PHOTO_BYTES, PHOTO_TYPES, isPhotoResult, type PhotoResult } from "./contract.ts";
 
 function readPhoto(file: File, signal: AbortSignal): Promise<string> {
@@ -16,6 +16,8 @@ function readPhoto(file: File, signal: AbortSignal): Promise<string> {
   });
 }
 export function PhotoCheck() {
+  const photoId = useId();
+  const titleId = useId();
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -58,13 +60,13 @@ export function PhotoCheck() {
         : cause instanceof Error ? cause.message : "사진을 확인하지 못했어요. 다시 시도해 주세요.");
     } finally { window.clearTimeout(timeout); if (active.current === controller) active.current = null; setBusy(false); }
   }
-  return <section aria-labelledby="photo-title" className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#dfe9da] md:p-8">
+  return <section aria-labelledby={titleId} className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-[#dfe9da] md:p-8">
     <p className="text-sm font-bold text-[#397d3e]">미션 사진 확인 · 체험</p>
-    <h1 id="photo-title" className="mt-2 text-2xl font-bold text-[#29452a]">다회용기에 음식 담기</h1>
+    <h3 id={titleId} className="mt-2 text-2xl font-bold text-[#29452a]">다회용기에 음식 담기</h3>
     <p className="mt-3 text-sm leading-6 text-[#526b50]">도시락이나 식품 보관통에 음식을 담고, 내부와 용기 전체가 함께 보이게 찍어 주세요.</p>
     <p className="mt-2 text-sm leading-6 text-[#526b50]">사진 속 용기와 음식만 확인해요. 이 결과로 미션 완료나 보상이 자동 기록되지는 않아요.</p>
-    <label className="mt-6 block text-sm font-bold" htmlFor="mission-photo">사진 한 장 선택 (JPG·PNG·WebP, 최대 5MB)</label>
-    <input ref={input} id="mission-photo" type="file" accept={PHOTO_TYPES.join(",")} disabled={busy}
+    <label className="mt-6 block text-sm font-bold" htmlFor={photoId}>사진 한 장 선택 (JPG·PNG·WebP, 최대 5MB)</label>
+    <input ref={input} id={photoId} type="file" accept={PHOTO_TYPES.join(",")} disabled={busy}
       onChange={event => select(event.target.files?.[0] ?? null)}
       className="mt-2 block w-full min-w-0 rounded-xl border border-[#b8cdb3] p-3 text-sm disabled:opacity-60" />
     {preview && <div className="mt-4">
@@ -81,7 +83,7 @@ export function PhotoCheck() {
     {error && <div role="alert" className="mt-4 rounded-xl bg-[#fff4e5] p-4 text-sm text-[#7b5929]">{error}
       {loginNeeded && <Link href="/login" className="ml-2 font-bold underline">로그인하기</Link>}</div>}
     {result && <div role="status" className="mt-4 rounded-xl bg-[#eef7e9] p-5">
-      <h2 className="font-bold text-[#315f35]">{result.title}</h2><p className="mt-2 text-sm leading-6">{result.message}</p>
+      <h4 className="font-bold text-[#315f35]">{result.title}</h4><p className="mt-2 text-sm leading-6">{result.message}</p>
     </div>}
   </section>;
 }
