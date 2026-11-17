@@ -4,6 +4,54 @@
 
 > **프로젝트 상태:** 2026-10-02 종료·보관. 현재 운영 서비스나 시연 링크를 제공하지 않는다. 아래 결과는 2026-09-18 제출·QA 문서에 남은 **과거 확인 기록**이며 이번 README 정리에서 제품을 재실행한 결과가 아니다.
 
+## 사용자 흐름
+
+상담과 미션은 **독립 진입**이다. 관심사는 가입 직후 또는 수정 화면에서 선택하고, 개인 조건은 상담에서 확인·저장한다. 아래 화살표는 화면 이동·선택 경로이며 모든 단계를 반드시 순서대로 거친다는 뜻은 아니다.
+
+```mermaid
+flowchart LR
+    H["홈·메뉴"] --> I["관심사·조건"]
+    H --> C["맞춤 상담"]
+    H --> M["미션 선택"]
+    I --> M
+    I -. 조건 반영 .-> C
+    C -. 필요시 미션 연결 .-> M
+    M --> P["관련 장소"]
+    P -. 확인 후 미션 복귀 .-> M
+    M --> F["사진 확인 · A17"]
+    F -->|충족·저장 성공| R["실천 기록·레벨"]
+    M -->|직접 수행 확인·완료 저장| R
+```
+
+장소 조회와 상담은 선택 경로다. 사진 확인은 A17 개인용기 식품 포장 행동에 한정하며, 부적합·확인불가 판정은 완료로 저장하지 않는다. 앱의 실천 기록은 **공식 참여 실적·포인트 지급과 별개**다.
+
+근거: [제출 기준](docs/submission-2026-09-18.md) · [홈의 개별 진입](frontend/src/app/page.tsx) · [미션·상담·장소 연결](frontend/src/features/missions/MissionCards.tsx) · [사진 완료 연결](frontend/src/features/missions/photo/MissionPhotoToggle.tsx) · [사진 완료 QA 기록](docs/qa-photo-completion-2026-09-18.md).
+
+## 간략 구조와 데이터 흐름
+
+사용자 흐름과 달리 아래 화살표는 **요청·데이터 접근 경계**다. Next 서버의 LangGraph·도구는 Spring HTTP API를 호출하고, 업무 규칙·권한·DB 접근은 Spring이 맡는다. Next가 PostgreSQL·Elasticsearch에 직접 접근하는 구조가 아니다.
+
+```mermaid
+flowchart LR
+    U["브라우저"] --> N["Next.js 서버 · LangGraph"]
+    N -->|업무 HTTP API| S["Spring 업무 API"]
+    S -->|회원·조건·미션·장소| P["PostgreSQL"]
+    S -->|키워드·벡터 검색| E["Elasticsearch"]
+    N -->|상담·사진·임베딩| A["OpenAI · BGE 서비스"]
+    N -->|길찾기 요청| K["카카오 지도·경로"]
+    U -->|지도 SDK| K
+```
+
+외부 지도·모델 연동은 Next·브라우저 경계에, PG·ES 접근은 Spring 경계에 구분했다. 이 그림은 구현 구성 요약이며 현재 서비스 가동을 뜻하지 않는다.
+
+근거: [책임 경계](docs/architecture.md) · [AI 런타임 조립](frontend/src/lib/server/ai/runtime.ts) · [Spring 검색 어댑터](backend/src/main/java/kr/co/ecojupjup/search/adapter/ElasticsearchHybridCatalogSearch.java) · [카카오 경로 연동](frontend/src/lib/server/map/route.ts) · [지도 SDK 화면](frontend/src/app/map/KakaoMap.tsx).
+
+## 보존된 실제 화면
+
+![에코줍줍 비로그인 홈: 맞춤 미션·상담·장소 찾기의 독립 진입](docs/assets/eco-home-2026-09-18.png)
+
+2026-09-18 QA에서 보존한 **실제 비로그인 홈 화면**이다. 보관본 `evidence/eco-frontend-063828f-2026-09-18/public-home.png`를 수정 없이 공개 복사했다. 같은 자료의 `public-result.json`은 홈 응답과 제목을 기록한다. 개인 계정·상담 내용·키·로그인 정보는 보이지 않으며, 당시 아이콘 표시 상태도 그대로 보존했다. 새 촬영이나 현재 운영 화면이 아니다. [당시 화면 통합 기록](docs/qa-frontend-063828f-2026-09-18.md)
+
 ## 해결하려던 문제와 구현 범위
 
 친환경 혜택은 제도별 대상 조건·가입 여부·실천 장소가 달라, 검색 결과만으로 내가 무엇을 할 수 있는지 판단하기 어렵다. 사용자 발화에서 확인된 조건과 제도 근거를 연결하고, 안내에서 실제 행동 기록까지 이어지는 흐름을 만들었다.
